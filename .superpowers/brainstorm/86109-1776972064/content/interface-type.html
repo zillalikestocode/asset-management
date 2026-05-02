@@ -1,0 +1,40 @@
+<h2>Question 4: What's the primary interface for the MVP?</h2>
+<p class="subtitle">Manufacturing workers use tools in the field. Where does the software live?</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Web App Only</h3>
+      <p>Desktop browser-based dashboard. Managers and admins track assets from the office. Fast to build, no app store needed.</p>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Pros</h4><ul><li>Fastest to build</li><li>No installs</li><li>Easy updates</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Not ideal for field workers</li><li>No offline mode</li><li>Barcode scan needs add-on</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Mobile App First</h3>
+      <p>Native or PWA mobile app for technicians scanning barcodes and logging work in the field. Managers use the same app.</p>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Pros</h4><ul><li>Barcode & GPS built-in</li><li>Field-worker friendly</li><li>Offline capable</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Harder to build</li><li>App store approval</li><li>Two platforms (iOS + Android)</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Web App + Mobile PWA</h3>
+      <p>Responsive web app that works on desktop and mobile browser. Field workers use mobile browser to scan barcodes (camera). Managers get full dashboard on desktop.</p>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Pros</h4><ul><li>One codebase</li><li>Camera-based scanning</li><li>No app store needed</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Limited offline support</li><li>Camera scan less reliable than dedicated scanner</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>

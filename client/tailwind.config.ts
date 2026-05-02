@@ -1,0 +1,91 @@
+import type { Config } from 'tailwindcss'
+
+export default {
+  content: ['./index.html', './src/**/*.{ts,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        af: {
+          'ink-900': 'var(--af-ink-900)',
+          'ink-800': 'var(--af-ink-800)',
+          'ink-700': 'var(--af-ink-700)',
+          'ink-600': 'var(--af-ink-600)',
+          'ink-500': 'var(--af-ink-500)',
+          'ink-400': 'var(--af-ink-400)',
+          'ink-300': 'var(--af-ink-300)',
+          'ink-200': 'var(--af-ink-200)',
+          'ink-150': 'var(--af-ink-150)',
+          'ink-100': 'var(--af-ink-100)',
+          'ink-050': 'var(--af-ink-050)',
+          paper:     'var(--af-paper)',
+
+          'orange-600': 'var(--af-orange-600)',
+          'orange-500': 'var(--af-orange-500)',
+          'orange-100': 'var(--af-orange-100)',
+          'orange-050': 'var(--af-orange-050)',
+
+          'blue-700': 'var(--af-blue-700)',
+          'blue-600': 'var(--af-blue-600)',
+          'blue-500': 'var(--af-blue-500)',
+          'blue-100': 'var(--af-blue-100)',
+          'blue-050': 'var(--af-blue-050)',
+
+          'ok-600':   'var(--af-ok-600)',
+          'ok-500':   'var(--af-ok-500)',
+          'ok-100':   'var(--af-ok-100)',
+          'warn-600': 'var(--af-warn-600)',
+          'warn-500': 'var(--af-warn-500)',
+          'warn-100': 'var(--af-warn-100)',
+          'crit-700': 'var(--af-crit-700)',
+          'crit-600': 'var(--af-crit-600)',
+          'crit-500': 'var(--af-crit-500)',
+          'crit-200': 'var(--af-crit-200)',
+          'crit-100': 'var(--af-crit-100)',
+          'crit-050': 'var(--af-crit-050)',
+          'info-600': 'var(--af-info-600)',
+          'info-500': 'var(--af-info-500)',
+          'info-100': 'var(--af-info-100)',
+          'amber-500': 'var(--af-amber-500)',
+          'amber-100': 'var(--af-amber-100)',
+
+          bg:       'var(--af-bg)',
+          surface:  'var(--af-surface)',
+          border:   'var(--af-border)',
+          fg:       'var(--af-fg)',
+          muted:    'var(--af-fg-muted)',
+          subtle:   'var(--af-fg-subtle)',
+          accent:   'var(--af-accent)',
+          focus:    'var(--af-focus)',
+        },
+      },
+      fontFamily: {
+        sans: ['var(--af-font-sans)'],
+        mono: ['var(--af-font-mono)'],
+      },
+      borderRadius: {
+        sm:  '3px',
+        DEFAULT: '5px',
+        md:  '6px',
+        lg:  '8px',
+        xl:  '12px',
+        pill: '999px',
+      },
+      transitionTimingFunction: {
+        af: 'cubic-bezier(.2, .7, .2, 1)',
+      },
+      transitionDuration: {
+        '1': '120ms',
+        '2': '180ms',
+        '3': '260ms',
+      },
+      boxShadow: {
+        '0': '0 0 0 1px var(--af-border)',
+        '1': '0 1px 0 rgba(14,17,22,.04), 0 1px 2px rgba(14,17,22,.06)',
+        '2': '0 2px 4px rgba(14,17,22,.06), 0 4px 12px rgba(14,17,22,.06)',
+        '3': '0 8px 24px rgba(14,17,22,.08), 0 2px 4px rgba(14,17,22,.06)',
+        focus: '0 0 0 3px rgba(59,130,246,.25)',
+      },
+    },
+  },
+  plugins: [],
+} satisfies Config

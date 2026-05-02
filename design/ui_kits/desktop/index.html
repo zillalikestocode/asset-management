@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>AssetFlow · Desktop</title>
+<link rel="stylesheet" href="../../colors_and_type.css"/>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"/>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css"/>
+<style>
+  html, body { height: 100%; margin: 0; }
+  body { font-family: var(--af-font-sans); font-size: 13px; color: var(--af-fg); background: var(--af-ink-050); overflow: hidden; }
+
+  .app { display: grid; grid-template-columns: 220px 1fr; height: 100vh; }
+
+  /* ========== SIDEBAR ========== */
+  .sb { background: var(--af-ink-900); color: #C7CCD3; padding: 14px 0; display: flex; flex-direction: column; }
+  .sb-brand { display: flex; align-items: center; gap: 8px; padding: 0 16px 18px; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .sb-brand-mark { width: 24px; height: 24px; border-radius: 5px; background: var(--af-ink-800); display: grid; place-items: center; }
+  .sb-brand-mark::after { content:''; width: 5px; height: 5px; background: var(--af-orange-500); border-radius: 99px;}
+  .sb-brand-name { color: #fff; font-weight: 600; font-size: 14px; letter-spacing: -0.01em; }
+  .sb-brand-env { font-family: var(--af-font-mono); font-size: 9px; color: var(--af-ink-500); letter-spacing: 0.1em; margin-left: auto; background: rgba(255,255,255,.05); padding: 2px 5px; border-radius: 3px; }
+
+  .sb-section { padding: 14px 12px 4px; }
+  .sb-section-label { font-family: var(--af-font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--af-ink-500); padding: 0 6px 6px; }
+  .sb-item { display: flex; align-items: center; gap: 9px; padding: 6px 8px; border-radius: 4px; font-size: 13px; color: #C7CCD3; cursor: pointer; transition: background 120ms, color 120ms; white-space: nowrap; }
+  .sb-item i { font-size: 16px; color: var(--af-ink-400); }
+  .sb-item:hover { background: rgba(255,255,255,.04); color: #fff; }
+  .sb-item:hover i { color: #fff; }
+  .sb-item.active { background: rgba(255,107,53,.12); color: #fff; }
+  .sb-item.active i { color: var(--af-orange-500); }
+  .sb-item .cnt { margin-left: auto; font-family: var(--af-font-mono); font-size: 10px; color: var(--af-ink-500); background: rgba(255,255,255,.04); padding: 1px 5px; border-radius: 99px;}
+  .sb-item.active .cnt { color: var(--af-orange-500); background: rgba(255,107,53,.15);}
+
+  .sb-foot { margin-top: auto; padding: 14px; border-top: 1px solid rgba(255,255,255,.06); display:flex; align-items:center; gap:10px;}
+  .sb-avatar { width: 26px; height: 26px; border-radius: 5px; background: linear-gradient(135deg, #FF6B35, #E55A22); color: #fff; font-size: 11px; display: grid; place-items: center; font-weight: 600;}
+  .sb-user { line-height: 1.2; }
+  .sb-user b { display: block; color: #fff; font-size: 12px; font-weight: 600; }
+  .sb-user span { font-family: var(--af-font-mono); font-size: 9px; color: var(--af-ink-500); }
+
+  /* ========== MAIN ========== */
+  .main { display: grid; grid-template-rows: 48px 1fr; overflow: hidden; }
+  .topbar { display: flex; align-items: center; gap: 12px; padding: 0 20px; border-bottom: 1px solid var(--af-border); background: #fff; }
+  .crumbs { font-family: var(--af-font-mono); font-size: 11px; color: var(--af-fg-muted); letter-spacing: 0.02em; }
+  .crumbs b { color: var(--af-fg); font-weight: 500; }
+  .tb-spacer { flex: 1; }
+  .search { display: flex; align-items: center; gap: 6px; background: var(--af-ink-050); border: 1px solid var(--af-border); border-radius: 5px; padding: 4px 10px; width: 280px; color: var(--af-fg-muted); font-size: 12px;}
+  .search i { font-size: 14px; }
+  .search .kbd { margin-left: auto; font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-subtle); background: #fff; border: 1px solid var(--af-border); padding: 0 4px; border-radius: 3px; }
+  .tb-btn { display:inline-flex; align-items:center; gap:6px; height:28px; padding: 0 10px; border-radius: 5px; border: 1px solid var(--af-border); background: #fff; font-size: 12px; font-weight: 500; cursor: pointer; color: var(--af-fg);}
+  .tb-btn i { font-size: 14px; color: var(--af-fg-muted); }
+  .tb-btn.accent { background: var(--af-orange-500); color: #fff; border-color: var(--af-orange-600); }
+  .tb-btn.accent i { color: #fff; }
+
+  /* ========== ROUTES ========== */
+  .route { overflow: auto; padding: 20px 24px; }
+
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 16px; gap: 16px;}
+  .page-head h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.015em; margin: 0; color: var(--af-fg); }
+  .page-head .sub { font-size: 12px; color: var(--af-fg-muted); margin-top: 2px; }
+  .page-actions { display: flex; gap: 8px; }
+
+  .eyebrow { font-family: var(--af-font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--af-fg-muted); }
+
+  /* --- KPI grid --- */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;}
+  .kpi { background: #fff; border: 1px solid var(--af-border); border-radius: 8px; padding: 14px 16px; position: relative; overflow: hidden;}
+  .kpi-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;}
+  .kpi-label .eyebrow { margin: 0;}
+  .kpi-label i { font-size: 14px; color: var(--af-fg-subtle); }
+  .kpi-val { font-weight: 600; font-size: 30px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1;}
+  .kpi-val.crit { color: var(--af-crit-600); }
+  .kpi-val.warn { color: var(--af-warn-600); }
+  .kpi-foot { display:flex; justify-content: space-between; align-items: center; margin-top: 8px;}
+  .kpi-delta { font-family: var(--af-font-mono); font-size: 11px;}
+  .kpi-delta.up { color: var(--af-ok-600); }
+  .kpi-delta.down { color: var(--af-crit-600); }
+  .kpi-spark { height: 20px; width: 72px;}
+
+  /* --- 2-col layout --- */
+  .grid-2 { display: grid; grid-template-columns: 1fr 320px; gap: 14px; }
+
+  .panel { background: #fff; border: 1px solid var(--af-border); border-radius: 8px; overflow: hidden;}
+  .panel-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--af-border); }
+  .panel-head h3 { margin: 0; font-size: 13px; font-weight: 600;}
+  .panel-head .eyebrow { margin: 0;}
+  .panel-head .more { font-size: 11px; color: var(--af-fg-muted); cursor: pointer;}
+  .panel-body { padding: 0; }
+
+  /* --- Calendar/schedule strip --- */
+  .schedule { padding: 14px;}
+  .sched-day { display: grid; grid-template-columns: 56px 1fr; gap: 12px; padding: 8px 0; border-bottom: 1px dashed var(--af-ink-150); }
+  .sched-day:last-child { border-bottom: 0; padding-bottom: 0;}
+  .sched-date { text-align: center; }
+  .sched-date b { display: block; font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+  .sched-date span { font-family: var(--af-font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--af-fg-muted); }
+  .sched-list { display: flex; flex-direction: column; gap: 4px;}
+  .sched-row { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; font-size: 12px; padding: 3px 0;}
+  .sched-row .bar { width: 3px; height: 18px; border-radius: 2px;}
+  .bar.crit { background: var(--af-crit-500); }
+  .bar.warn { background: var(--af-warn-500); }
+  .bar.ok { background: var(--af-ok-500);}
+  .bar.info { background: var(--af-blue-500);}
+  .sched-row .time { font-family: var(--af-font-mono); font-size: 11px; color: var(--af-fg-muted); width: 44px;}
+
+  /* --- Activity --- */
+  .activity { padding: 6px 0; }
+  .act { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 10px 14px; border-bottom: 1px dashed var(--af-ink-150); }
+  .act:last-child { border-bottom: 0;}
+  .act-icon { width: 24px; height: 24px; border-radius: 5px; display: grid; place-items: center; background: var(--af-ink-100); color: var(--af-fg-muted); font-size: 12px;}
+  .act-icon.ok { background: var(--af-ok-100); color: var(--af-ok-600);}
+  .act-icon.crit { background: var(--af-crit-100); color: var(--af-crit-600);}
+  .act-icon.warn { background: var(--af-warn-100); color: var(--af-warn-600);}
+  .act-text { font-size: 12px; line-height: 1.4;}
+  .act-text b { font-weight: 600;}
+  .act-meta { font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-muted); margin-top: 2px;}
+
+  /* --- Assets table --- */
+  table { width: 100%; border-collapse: collapse;}
+  th { background: var(--af-ink-050); font-family: var(--af-font-mono); font-weight: 500; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--af-fg-muted); text-align: left; padding: 8px 14px; border-bottom: 1px solid var(--af-border); position: sticky; top: 0; }
+  td { padding: 10px 14px; font-size: 12px; border-bottom: 1px solid var(--af-ink-150); vertical-align: middle;}
+  tr:last-child td { border-bottom: 0;}
+  tr:hover td { background: var(--af-ink-050); cursor: pointer;}
+  .mono { font-family: var(--af-font-mono); font-size: 11px;}
+  .pill { font-weight: 500; font-size: 10.5px; padding: 2px 8px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px;}
+  .pill .dot { width: 5px; height: 5px; border-radius: 99px;}
+
+  /* --- Filters --- */
+  .filters { display: flex; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--af-border); background: var(--af-ink-050); align-items: center; flex-wrap: wrap;}
+  .chip { font-size: 11px; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--af-border); background: #fff; cursor: pointer; display: inline-flex; align-items:center; gap: 4px; color: var(--af-fg-muted); }
+  .chip i { font-size: 12px; }
+  .chip.on { background: var(--af-ink-900); color: #fff; border-color: var(--af-ink-900); }
+  .chip.cnt b { font-family: var(--af-font-mono); font-size: 10px; margin-left: 2px; color: var(--af-fg); font-weight: 500; }
+  .chip.on.cnt b { color: #fff;}
+
+  /* --- Map mock --- */
+  .map { height: 220px; position: relative; overflow: hidden; border-radius: 8px; border: 1px solid var(--af-border); background:
+    linear-gradient(135deg, #F4F1EA 0%, #EDE8DE 100%);
+  }
+  .map::before { content:''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(14,17,22,.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(14,17,22,.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .map-pin { position: absolute; width: 22px; height: 22px; border-radius: 99px; background: var(--af-orange-500); color: #fff; display: grid; place-items: center; font-size: 11px; font-family: var(--af-font-mono); font-weight: 600; transform: translate(-50%, -50%); box-shadow: 0 0 0 4px rgba(255,107,53,.25);}
+  .map-pin.blue { background: var(--af-blue-500); box-shadow: 0 0 0 4px rgba(59,130,246,.25);}
+
+  /* Grid bg for marketing-ish surfaces */
+  .grid-bg {
+    background-color: var(--af-ink-050);
+    background-image:
+      linear-gradient(to right, rgba(14,17,22,.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(14,17,22,.035) 1px, transparent 1px);
+    background-size: 8px 8px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sb">
+    <div class="sb-brand">
+      <div class="sb-brand-mark"></div>
+      <div class="sb-brand-name">AssetFlow</div>
+      <div class="sb-brand-env">PROD</div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-section-label">Overview</div>
+      <div class="sb-item active" data-route="dashboard"><i class="ph ph-gauge"></i>Dashboard</div>
+      <div class="sb-item" data-route="work"><i class="ph ph-clipboard-text"></i>Work Orders<span class="cnt">14</span></div>
+      <div class="sb-item" data-route="schedule"><i class="ph ph-calendar-dots"></i>Maintenance</div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-section-label">Inventory</div>
+      <div class="sb-item" data-route="assets"><i class="ph ph-package"></i>Assets<span class="cnt">1.2k</span></div>
+      <div class="sb-item"><i class="ph ph-map-pin"></i>Locations</div>
+      <div class="sb-item"><i class="ph ph-qr-code"></i>QR Labels</div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-section-label">Insight</div>
+      <div class="sb-item"><i class="ph ph-warning"></i>Issues<span class="cnt">3</span></div>
+      <div class="sb-item"><i class="ph ph-chart-line-up"></i>Reports</div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-section-label">Admin</div>
+      <div class="sb-item"><i class="ph ph-users-three"></i>Team</div>
+      <div class="sb-item"><i class="ph ph-gear"></i>Settings</div>
+    </div>
+
+    <div class="sb-foot">
+      <div class="sb-avatar">SR</div>
+      <div class="sb-user"><b>Sarah Reyes</b><span>ADMIN · METALWORKS CO</span></div>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main">
+    <header class="topbar">
+      <div class="crumbs"><b data-breadcrumb>Dashboard</b></div>
+      <div class="tb-spacer"></div>
+      <div class="search"><i class="ph ph-magnifying-glass"></i>Search assets, orders, people<span class="kbd">⌘K</span></div>
+      <button class="tb-btn"><i class="ph ph-bell"></i></button>
+      <button class="tb-btn accent"><i class="ph ph-plus"></i>New asset</button>
+    </header>
+
+    <!-- ======= DASHBOARD ROUTE ======= -->
+    <section class="route" data-panel="dashboard">
+      <div class="page-head">
+        <div>
+          <div class="eyebrow">Plant overview · live</div>
+          <h1 style="margin-top:4px">Good morning, Sarah.</h1>
+          <div class="sub">7 items need your attention today. On-time rate held at 92% this week.</div>
+        </div>
+        <div class="page-actions">
+          <button class="tb-btn"><i class="ph ph-download-simple"></i>Export report</button>
+          <button class="tb-btn"><i class="ph ph-funnel"></i>Last 30 days</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi-label"><span class="eyebrow">Assets tracked</span><i class="ph ph-package"></i></div>
+          <div class="kpi-val">1,284</div>
+          <div class="kpi-foot"><span class="kpi-delta up">+42 this week</span>
+            <svg class="kpi-spark" viewBox="0 0 72 20"><polyline points="0,14 10,12 20,13 30,10 40,8 50,9 60,6 72,4" fill="none" stroke="#4D8B1A" stroke-width="1.5"/></svg>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><span class="eyebrow">Overdue PM</span><i class="ph ph-warning"></i></div>
+          <div class="kpi-val crit">7</div>
+          <div class="kpi-foot"><span class="kpi-delta down">+3 since Monday</span>
+            <svg class="kpi-spark" viewBox="0 0 72 20"><polyline points="0,16 10,15 20,14 30,12 40,11 50,8 60,6 72,4" fill="none" stroke="#C52629" stroke-width="1.5"/></svg>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><span class="eyebrow">On-time rate</span><i class="ph ph-check-circle"></i></div>
+          <div class="kpi-val">92<span style="font-size:16px;color:var(--af-fg-muted);font-weight:500">%</span></div>
+          <div class="kpi-foot"><span class="kpi-delta up">+4 pp MoM</span>
+            <svg class="kpi-spark" viewBox="0 0 72 20"><polyline points="0,12 10,10 20,11 30,8 40,7 50,5 60,6 72,3" fill="none" stroke="#4D8B1A" stroke-width="1.5"/></svg>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><span class="eyebrow">Open work orders</span><i class="ph ph-clipboard-text"></i></div>
+          <div class="kpi-val">14</div>
+          <div class="kpi-foot"><span class="kpi-delta">3 critical · 11 normal</span>
+            <svg class="kpi-spark" viewBox="0 0 72 20"><polyline points="0,10 10,12 20,9 30,11 40,8 50,10 60,7 72,8" fill="none" stroke="#6B7280" stroke-width="1.5"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- LEFT: Schedule -->
+        <div class="panel">
+          <div class="panel-head">
+            <div><span class="eyebrow">Upcoming maintenance</span></div>
+            <span class="more">View calendar →</span>
+          </div>
+          <div class="schedule">
+            <div class="sched-day">
+              <div class="sched-date"><b>22</b><span>Mon · today</span></div>
+              <div class="sched-list">
+                <div class="sched-row"><span class="bar crit"></span><span><b>Conveyor Belt A</b> · belt tension check <span class="mono" style="color:var(--af-fg-muted)"> · AF-0131</span></span><span class="time">09:00</span></div>
+                <div class="sched-row"><span class="bar warn"></span><span><b>CNC Lathe Mori-NL</b> · oil change <span class="mono" style="color:var(--af-fg-muted)"> · AF-0088</span></span><span class="time">13:30</span></div>
+                <div class="sched-row"><span class="bar ok"></span><span><b>Compressor C-2</b> · filter replace <span class="mono" style="color:var(--af-fg-muted)"> · AF-0256</span></span><span class="time">16:00</span></div>
+              </div>
+            </div>
+            <div class="sched-day">
+              <div class="sched-date"><b>23</b><span>Tue</span></div>
+              <div class="sched-list">
+                <div class="sched-row"><span class="bar info"></span><span><b>Hydraulic Press #4</b> · pressure test <span class="mono" style="color:var(--af-fg-muted)"> · AF-0042</span></span><span class="time">10:00</span></div>
+                <div class="sched-row"><span class="bar ok"></span><span><b>Forklift F-3</b> · safety check <span class="mono" style="color:var(--af-fg-muted)"> · AF-0511</span></span><span class="time">14:00</span></div>
+              </div>
+            </div>
+            <div class="sched-day">
+              <div class="sched-date"><b>24</b><span>Wed</span></div>
+              <div class="sched-list">
+                <div class="sched-row"><span class="bar ok"></span><span><b>Welder W-1</b> · electrode inspection <span class="mono" style="color:var(--af-fg-muted)"> · AF-0198</span></span><span class="time">11:00</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Activity + Map -->
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div class="panel">
+            <div class="panel-head"><span class="eyebrow">Plant floor · last check-ins</span></div>
+            <div class="map">
+              <div class="map-pin" style="left:28%; top:40%">4</div>
+              <div class="map-pin blue" style="left:58%; top:30%">2</div>
+              <div class="map-pin" style="left:72%; top:65%">1</div>
+              <div class="map-pin blue" style="left:40%; top:72%">6</div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><span class="eyebrow">Activity</span><span class="more">See all →</span></div>
+            <div class="activity">
+              <div class="act">
+                <div class="act-icon crit"><i class="ph-bold ph-warning"></i></div>
+                <div><div class="act-text"><b>Marcus Chen</b> flagged <b>Conveyor Belt A</b> as critical — "belt slipping under load"</div><div class="act-meta">AF-0131 · 14 MIN AGO</div></div>
+              </div>
+              <div class="act">
+                <div class="act-icon ok"><i class="ph-bold ph-check"></i></div>
+                <div><div class="act-text"><b>Amara Okafor</b> completed PM on <b>Compressor C-2</b></div><div class="act-meta">WO-2174 · 42 MIN AGO</div></div>
+              </div>
+              <div class="act">
+                <div class="act-icon warn"><i class="ph-bold ph-clock-countdown"></i></div>
+                <div><div class="act-text">Auto-generated WO: <b>Hydraulic Press #4</b> pressure test due in 3 days</div><div class="act-meta">WO-2181 · 1H AGO</div></div>
+              </div>
+              <div class="act">
+                <div class="act-icon"><i class="ph-bold ph-user-plus"></i></div>
+                <div><div class="act-text"><b>You</b> invited <b>jay.patel@metalworks.co</b> as Technician</div><div class="act-meta">2H AGO</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= ASSETS ROUTE ======= -->
+    <section class="route" data-panel="assets" style="display:none">
+      <div class="page-head">
+        <div>
+          <div class="eyebrow">Asset registry</div>
+          <h1 style="margin-top:4px">Assets</h1>
+          <div class="sub">1,284 total · 1,247 active · 37 archived</div>
+        </div>
+        <div class="page-actions">
+          <button class="tb-btn"><i class="ph ph-upload-simple"></i>Import CSV</button>
+          <button class="tb-btn"><i class="ph ph-qr-code"></i>Print labels</button>
+          <button class="tb-btn accent"><i class="ph ph-plus"></i>New asset</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="filters">
+          <span class="chip on cnt">All <b>1,284</b></span>
+          <span class="chip cnt">Machinery <b>412</b></span>
+          <span class="chip cnt">Vehicles <b>84</b></span>
+          <span class="chip cnt">Tools <b>631</b></span>
+          <span class="chip cnt">IT Equipment <b>157</b></span>
+          <span style="flex:1"></span>
+          <span class="chip"><i class="ph ph-funnel"></i>Location</span>
+          <span class="chip"><i class="ph ph-funnel"></i>Status</span>
+          <span class="chip"><i class="ph ph-sort-ascending"></i>Sort</span>
+        </div>
+        <table>
+          <thead><tr>
+            <th style="width:28px"><input type="checkbox" style="accent-color:var(--af-orange-500)"/></th>
+            <th style="width:140px">ID</th>
+            <th>Name</th>
+            <th style="width:110px">Category</th>
+            <th style="width:100px">Location</th>
+            <th style="width:130px">Status</th>
+            <th style="width:100px">Next PM</th>
+            <th style="width:80px">Assigned</th>
+          </tr></thead>
+          <tbody>
+            <tr><td><input type="checkbox"/></td><td class="mono">AF-0042</td><td>Hydraulic Press #4</td><td>Machinery</td><td class="mono">B3·Z2</td><td><span class="pill" style="background:#E8F5D4; color:#3A6912;"><span class="dot" style="background:#4D8B1A"></span>Healthy</span></td><td class="mono">in 12d</td><td>MC</td></tr>
+            <tr><td><input type="checkbox"/></td><td class="mono">AF-0088</td><td>CNC Lathe Mori-NL</td><td>Machinery</td><td class="mono">B1·Z4</td><td><span class="pill" style="background:#FEF0CE; color:#7A3B06;"><span class="dot" style="background:#B45309"></span>Due 3d</span></td><td class="mono">Apr 27</td><td>AO</td></tr>
+            <tr><td><input type="checkbox"/></td><td class="mono">AF-0131</td><td>Conveyor Belt A</td><td>Machinery</td><td class="mono">B3·Z1</td><td><span class="pill" style="background:#FDE0E0; color:#8B1C1F;"><span class="dot" style="background:#C52629"></span>Overdue 2d</span></td><td class="mono">Apr 22</td><td>MC</td></tr>
+            <tr><td><input type="checkbox"/></td><td class="mono">AF-0198</td><td>Welder W-1</td><td>Tools</td><td class="mono">B2·Z1</td><td><span class="pill" style="background:#E8F5D4; color:#3A6912;"><span class="dot" style="background:#4D8B1A"></span>Healthy</span></td><td class="mono">in 6d</td><td>JP</td></tr>
+            <tr><td><input type="checkbox"/></td><td class="mono">AF-0204</td><td>Pump Station 4</td><td>Machinery</td><td class="mono">B2·Z3</td><td><span class="pill" style="background:var(--af-ink-100); color:var(--af-fg-muted);"><span class="dot" style="background:var(--af-ink-400)"></span>Archived</span></td><td class="mono">—</td><td>—</td></tr>
+            <tr><td><input type="checkbox"/></td><td class="mono">AF-0256</td><td>Compressor C-2</td><td>Machinery</td><td class="mono">B1·Z2</td><td><span class="pill" style="background:#DBEAFE; color:#1A4BA5;"><span class="dot" style="background:#1E5FD4"></span>In service</span></td><td class="mono">Today</td><td>AO</td></tr>
+            <tr><td><input type="checkbox"/></td><td class="mono">AF-0511</td><td>Forklift F-3</td><td>Vehicles</td><td class="mono">YARD·A</td><td><span class="pill" style="background:#E8F5D4; color:#3A6912;"><span class="dot" style="background:#4D8B1A"></span>Healthy</span></td><td class="mono">in 9d</td><td>JP</td></tr>
+            <tr><td><input type="checkbox"/></td><td class="mono">AF-0612</td><td>Torque Wrench Kit</td><td>Tools</td><td class="mono">TOOL·CR</td><td><span class="pill" style="background:#E8F5D4; color:#3A6912;"><span class="dot" style="background:#4D8B1A"></span>Healthy</span></td><td class="mono">in 30d</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======= WORK ORDERS ROUTE ======= -->
+    <section class="route" data-panel="work" style="display:none">
+      <div class="page-head">
+        <div>
+          <div class="eyebrow">Operations</div>
+          <h1 style="margin-top:4px">Work orders</h1>
+          <div class="sub">14 open · 3 critical · 2 overdue</div>
+        </div>
+        <div class="page-actions">
+          <button class="tb-btn"><i class="ph ph-funnel"></i>Filter</button>
+          <button class="tb-btn accent"><i class="ph ph-plus"></i>New work order</button>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="filters">
+            <span class="chip on cnt">Open <b>14</b></span>
+            <span class="chip cnt">In progress <b>5</b></span>
+            <span class="chip cnt">Completed <b>128</b></span>
+            <span class="chip cnt">Cancelled <b>3</b></span>
+          </div>
+          <table>
+            <thead><tr>
+              <th style="width:120px">ID</th>
+              <th>Task</th>
+              <th style="width:130px">Asset</th>
+              <th style="width:90px">Priority</th>
+              <th style="width:90px">Due</th>
+              <th style="width:70px">Tech</th>
+            </tr></thead>
+            <tbody>
+              <tr><td class="mono">WO-2181</td><td>Pressure test · hydraulic</td><td class="mono">AF-0042</td><td><span class="pill" style="background:#FEF0CE; color:#7A3B06; font-family:var(--af-font-mono); font-size:9.5px; letter-spacing:0.08em;">HIGH</span></td><td class="mono">Apr 23</td><td>MC</td></tr>
+              <tr><td class="mono">WO-2180</td><td>Belt tension check — flagged</td><td class="mono">AF-0131</td><td><span class="pill" style="background:#FDE0E0; color:#8B1C1F; font-family:var(--af-font-mono); font-size:9.5px; letter-spacing:0.08em;">CRITICAL</span></td><td class="mono" style="color:var(--af-crit-600)">2d over</td><td>MC</td></tr>
+              <tr><td class="mono">WO-2178</td><td>Oil change — synthetic 10W-30</td><td class="mono">AF-0088</td><td><span class="pill" style="background:#FEF0CE; color:#7A3B06; font-family:var(--af-font-mono); font-size:9.5px; letter-spacing:0.08em;">HIGH</span></td><td class="mono">Apr 22</td><td>AO</td></tr>
+              <tr><td class="mono">WO-2177</td><td>Quarterly safety inspection</td><td class="mono">AF-0511</td><td><span class="pill" style="background:#DBEAFE; color:#1A4BA5; font-family:var(--af-font-mono); font-size:9.5px; letter-spacing:0.08em;">MEDIUM</span></td><td class="mono">Apr 23</td><td>JP</td></tr>
+              <tr><td class="mono">WO-2174</td><td>Filter replacement</td><td class="mono">AF-0256</td><td><span class="pill" style="background:var(--af-ink-100); color:var(--af-fg-muted); font-family:var(--af-font-mono); font-size:9.5px; letter-spacing:0.08em;">LOW</span></td><td class="mono">Today</td><td>AO</td></tr>
+              <tr><td class="mono">WO-2172</td><td>Electrode inspection</td><td class="mono">AF-0198</td><td><span class="pill" style="background:#DBEAFE; color:#1A4BA5; font-family:var(--af-font-mono); font-size:9.5px; letter-spacing:0.08em;">MEDIUM</span></td><td class="mono">Apr 24</td><td>JP</td></tr>
+              <tr><td class="mono">WO-2170</td><td>Lubrication — gearbox</td><td class="mono">AF-0042</td><td><span class="pill" style="background:var(--af-ink-100); color:var(--af-fg-muted); font-family:var(--af-font-mono); font-size:9.5px; letter-spacing:0.08em;">LOW</span></td><td class="mono">Apr 26</td><td>MC</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Detail pane -->
+        <div class="panel">
+          <div class="panel-head"><span class="eyebrow">WO-2180 · Detail</span><i class="ph ph-x" style="color:var(--af-fg-muted); cursor:pointer"></i></div>
+          <div style="padding:14px 16px;">
+            <span class="pill" style="background:#FDE0E0; color:#8B1C1F; font-family:var(--af-font-mono); font-size:9.5px; letter-spacing:0.08em;">CRITICAL · 2D OVER</span>
+            <div style="font-size:15px; font-weight:600; margin:8px 0 2px;">Belt tension check — flagged by technician</div>
+            <div class="mono" style="color:var(--af-fg-muted)">AF-0131 · Conveyor Belt A · B3·Z1</div>
+
+            <div style="margin-top:14px; display:grid; grid-template-columns: auto 1fr; gap:6px 14px; font-size:12px;">
+              <span class="eyebrow" style="padding-top:2px">Reported</span><span>Belt slipping under load at 80% capacity. Squeal audible from bearing housing.</span>
+              <span class="eyebrow" style="padding-top:2px">Assigned</span><span>Marcus Chen · Technician</span>
+              <span class="eyebrow" style="padding-top:2px">Est. time</span><span class="mono">1h 30m</span>
+              <span class="eyebrow" style="padding-top:2px">Created</span><span class="mono">Apr 20 · 14:02 · by M. Chen</span>
+            </div>
+
+            <div style="margin-top:14px; padding-top:14px; border-top: 1px dashed var(--af-ink-150);">
+              <div class="eyebrow" style="margin-bottom:8px">Comments · 2</div>
+              <div style="font-size:12px; margin-bottom:10px"><b>Sarah Reyes</b> <span class="mono" style="color:var(--af-fg-muted); font-size:10px">· 1H AGO</span><br/>Marking as critical. Re-assigned to Marcus for tomorrow morning.</div>
+              <div style="font-size:12px"><b>Marcus Chen</b> <span class="mono" style="color:var(--af-fg-muted); font-size:10px">· 30M AGO</span><br/>Ordered replacement belt just in case. Will bring spare.</div>
+            </div>
+
+            <div style="margin-top:14px; display:flex; gap: 6px;">
+              <button class="tb-btn accent" style="flex:1; justify-content:center"><i class="ph ph-play"></i>Start work</button>
+              <button class="tb-btn"><i class="ph ph-user-switch"></i>Reassign</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= MAINTENANCE / SCHEDULE ROUTE ======= -->
+    <section class="route" data-panel="schedule" style="display:none">
+      <div class="page-head">
+        <div>
+          <div class="eyebrow">Preventive maintenance</div>
+          <h1 style="margin-top:4px">Schedule</h1>
+          <div class="sub">Week of Apr 22 · 11 tasks planned · 2 overdue</div>
+        </div>
+        <div class="page-actions">
+          <button class="tb-btn"><i class="ph ph-caret-left"></i></button>
+          <button class="tb-btn">This week</button>
+          <button class="tb-btn"><i class="ph ph-caret-right"></i></button>
+          <button class="tb-btn accent"><i class="ph ph-plus"></i>New schedule</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div style="display:grid; grid-template-columns: repeat(7, 1fr); border-bottom: 1px solid var(--af-border);">
+          <div style="padding: 10px 14px; border-right:1px solid var(--af-border);"><div class="eyebrow">Mon 22</div><div style="font-size:20px; font-weight:600; letter-spacing:-.02em; margin-top:4px">3<span style="font-size:12px; color:var(--af-fg-muted); font-weight:500"> tasks</span></div></div>
+          <div style="padding: 10px 14px; border-right:1px solid var(--af-border);"><div class="eyebrow">Tue 23</div><div style="font-size:20px; font-weight:600; letter-spacing:-.02em; margin-top:4px">2</div></div>
+          <div style="padding: 10px 14px; border-right:1px solid var(--af-border);"><div class="eyebrow">Wed 24</div><div style="font-size:20px; font-weight:600; letter-spacing:-.02em; margin-top:4px">1</div></div>
+          <div style="padding: 10px 14px; border-right:1px solid var(--af-border); background:var(--af-orange-050);"><div class="eyebrow" style="color:var(--af-orange-600)">Thu 25 · today</div><div style="font-size:20px; font-weight:600; letter-spacing:-.02em; margin-top:4px">2</div></div>
+          <div style="padding: 10px 14px; border-right:1px solid var(--af-border);"><div class="eyebrow">Fri 26</div><div style="font-size:20px; font-weight:600; letter-spacing:-.02em; margin-top:4px">1</div></div>
+          <div style="padding: 10px 14px; border-right:1px solid var(--af-border);"><div class="eyebrow">Sat 27</div><div style="font-size:20px; font-weight:600; letter-spacing:-.02em; margin-top:4px; color:var(--af-fg-muted)">—</div></div>
+          <div style="padding: 10px 14px;"><div class="eyebrow">Sun 28</div><div style="font-size:20px; font-weight:600; letter-spacing:-.02em; margin-top:4px">2</div></div>
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(7, 1fr); min-height: 300px;">
+          <div style="padding:10px; border-right:1px solid var(--af-ink-150); display:flex; flex-direction:column; gap:4px;">
+            <div style="background:var(--af-crit-100); border-left:3px solid var(--af-crit-500); padding:6px 8px; border-radius:3px;"><div style="font-weight:600; font-size:11.5px">Belt tension</div><div class="mono" style="font-size:10px; color:var(--af-crit-600)">AF-0131 · overdue</div></div>
+            <div style="background:var(--af-warn-100); border-left:3px solid var(--af-warn-500); padding:6px 8px; border-radius:3px;"><div style="font-weight:600; font-size:11.5px">Oil change</div><div class="mono" style="font-size:10px; color:var(--af-warn-600)">AF-0088 · 13:30</div></div>
+            <div style="background:var(--af-ok-100); border-left:3px solid var(--af-ok-500); padding:6px 8px; border-radius:3px;"><div style="font-weight:600; font-size:11.5px">Filter replace</div><div class="mono" style="font-size:10px; color:var(--af-ok-600)">AF-0256 · 16:00</div></div>
+          </div>
+          <div style="padding:10px; border-right:1px solid var(--af-ink-150); display:flex; flex-direction:column; gap:4px;">
+            <div style="background:#DBEAFE; border-left:3px solid var(--af-blue-500); padding:6px 8px; border-radius:3px;"><div style="font-weight:600; font-size:11.5px">Pressure test</div><div class="mono" style="font-size:10px; color:var(--af-blue-700)">AF-0042 · 10:00</div></div>
+            <div style="background:var(--af-ok-100); border-left:3px solid var(--af-ok-500); padding:6px 8px; border-radius:3px;"><div style="font-weight:600; font-size:11.5px">Safety check</div><div class="mono" style="font-size:10px; color:var(--af-ok-600)">AF-0511 · 14:00</div></div>
+          </div>
+          <div style="padding:10px; border-right:1px solid var(--af-ink-150);">
+            <div style="background:var(--af-ok-100); border-left:3px solid var(--af-ok-500); padding:6px 8px; border-radius:3px;"><div style="font-weight:600; font-size:11.5px">Electrode insp.</div><div class="mono" style="font-size:10px; color:var(--af-ok-600)">AF-0198 · 11:00</div></div>
+          </div>
+          <div style="padding:10px; border-right:1px solid var(--af-ink-150); background: rgba(255,107,53,.03); display:flex; flex-direction:column; gap:4px;">
+            <div style="background:#DBEAFE; border-left:3px solid var(--af-blue-500); padding:6px 8px; border-radius:3px;"><div style="font-weight:600; font-size:11.5px">Lubrication</div><div class="mono" style="font-size:10px; color:var(--af-blue-700)">AF-0042 · 09:00</div></div>
+            <div style="background:var(--af-ok-100); border-left:3px solid var(--af-ok-500); padding:6px 8px; border-radius:3px;"><div style="font-weight:600; font-size:11.5px">Calibration</div><div class="mono" style="font-size:10px; color:var(--af-ok-600)">AF-0612 · 15:00</div></div>
+          </div>
+          <div style="padding:10px; border-right:1px solid var(--af-ink-150);">
+            <div style="background:var(--af-ok-100); border-left:3px solid var(--af-ok-500); padding:6px 8px; border-radius:3px;"><div style="font-weight:600; font-size:11.5px">Coolant flush</div><div class="mono" style="font-size:10px; color:var(--af-ok-600)">AF-0088 · 10:00</div></div>
+          </div>
+          <div style="border-right:1px solid var(--af-ink-150); background: repeating-linear-gradient(135deg, transparent 0 6px, rgba(14,17,22,.02) 6px 7px);"></div>
+          <div style="padding:10px; display:flex; flex-direction:column; gap:4px;">
+            <div style="background:var(--af-ok-100); border-left:3px solid var(--af-ok-500); padding:6px 8px; border-radius:3px;"><div style="font-weight:600; font-size:11.5px">Weekly audit</div><div class="mono" style="font-size:10px; color:var(--af-ok-600)">ALL · 08:00</div></div>
+            <div style="background:#DBEAFE; border-left:3px solid var(--af-blue-500); padding:6px 8px; border-radius:3px;"><div style="font-weight:600; font-size:11.5px">Generator test</div><div class="mono" style="font-size:10px; color:var(--af-blue-700)">AF-0301 · 12:00</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  // Simple routing
+  const items = document.querySelectorAll('.sb-item[data-route]');
+  const routes = document.querySelectorAll('.route');
+  const crumb = document.querySelector('[data-breadcrumb]');
+  const labels = { dashboard:'Dashboard', assets:'Assets', work:'Work orders', schedule:'Maintenance' };
+  items.forEach(it => it.addEventListener('click', () => {
+    const r = it.dataset.route;
+    items.forEach(i => i.classList.toggle('active', i === it));
+    routes.forEach(x => x.style.display = x.dataset.panel === r ? '' : 'none');
+    crumb.textContent = labels[r] || r;
+  }));
+</script>
+</body>
+</html>

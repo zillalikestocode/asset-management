@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Form Inputs</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  .card { padding: 20px; background: var(--af-surface); border: 1px solid var(--af-border); border-radius: 8px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field label { display: block; font-family: var(--af-font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--af-fg-muted); margin-bottom: 6px; }
+  .input { width: 100%; height: 34px; padding: 0 12px; font-family: var(--af-font-sans); font-size: 13px; border: 1px solid var(--af-border); border-radius: 5px; background: #fff; color: var(--af-fg); box-sizing: border-box; }
+  .input:focus { outline: none; border-color: var(--af-blue-500); box-shadow: 0 0 0 3px rgba(59,130,246,.15); }
+  .input.mono { font-family: var(--af-font-mono); font-size: 12px; }
+  .input.err { border-color: var(--af-crit-500); box-shadow: 0 0 0 3px rgba(239,68,68,.12); }
+  .hint { font-size: 11px; color: var(--af-fg-muted); margin-top: 5px; font-family: var(--af-font-sans); }
+  .hint.err { color: var(--af-crit-600); }
+  .chk { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .chk input { accent-color: var(--af-orange-500); width: 14px; height: 14px; }
+</style>
+</head>
+<body style="padding: 20px;">
+  <div class="card">
+    <div class="af-eyebrow" style="margin-bottom: 14px;">Form inputs</div>
+    <div class="grid">
+      <div class="field"><label>Asset Name</label><input class="input" value="Hydraulic Press #4"/></div>
+      <div class="field"><label>Asset ID</label><input class="input mono" value="AF-0042-PRESS-H4"/></div>
+      <div class="field"><label>Serial Number</label><input class="input mono" placeholder="8847-QX-0913"/><div class="hint">Must be unique per tenant</div></div>
+      <div class="field"><label>Purchase Cost</label><input class="input err" value="-1250"/><div class="hint err">Cost must be positive</div></div>
+    </div>
+    <div style="margin-top: 14px; display:flex; gap: 18px;">
+      <label class="chk"><input type="checkbox" checked/>Require photo on completion</label>
+      <label class="chk"><input type="checkbox"/>Notify manager on overdue</label>
+    </div>
+  </div>
+</body>
+</html>

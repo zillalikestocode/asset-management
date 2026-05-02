@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>AssetFlow · Mobile PWA</title>
+<link rel="stylesheet" href="../../colors_and_type.css"/>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"/>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css"/>
+<style>
+  html, body { margin:0; height: 100%; font-family: var(--af-font-sans); background: #EDE8DE; color: var(--af-fg); -webkit-font-smoothing: antialiased;}
+  .stage { min-height: 100vh; display:grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 40px; padding: 40px; justify-items: center;}
+
+  /* iPhone frame */
+  .phone { width: 390px; height: 780px; border-radius: 44px; background: #0E1116; padding: 10px; box-shadow: 0 30px 60px -20px rgba(14,17,22,.3), 0 0 0 1px rgba(14,17,22,.08); position: relative;}
+  .phone::before { content:''; position:absolute; top: 18px; left: 50%; transform: translateX(-50%); width: 110px; height: 30px; background: #000; border-radius: 20px; z-index: 10;}
+  .screen { width: 100%; height: 100%; border-radius: 36px; background: #FAFAF9; overflow: hidden; position: relative; display: flex; flex-direction: column;}
+
+  /* Status bar */
+  .statusbar { height: 46px; display:flex; justify-content: space-between; align-items: flex-end; padding: 0 28px 4px; font-size: 14px; font-weight: 600; flex-shrink: 0;}
+  .statusbar .right { display:flex; gap: 6px; align-items: center; font-size: 12px;}
+
+  /* Header */
+  .hdr { padding: 6px 20px 12px; display:flex; align-items:center; gap:10px; flex-shrink: 0;}
+  .hdr .back { width: 32px; height: 32px; border-radius: 99px; border:1px solid var(--af-border); background:#fff; display:grid; place-items:center;}
+  .hdr .back i { font-size: 16px;}
+  .hdr h1 { margin:0; font-size: 18px; font-weight: 600; letter-spacing: -0.015em; flex: 1;}
+  .hdr .avatar { width: 32px; height:32px; border-radius: 99px; background: linear-gradient(135deg, #FF6B35, #E55A22); color: #fff; display: grid; place-items:center; font-size: 11px; font-weight: 600;}
+
+  /* Content */
+  .content { flex: 1; overflow: auto; padding: 0 20px 20px;}
+
+  /* Greeting */
+  .greeting .eyebrow { font-family: var(--af-font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--af-fg-muted);}
+  .greeting h2 { margin: 2px 0 0; font-size: 22px; letter-spacing: -0.02em; font-weight: 600;}
+
+  /* Big scan CTA */
+  .scan-card { margin: 16px 0; border-radius: 16px; overflow: hidden; background: var(--af-ink-900); color: #fff; padding: 18px; display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; position: relative;}
+  .scan-card::before {
+    content:''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 8px 8px;
+  }
+  .scan-card > * { position: relative; z-index: 1;}
+  .scan-card h3 { margin: 0; font-size: 15px; font-weight: 600;}
+  .scan-card p { margin: 2px 0 0; font-size: 12px; color: #A0A7B3;}
+  .scan-btn { width: 56px; height: 56px; border-radius: 16px; background: var(--af-orange-500); display: grid; place-items: center; box-shadow: 0 8px 16px -4px rgba(255,107,53,.5);}
+  .scan-btn i { font-size: 26px; color: #fff;}
+
+  /* Section */
+  .sec { margin-top: 20px;}
+  .sec-head { display:flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;}
+  .sec-head .eyebrow { font-family: var(--af-font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--af-fg-muted);}
+  .sec-head a { font-size: 11px; color: var(--af-orange-600); text-decoration: none;}
+
+  /* Task rows */
+  .task { background: #fff; border: 1px solid var(--af-border); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; display: grid; grid-template-columns: 4px 1fr auto; gap: 12px; align-items: center;}
+  .task .pri { width: 4px; align-self: stretch; border-radius: 2px;}
+  .pri.crit { background: var(--af-crit-500);}
+  .pri.high { background: var(--af-warn-500);}
+  .pri.med { background: var(--af-blue-500);}
+  .task-title { font-size: 13.5px; font-weight: 600; letter-spacing: -0.01em;}
+  .task-meta { font-family: var(--af-font-mono); font-size: 10.5px; color: var(--af-fg-muted); margin-top: 2px;}
+  .task-go { width: 28px; height: 28px; border-radius: 99px; background: var(--af-ink-050); display:grid; place-items:center;}
+  .task-go i { font-size: 14px; color: var(--af-fg-muted);}
+
+  /* KPI strip */
+  .kstrip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 4px;}
+  .kt { background: #fff; border: 1px solid var(--af-border); border-radius: 10px; padding: 10px 12px;}
+  .kt .eyebrow { font-family: var(--af-font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--af-fg-muted);}
+  .kt b { display: block; font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin-top: 2px; font-variant-numeric: tabular-nums;}
+
+  /* Tab bar */
+  .tabbar { display: grid; grid-template-columns: repeat(4, 1fr); padding: 10px 16px 18px; background: rgba(255,255,255,.96); backdrop-filter: blur(14px); border-top: 1px solid var(--af-border); flex-shrink: 0;}
+  .tab { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; color: var(--af-fg-muted); font-size: 10px; font-family: var(--af-font-mono); letter-spacing: 0.06em; text-transform: uppercase;}
+  .tab i { font-size: 22px;}
+  .tab.active { color: var(--af-ink-900);}
+  .tab.active i { color: var(--af-orange-500);}
+
+  /* ======= SCANNER SCREEN ======= */
+  .scanner-screen { background: #0E1116; color: #fff; position:absolute; inset: 0; border-radius: 36px; display: flex; flex-direction: column;}
+  .scanner-screen .statusbar { color: #fff;}
+  .scanner-view { flex: 1; position: relative; overflow: hidden;
+    background:
+      radial-gradient(ellipse at center, rgba(255,107,53,.06), transparent 60%),
+      linear-gradient(135deg, #1C1F26 0%, #0E1116 100%);
+  }
+  .scanner-view::before {
+    content:''; position:absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .reticle { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 220px; height: 220px;}
+  .reticle::before, .reticle::after { content:''; position: absolute; width: 40px; height: 40px; border: 2px solid var(--af-orange-500);}
+  .reticle::before { top: 0; left: 0; border-right: 0; border-bottom: 0;}
+  .reticle::after { bottom: 0; right: 0; border-left: 0; border-top: 0;}
+  .reticle .tr { position: absolute; top: 0; right: 0; width: 40px; height: 40px; border: 2px solid var(--af-orange-500); border-left: 0; border-bottom: 0;}
+  .reticle .bl { position: absolute; bottom: 0; left: 0; width: 40px; height: 40px; border: 2px solid var(--af-orange-500); border-right: 0; border-top: 0;}
+  .reticle .line { position: absolute; top: 50%; left: 8px; right: 8px; height: 2px; background: var(--af-orange-500); box-shadow: 0 0 10px var(--af-orange-500); animation: scan 2s ease-in-out infinite;}
+  @keyframes scan { 0%, 100% { top: 10%;} 50% { top: 90%;}}
+
+  .scan-prompt { position: absolute; bottom: 140px; left: 0; right: 0; text-align: center;}
+  .scan-prompt .eyebrow { font-family: var(--af-font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--af-orange-500);}
+  .scan-prompt h4 { margin: 6px 0 2px; font-size: 18px; font-weight: 600;}
+  .scan-prompt p { margin: 0; font-size: 12px; color: #A0A7B3;}
+
+  .scan-actions { position: absolute; bottom: 30px; left: 20px; right: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;}
+  .sa-btn { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); border-radius: 10px; padding: 10px; color: #fff; text-align: center; font-size: 12px; font-weight: 500; display:flex; align-items:center; justify-content:center; gap: 6px;}
+  .sa-btn i { font-size: 14px;}
+  .sa-close { position: absolute; top: 58px; right: 20px; width: 32px; height: 32px; border-radius: 99px; background: rgba(255,255,255,.1); display: grid; place-items: center; color: #fff;}
+
+  /* ======= ASSET DETAIL SCREEN ======= */
+  .detail-hdr { background: var(--af-ink-900); color: #fff; padding: 50px 20px 16px; position: relative;}
+  .detail-hdr::after {
+    content:''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 8px 8px;
+    pointer-events: none;
+  }
+  .detail-hdr > * { position: relative; z-index: 1;}
+  .detail-hdr .back { background: rgba(255,255,255,.1); border: 0; color: #fff;}
+  .detail-hdr .back i { color: #fff;}
+  .detail-hdr .id { font-family: var(--af-font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--af-orange-500); margin-top: 12px;}
+  .detail-hdr h2 { margin: 2px 0 4px; font-size: 22px; letter-spacing: -0.02em; font-weight: 600;}
+  .detail-hdr .sub { font-size: 12px; color: #A0A7B3; display:flex; gap: 10px; align-items: center;}
+  .detail-hdr .sub .dot { width: 5px; height: 5px; border-radius: 99px; background: var(--af-ok-500);}
+
+  .detail-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 14px 20px; background: var(--af-ink-050); border-bottom: 1px solid var(--af-border);}
+  .detail-meta .dm .eyebrow { font-family: var(--af-font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--af-fg-muted);}
+  .detail-meta .dm b { display:block; font-size: 13px; font-weight: 600; margin-top: 2px;}
+  .detail-meta .dm .mono { font-family: var(--af-font-mono); font-size: 11px; color: var(--af-fg); font-weight: 500;}
+
+  /* Action buttons */
+  .actions { padding: 14px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;}
+  .action { background: #fff; border: 1px solid var(--af-border); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 4px;}
+  .action i { font-size: 20px; color: var(--af-orange-500);}
+  .action b { font-size: 13px; font-weight: 600;}
+  .action span { font-size: 11px; color: var(--af-fg-muted);}
+  .action.primary { background: var(--af-ink-900); border-color: var(--af-ink-900); color: #fff;}
+  .action.primary i { color: var(--af-orange-500);}
+  .action.primary span { color: #A0A7B3;}
+
+  /* History */
+  .hist { padding: 0 20px 20px;}
+  .hist-item { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--af-ink-150);}
+  .hist-item:last-child { border-bottom: 0;}
+  .hist-ic { width: 28px; height: 28px; border-radius: 8px; background: var(--af-ink-100); display: grid; place-items: center;}
+  .hist-ic i { font-size: 14px; color: var(--af-fg-muted);}
+  .hist-ic.ok { background: var(--af-ok-100);} .hist-ic.ok i { color: var(--af-ok-600);}
+  .hist-ic.warn { background: var(--af-warn-100);} .hist-ic.warn i { color: var(--af-warn-600);}
+  .hist-title { font-size: 13px; font-weight: 600;}
+  .hist-meta { font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-muted); margin-top: 2px;}
+
+  /* Floor label */
+  .floor-label { font-family: var(--af-font-mono); font-size: 11px; text-align: center; color: var(--af-fg-muted); margin-top: 24px; letter-spacing: 0.08em;}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- ================= PHONE 1: HOME ================= -->
+  <div>
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><div class="right"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-fill ph-wifi-high"></i><span style="font-family:var(--af-font-mono); font-size:11px; background:#0E1116; color:#fff; padding:1px 4px; border-radius:3px">87</span></div></div>
+
+        <div class="hdr">
+          <div style="width:32px; height:32px; border-radius:8px; background:var(--af-ink-900); display:grid; place-items:center;"><div style="width:6px; height:6px; border-radius:99px; background:var(--af-orange-500)"></div></div>
+          <h1>AssetFlow</h1>
+          <div class="avatar">MC</div>
+        </div>
+
+        <div class="content">
+          <div class="greeting">
+            <div class="eyebrow">Thursday · Apr 25</div>
+            <h2>Hey Marcus. 4 tasks today.</h2>
+          </div>
+
+          <div class="scan-card">
+            <div>
+              <div style="font-family:var(--af-font-mono); font-size:9.5px; letter-spacing:0.14em; color:var(--af-orange-500)">QUICK SCAN</div>
+              <h3>Tap to scan any asset</h3>
+              <p>Point at a QR label or barcode</p>
+            </div>
+            <div class="scan-btn"><i class="ph-bold ph-qr-code"></i></div>
+          </div>
+
+          <div class="kstrip">
+            <div class="kt"><div class="eyebrow">Today</div><b>4</b></div>
+            <div class="kt"><div class="eyebrow">Overdue</div><b style="color:var(--af-crit-600)">1</b></div>
+            <div class="kt"><div class="eyebrow">Done</div><b>12</b></div>
+          </div>
+
+          <div class="sec">
+            <div class="sec-head"><span class="eyebrow">My queue · today</span><a>See all</a></div>
+            <div class="task">
+              <div class="pri crit"></div>
+              <div>
+                <div class="task-title">Belt tension check</div>
+                <div class="task-meta">WO-2180 · AF-0131 · 2D OVER</div>
+              </div>
+              <div class="task-go"><i class="ph-bold ph-caret-right"></i></div>
+            </div>
+            <div class="task">
+              <div class="pri high"></div>
+              <div>
+                <div class="task-title">Pressure test · hydraulic</div>
+                <div class="task-meta">WO-2181 · AF-0042 · DUE 10:00</div>
+              </div>
+              <div class="task-go"><i class="ph-bold ph-caret-right"></i></div>
+            </div>
+            <div class="task">
+              <div class="pri med"></div>
+              <div>
+                <div class="task-title">Lubrication · gearbox</div>
+                <div class="task-meta">WO-2170 · AF-0042 · DUE 14:00</div>
+              </div>
+              <div class="task-go"><i class="ph-bold ph-caret-right"></i></div>
+            </div>
+            <div class="task">
+              <div class="pri med"></div>
+              <div>
+                <div class="task-title">Weekly safety audit</div>
+                <div class="task-meta">WO-2183 · ALL · DUE 16:30</div>
+              </div>
+              <div class="task-go"><i class="ph-bold ph-caret-right"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tabbar">
+          <div class="tab active"><i class="ph-fill ph-house"></i>Home</div>
+          <div class="tab"><i class="ph ph-clipboard-text"></i>Tasks</div>
+          <div class="tab"><i class="ph ph-qr-code"></i>Scan</div>
+          <div class="tab"><i class="ph ph-user"></i>Me</div>
+        </div>
+      </div>
+    </div>
+    <div class="floor-label">HOME · FIELD TECHNICIAN</div>
+  </div>
+
+  <!-- ================= PHONE 2: SCANNER ================= -->
+  <div>
+    <div class="phone">
+      <div class="screen">
+        <div class="scanner-screen">
+          <div class="statusbar"><span>9:41</span><div class="right"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-fill ph-wifi-high"></i></div></div>
+          <div class="scanner-view">
+            <div class="sa-close"><i class="ph-bold ph-x"></i></div>
+            <div class="reticle">
+              <div class="tr"></div><div class="bl"></div>
+              <div class="line"></div>
+            </div>
+            <div class="scan-prompt">
+              <div class="eyebrow">Scanning</div>
+              <h4>Align the QR within the frame</h4>
+              <p>Works offline. We'll sync when you're back.</p>
+            </div>
+            <div class="scan-actions">
+              <div class="sa-btn"><i class="ph ph-flashlight"></i>Torch</div>
+              <div class="sa-btn"><i class="ph ph-keyboard"></i>Enter ID</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="floor-label">SCAN · QR + BARCODE</div>
+  </div>
+
+  <!-- ================= PHONE 3: ASSET DETAIL ================= -->
+  <div>
+    <div class="phone">
+      <div class="screen">
+        <div style="background:var(--af-ink-900); height: 46px; display:flex; justify-content: space-between; align-items: flex-end; padding: 0 28px 4px; font-size: 14px; font-weight: 600; color: #fff; flex-shrink: 0;"><span>9:42</span><div style="display:flex; gap: 6px; align-items: center; font-size: 12px;"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-fill ph-wifi-high"></i></div></div>
+
+        <div class="detail-hdr">
+          <div style="display:flex; justify-content: space-between; align-items: center;">
+            <div class="back" style="display:grid; place-items:center; width:32px; height:32px; border-radius:99px;"><i class="ph-bold ph-caret-left"></i></div>
+            <div style="display:flex; gap: 6px;">
+              <div class="back" style="display:grid; place-items:center; width:32px; height:32px; border-radius:99px;"><i class="ph ph-share-fat"></i></div>
+              <div class="back" style="display:grid; place-items:center; width:32px; height:32px; border-radius:99px;"><i class="ph ph-dots-three"></i></div>
+            </div>
+          </div>
+          <div class="id">AF-0131 · CONVEYOR</div>
+          <h2>Conveyor Belt A</h2>
+          <div class="sub"><i class="ph ph-map-pin" style="font-size:13px"></i>B3 · Zone 2 <span class="dot" style="margin-left:8px; background:var(--af-crit-500)"></span><span style="color:var(--af-crit-500)">Overdue 2d</span></div>
+        </div>
+
+        <div class="detail-meta">
+          <div class="dm"><div class="eyebrow">Runtime</div><b class="mono">2,418 h</b></div>
+          <div class="dm"><div class="eyebrow">Next PM</div><b style="color:var(--af-crit-600)">Overdue</b></div>
+          <div class="dm"><div class="eyebrow">Last check</div><b class="mono">3d ago</b></div>
+        </div>
+
+        <div class="actions">
+          <div class="action primary">
+            <i class="ph-bold ph-play"></i>
+            <b>Start work order</b>
+            <span>WO-2180 assigned to you</span>
+          </div>
+          <div class="action">
+            <i class="ph ph-warning"></i>
+            <b>Report issue</b>
+            <span>Photo + description</span>
+          </div>
+          <div class="action">
+            <i class="ph ph-wrench"></i>
+            <b>Log maintenance</b>
+            <span>Quick-log a completed task</span>
+          </div>
+          <div class="action">
+            <i class="ph ph-file-text"></i>
+            <b>View manual</b>
+            <span>Manufacturer PDF · 14MB</span>
+          </div>
+        </div>
+
+        <div class="hist">
+          <div class="sec-head"><span class="eyebrow">Recent history</span><a>Full log</a></div>
+          <div class="hist-item">
+            <div class="hist-ic warn"><i class="ph-bold ph-warning"></i></div>
+            <div>
+              <div class="hist-title">Flagged critical — belt slipping</div>
+              <div class="hist-meta">YOU · APR 20 · 14:02</div>
+            </div>
+          </div>
+          <div class="hist-item">
+            <div class="hist-ic ok"><i class="ph-bold ph-check"></i></div>
+            <div>
+              <div class="hist-title">Completed monthly lubrication</div>
+              <div class="hist-meta">A. OKAFOR · MAR 28</div>
+            </div>
+          </div>
+          <div class="hist-item">
+            <div class="hist-ic"><i class="ph ph-gear"></i></div>
+            <div>
+              <div class="hist-title">Belt replaced — 1st generation</div>
+              <div class="hist-meta">M. CHEN · FEB 03</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="floor-label">ASSET DETAIL · AFTER SCAN</div>
+  </div>
+
+</div>
+</body>
+</html>

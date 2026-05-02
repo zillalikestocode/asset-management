@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Spacing — 4px Base</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  .card { padding: 24px; background: var(--af-surface); border: 1px solid var(--af-border); border-radius: 8px; }
+  .row { display: grid; grid-template-columns: 60px 1fr 60px; gap: 16px; align-items: center; padding: 4px 0; }
+  .bar { height: 14px; background: var(--af-orange-500); border-radius: 2px; }
+  .name { font-family: var(--af-font-mono); font-size: 11px; color: var(--af-fg); }
+  .val { font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-muted); text-align: right; }
+</style>
+</head>
+<body style="padding: 20px;">
+  <div class="card">
+    <div class="af-eyebrow" style="margin-bottom: 12px;">Spacing · 4px base grid</div>
+    <div class="row"><span class="name">--space-1</span><div class="bar" style="width:2px"></div><span class="val">2px</span></div>
+    <div class="row"><span class="name">--space-2</span><div class="bar" style="width:4px"></div><span class="val">4px</span></div>
+    <div class="row"><span class="name">--space-3</span><div class="bar" style="width:8px"></div><span class="val">8px</span></div>
+    <div class="row"><span class="name">--space-4</span><div class="bar" style="width:12px"></div><span class="val">12px</span></div>
+    <div class="row"><span class="name">--space-5</span><div class="bar" style="width:16px"></div><span class="val">16px</span></div>
+    <div class="row"><span class="name">--space-6</span><div class="bar" style="width:20px"></div><span class="val">20px</span></div>
+    <div class="row"><span class="name">--space-7</span><div class="bar" style="width:24px"></div><span class="val">24px</span></div>
+    <div class="row"><span class="name">--space-8</span><div class="bar" style="width:32px"></div><span class="val">32px</span></div>
+    <div class="row"><span class="name">--space-9</span><div class="bar" style="width:48px"></div><span class="val">48px</span></div>
+    <div class="row"><span class="name">--space-10</span><div class="bar" style="width:64px"></div><span class="val">64px</span></div>
+  </div>
+</body>
+</html>

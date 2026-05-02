@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Badges & Status Pills</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  .card { padding: 20px; background: var(--af-surface); border: 1px solid var(--af-border); border-radius: 8px; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .row:last-child { margin-bottom: 0; }
+  .lbl { font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-muted); letter-spacing: 0.1em; text-transform: uppercase; width: 80px; flex-shrink: 0; }
+  .pill { font-family: var(--af-font-sans); font-weight: 500; font-size: 11px; padding: 2px 8px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; line-height: 1.6; }
+  .dot { width: 6px; height: 6px; border-radius: 99px; }
+  .tag-mono { font-family: var(--af-font-mono); font-size: 11px; padding: 2px 6px; border-radius: 3px; background: var(--af-ink-100); border: 1px solid var(--af-border); color: var(--af-fg); }
+</style>
+</head>
+<body style="padding: 20px;">
+  <div class="card">
+    <div class="af-eyebrow" style="margin-bottom: 12px;">Status pills</div>
+    <div class="row"><span class="lbl">Status</span>
+      <span class="pill" style="background:#E8F5D4; color:#3A6912;"><span class="dot" style="background:#4D8B1A"></span>Healthy</span>
+      <span class="pill" style="background:#FEF0CE; color:#7A3B06;"><span class="dot" style="background:#B45309"></span>Due in 3d</span>
+      <span class="pill" style="background:#FDE0E0; color:#8B1C1F;"><span class="dot" style="background:#C52629"></span>Overdue</span>
+      <span class="pill" style="background:#DBEAFE; color:#1A4BA5;"><span class="dot" style="background:#1E5FD4"></span>Scheduled</span>
+      <span class="pill" style="background:var(--af-ink-100); color:var(--af-fg-muted);"><span class="dot" style="background:var(--af-ink-400)"></span>Archived</span>
+    </div>
+    <div class="row"><span class="lbl">Priority</span>
+      <span class="pill" style="background:#FDE0E0; color:#8B1C1F; font-family:var(--af-font-mono); font-size:10px; letter-spacing:0.08em;">CRITICAL</span>
+      <span class="pill" style="background:#FEF0CE; color:#7A3B06; font-family:var(--af-font-mono); font-size:10px; letter-spacing:0.08em;">HIGH</span>
+      <span class="pill" style="background:#DBEAFE; color:#1A4BA5; font-family:var(--af-font-mono); font-size:10px; letter-spacing:0.08em;">MEDIUM</span>
+      <span class="pill" style="background:var(--af-ink-100); color:var(--af-fg-muted); font-family:var(--af-font-mono); font-size:10px; letter-spacing:0.08em;">LOW</span>
+    </div>
+    <div class="row"><span class="lbl">ID tags</span>
+      <span class="tag-mono">AF-0042</span>
+      <span class="tag-mono">WO-2174</span>
+      <span class="tag-mono">LOC·B3·Z2</span>
+      <span class="tag-mono" style="color:var(--af-orange-600); border-color:var(--af-orange-100); background:var(--af-orange-050);">PUMP-V2</span>
+    </div>
+  </div>
+</body>
+</html>

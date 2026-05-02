@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 32" fill="none">
+  <rect x="0" y="0" width="32" height="32" rx="6" fill="#0E1116"></rect>
+  <path d="M7 20 L7 12 L15 8 L23 12 L23 20 L15 24 Z" stroke="#FAFAF9" stroke-width="1.5" stroke-linejoin="round"></path>
+  <path d="M7 12 L15 16 L23 12" stroke="#FAFAF9" stroke-width="1.5" stroke-linejoin="round"></path>
+  <path d="M15 16 L15 24" stroke="#FAFAF9" stroke-width="1.5"></path>
+  <circle cx="15" cy="16" r="1.5" fill="#FF6B35"></circle>
+  <text x="42" y="22" font-family="Inter Tight, sans-serif" font-size="18" font-weight="600" fill="#0E1116" letter-spacing="-0.3">AssetFlow</text>
+</svg>

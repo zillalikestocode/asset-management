@@ -1,0 +1,107 @@
+<h2>PRD Design — AssetFlow MVP</h2>
+<p class="subtitle">User Journey structure · B2B · Manufacturing SMEs · Web + Mobile PWA</p>
+
+<div class="section">
+  <h3>Document Sections</h3>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px">
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <span class="label">Section 1</span>
+      <h3 style="margin:6px 0 4px">Executive Summary</h3>
+      <p style="font-size:0.85rem">Problem statement · Solution overview · Market opportunity ($32.2B by 2028) · Business model summary</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <span class="label">Section 2</span>
+      <h3 style="margin:6px 0 4px">Product Vision & Goals</h3>
+      <p style="font-size:0.85rem">Vision statement · MVP objectives · Success metrics & KPIs · Out-of-scope items</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <span class="label">Section 3</span>
+      <h3 style="margin:6px 0 4px">Market Context</h3>
+      <p style="font-size:0.85rem">Target segment (manufacturing SMEs 10–500 employees) · Competitive landscape · Positioning vs. Fiix, UpKeep, Limble CMMS</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <span class="label">Section 4</span>
+      <h3 style="margin:6px 0 4px">User Personas</h3>
+      <p style="font-size:0.85rem">3 core roles: <strong>Admin</strong> (Operations Manager) · <strong>Technician</strong> (Field Worker) · <strong>Manager</strong> (Plant/Dept Manager)</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;border-left:3px solid var(--accent)">
+      <span class="label">Section 5 — Core</span>
+      <h3 style="margin:6px 0 4px">User Journeys</h3>
+      <p style="font-size:0.85rem"><strong>Admin:</strong> Onboarding → Asset setup → User mgmt<br><strong>Technician:</strong> Scan → Log maintenance → Work orders<br><strong>Manager:</strong> Dashboard → Schedule → Reports → Alerts</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;border-left:3px solid var(--accent)">
+      <span class="label">Section 6 — Core</span>
+      <h3 style="margin:6px 0 4px">Feature Specifications</h3>
+      <p style="font-size:0.85rem">Asset Registry · QR/Barcode Scanning · GPS Tracking · Maintenance Scheduling · Work Orders · Alerts · Dashboard · User Management</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <span class="label">Section 7</span>
+      <h3 style="margin:6px 0 4px">Role × Feature Matrix</h3>
+      <p style="font-size:0.85rem">Table mapping which features each role can access. Clarifies permissions and priorities at a glance.</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <span class="label">Section 8</span>
+      <h3 style="margin:6px 0 4px">Technical Requirements</h3>
+      <p style="font-size:0.85rem">Web App + Mobile PWA · Camera-based QR scanning · GPS via browser API · SaaS cloud-hosted · Performance & uptime targets</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <span class="label">Section 9</span>
+      <h3 style="margin:6px 0 4px">Pricing & Business Model</h3>
+      <p style="font-size:0.85rem">Per-seat subscription (Starter · Pro) · Enterprise plan with direct sales · Pricing tiers · Revenue projections</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <span class="label">Section 10</span>
+      <h3 style="margin:6px 0 4px">MVP Timeline & Milestones</h3>
+      <p style="font-size:0.85rem">Phased 6-month build plan · Key milestones · Go-to-market timing</p>
+    </div>
+
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px">
+  <h3>3 User Roles</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center">
+      <div style="font-size:2rem;margin-bottom:8px">🏢</div>
+      <h3>Admin</h3>
+      <p style="font-size:0.8rem">Operations Manager<br>Sets up system, manages assets & users, configures alerts</p>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center">
+      <div style="font-size:2rem;margin-bottom:8px">🔧</div>
+      <h3>Technician</h3>
+      <p style="font-size:0.8rem">Field Worker<br>Scans assets, logs work, completes maintenance tasks</p>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center">
+      <div style="font-size:2rem;margin-bottom:8px">📊</div>
+      <h3>Manager</h3>
+      <p style="font-size:0.8rem">Plant/Dept Manager<br>Views dashboards, approves work orders, reviews reports</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px">
+  <h3>MVP Feature Set</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+    <div style="padding:10px 14px;background:var(--surface);border-radius:6px;border:1px solid var(--border);font-size:0.85rem">✅ Asset Registry & Tagging</div>
+    <div style="padding:10px 14px;background:var(--surface);border-radius:6px;border:1px solid var(--border);font-size:0.85rem">✅ QR / Barcode Scanning (camera)</div>
+    <div style="padding:10px 14px;background:var(--surface);border-radius:6px;border:1px solid var(--border);font-size:0.85rem">✅ GPS / Location Tracking</div>
+    <div style="padding:10px 14px;background:var(--surface);border-radius:6px;border:1px solid var(--border);font-size:0.85rem">✅ Maintenance Scheduling</div>
+    <div style="padding:10px 14px;background:var(--surface);border-radius:6px;border:1px solid var(--border);font-size:0.85rem">✅ Work Order Management</div>
+    <div style="padding:10px 14px;background:var(--surface);border-radius:6px;border:1px solid var(--border);font-size:0.85rem">✅ Automated Alerts & Reminders</div>
+    <div style="padding:10px 14px;background:var(--surface);border-radius:6px;border:1px solid var(--border);font-size:0.85rem">✅ Manager Dashboard & Reports</div>
+    <div style="padding:10px 14px;background:var(--surface);border-radius:6px;border:1px solid var(--border);font-size:0.85rem">✅ Role-Based User Management</div>
+    <div style="padding:10px 14px;background:#2d1f1f;border-radius:6px;border:1px solid #5a3a3a;font-size:0.85rem;color:#c97a7a">❌ Third-party integrations (v2)</div>
+    <div style="padding:10px 14px;background:#2d1f1f;border-radius:6px;border:1px solid #5a3a3a;font-size:0.85rem;color:#c97a7a">❌ Native iOS/Android app (v2)</div>
+  </div>
+</div>

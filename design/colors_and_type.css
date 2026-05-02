@@ -1,0 +1,231 @@
+/* ============================================================
+   AssetFlow — Design Tokens
+   Dense, industrial-operational SaaS for manufacturing SMEs.
+   Light-primary. Ink + warm-white base. Orange+blue accents.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* ---------- Base neutrals (warm-cool ink) ---------- */
+  --af-ink-900: #0E1116;      /* deep ink, body text, nav bg */
+  --af-ink-800: #1A1F26;
+  --af-ink-700: #2A2F38;
+  --af-ink-600: #4A5260;
+  --af-ink-500: #6B7280;      /* secondary text */
+  --af-ink-400: #9AA3AE;
+  --af-ink-300: #C7CCD3;
+  --af-ink-200: #E2E5EA;      /* borders */
+  --af-ink-150: #EDEFF2;      /* hover bg */
+  --af-ink-100: #F4F5F7;      /* surface-2 */
+  --af-ink-050: #FAFAF9;      /* surface-1, warm */
+  --af-paper:   #FFFFFF;
+
+  /* ---------- Accents ---------- */
+  --af-orange-600: #E55A22;   /* primary action (slightly darker for AA) */
+  --af-orange-500: #FF6B35;   /* brand accent */
+  --af-orange-100: #FFE8DD;
+  --af-orange-050: #FFF4EE;
+
+  --af-blue-700:   #1E5FD4;
+  --af-blue-600:   #2B6FE8;
+  --af-blue-500:   #3B82F6;
+  --af-blue-100:   #DBEAFE;
+  --af-blue-050:   #EEF5FF;
+
+  /* ---------- Status (operational) ---------- */
+  --af-ok-600:     #4D8B1A;    /* healthy / on-time */
+  --af-ok-500:     #84CC16;
+  --af-ok-100:     #E8F5D4;
+  --af-warn-600:   #B45309;    /* due soon */
+  --af-warn-500:   #F59E0B;
+  --af-warn-100:   #FEF0CE;
+  --af-crit-600:   #C52629;    /* overdue / critical */
+  --af-crit-500:   #EF4444;
+  --af-crit-100:   #FDE0E0;
+  --af-info-600:   var(--af-blue-600);
+  --af-info-500:   var(--af-blue-500);
+  --af-info-100:   var(--af-blue-100);
+
+  /* ---------- Semantic surfaces ---------- */
+  --af-bg:         var(--af-ink-050);
+  --af-surface:    var(--af-paper);
+  --af-surface-2:  var(--af-ink-100);
+  --af-border:     var(--af-ink-200);
+  --af-border-strong: var(--af-ink-300);
+  --af-fg:         var(--af-ink-900);
+  --af-fg-muted:   var(--af-ink-500);
+  --af-fg-subtle:  var(--af-ink-400);
+  --af-accent:     var(--af-orange-500);
+  --af-accent-fg:  #FFFFFF;
+  --af-focus:      var(--af-blue-500);
+
+  /* ---------- Type families ---------- */
+  --af-font-sans: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --af-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* ---------- Type scale ---------- */
+  --af-text-2xs: 10px;   /* label micro */
+  --af-text-xs:  11px;   /* table meta */
+  --af-text-sm:  12px;   /* dense body */
+  --af-text-base:13px;   /* default UI */
+  --af-text-md:  14px;
+  --af-text-lg:  16px;
+  --af-text-xl:  20px;   /* card titles */
+  --af-text-2xl: 24px;
+  --af-text-3xl: 32px;
+  --af-text-4xl: 44px;   /* page H1 */
+  --af-text-5xl: 60px;   /* marketing hero */
+
+  /* ---------- Spacing (4px base, dense) ---------- */
+  --af-space-0: 0;
+  --af-space-1: 2px;
+  --af-space-2: 4px;
+  --af-space-3: 8px;
+  --af-space-4: 12px;
+  --af-space-5: 16px;
+  --af-space-6: 20px;
+  --af-space-7: 24px;
+  --af-space-8: 32px;
+  --af-space-9: 48px;
+  --af-space-10: 64px;
+
+  /* ---------- Radius ---------- */
+  --af-radius-sm: 3px;
+  --af-radius:    5px;   /* default — slightly hard, industrial */
+  --af-radius-md: 6px;
+  --af-radius-lg: 8px;
+  --af-radius-xl: 12px;
+  --af-radius-pill: 999px;
+
+  /* ---------- Shadows (minimal, flat-forward) ---------- */
+  --af-shadow-0: 0 0 0 1px var(--af-border);
+  --af-shadow-1: 0 1px 0 rgba(14,17,22,.04), 0 1px 2px rgba(14,17,22,.06);
+  --af-shadow-2: 0 2px 4px rgba(14,17,22,.06), 0 4px 12px rgba(14,17,22,.06);
+  --af-shadow-3: 0 8px 24px rgba(14,17,22,.08), 0 2px 4px rgba(14,17,22,.06);
+  --af-shadow-focus: 0 0 0 3px rgba(59,130,246,.25);
+
+  /* ---------- Motion ---------- */
+  --af-ease: cubic-bezier(.2, .7, .2, 1);
+  --af-dur-1: 120ms;
+  --af-dur-2: 180ms;
+  --af-dur-3: 260ms;
+
+  /* ---------- Decorative grid (blueprint background) ---------- */
+  --af-grid-minor: rgba(14,17,22,.035);
+  --af-grid-major: rgba(14,17,22,.06);
+}
+
+/* ============================================================
+   Semantic text styles — use these, not raw sizes
+   ============================================================ */
+.af-h1 {
+  font-family: var(--af-font-sans);
+  font-weight: 600;
+  font-size: var(--af-text-4xl);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--af-fg);
+}
+.af-h2 {
+  font-family: var(--af-font-sans);
+  font-weight: 600;
+  font-size: var(--af-text-2xl);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--af-fg);
+}
+.af-h3 {
+  font-family: var(--af-font-sans);
+  font-weight: 600;
+  font-size: var(--af-text-xl);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--af-fg);
+}
+.af-h4 {
+  font-family: var(--af-font-sans);
+  font-weight: 600;
+  font-size: var(--af-text-lg);
+  line-height: 1.3;
+  color: var(--af-fg);
+}
+.af-body {
+  font-family: var(--af-font-sans);
+  font-weight: 400;
+  font-size: var(--af-text-base);
+  line-height: 1.5;
+  color: var(--af-fg);
+}
+.af-body-sm {
+  font-family: var(--af-font-sans);
+  font-weight: 400;
+  font-size: var(--af-text-sm);
+  line-height: 1.45;
+  color: var(--af-fg);
+}
+.af-caption {
+  font-family: var(--af-font-sans);
+  font-weight: 500;
+  font-size: var(--af-text-xs);
+  line-height: 1.4;
+  color: var(--af-fg-muted);
+}
+.af-eyebrow {
+  /* tiny caps label — used for section headers, metadata */
+  font-family: var(--af-font-mono);
+  font-weight: 500;
+  font-size: var(--af-text-2xs);
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--af-fg-muted);
+}
+.af-mono {
+  font-family: var(--af-font-mono);
+  font-weight: 500;
+  font-size: var(--af-text-sm);
+  letter-spacing: -0.01em;
+  color: var(--af-fg);
+}
+.af-mono-xs {
+  font-family: var(--af-font-mono);
+  font-weight: 500;
+  font-size: var(--af-text-xs);
+  letter-spacing: 0;
+  color: var(--af-fg);
+}
+.af-code {
+  font-family: var(--af-font-mono);
+  font-size: var(--af-text-sm);
+  background: var(--af-ink-100);
+  border: 1px solid var(--af-border);
+  border-radius: var(--af-radius-sm);
+  padding: 1px 5px;
+}
+
+/* ============================================================
+   Utility: blueprint grid background
+   ============================================================ */
+.af-grid-bg {
+  background-color: var(--af-bg);
+  background-image:
+    linear-gradient(to right, var(--af-grid-minor) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--af-grid-minor) 1px, transparent 1px),
+    linear-gradient(to right, var(--af-grid-major) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--af-grid-major) 1px, transparent 1px);
+  background-size: 8px 8px, 8px 8px, 64px 64px, 64px 64px;
+}
+
+/* ============================================================
+   Base reset — opinionated, for preview cards
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--af-font-sans);
+  color: var(--af-fg);
+  background: var(--af-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}

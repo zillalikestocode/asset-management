@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Buttons</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  .card { padding: 20px; background: var(--af-surface); border: 1px solid var(--af-border); border-radius: 8px; }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .row:last-child { margin-bottom: 0; }
+  .lbl { font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-muted); letter-spacing: 0.1em; text-transform: uppercase; width: 80px; flex-shrink: 0; }
+  .btn { font-family: var(--af-font-sans); font-weight: 500; font-size: 13px; height: 32px; padding: 0 14px; border-radius: 5px; border: 1px solid transparent; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; letter-spacing: -0.005em; }
+  .btn-primary { background: var(--af-ink-900); color: #fff; }
+  .btn-accent { background: var(--af-orange-500); color: #fff; }
+  .btn-secondary { background: #fff; color: var(--af-fg); border-color: var(--af-border); box-shadow: 0 1px 0 rgba(14,17,22,.04); }
+  .btn-ghost { background: transparent; color: var(--af-fg); }
+  .btn-danger { background: var(--af-crit-600); color: #fff; }
+  .btn-sm { height: 26px; padding: 0 10px; font-size: 12px; }
+  .btn-lg { height: 38px; padding: 0 18px; font-size: 14px; }
+  .kbd { font-family: var(--af-font-mono); font-size: 10px; padding: 1px 4px; background: rgba(255,255,255,.15); border-radius: 3px; margin-left: 2px; }
+</style>
+</head>
+<body style="padding: 20px;">
+  <div class="card">
+    <div class="af-eyebrow" style="margin-bottom: 14px;">Buttons</div>
+    <div class="row"><span class="lbl">Primary</span>
+      <button class="btn btn-primary">Save changes</button>
+      <button class="btn btn-accent">+ New asset</button>
+      <button class="btn btn-secondary">Cancel</button>
+      <button class="btn btn-ghost">Discard</button>
+      <button class="btn btn-danger">Archive</button>
+    </div>
+    <div class="row"><span class="lbl">Sizes</span>
+      <button class="btn btn-primary btn-sm">Small</button>
+      <button class="btn btn-primary">Default</button>
+      <button class="btn btn-primary btn-lg">Large</button>
+      <button class="btn btn-secondary">With shortcut <span class="kbd" style="background:var(--af-ink-100); color:var(--af-fg-muted)">⌘K</span></button>
+    </div>
+  </div>
+</body>
+</html>

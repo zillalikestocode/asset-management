@@ -1,0 +1,110 @@
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { Card, CardHeader } from '@/components/ui/Card'
+import { Button } from '@/components/ui/Button'
+import { Input, Select, Field } from '@/components/ui/Input'
+import { useCategories, useLocations, useCreateCategory, useCreateLocation, useDeleteCategory, useDeleteLocation } from '@/hooks/useCategories'
+import { Trash } from '@phosphor-icons/react'
+
+export function SettingsPage() {
+  const [newCategory, setNewCategory] = useState('')
+  const [newLocation, setNewLocation] = useState('')
+
+  const { data: categories } = useCategories()
+  const { data: locations }  = useLocations()
+  const createCat  = useCreateCategory()
+  const createLoc  = useCreateLocation()
+  const deleteCat  = useDeleteCategory()
+  const deleteLoc  = useDeleteLocation()
+
+  const handleAddCategory = async () => {
+    if (!newCategory.trim()) return
+    try {
+      await createCat.mutateAsync({ name: newCategory.trim() })
+      toast.success('Category added')
+      setNewCategory('')
+    } catch { toast.error('Failed to add category') }
+  }
+
+  const handleAddLocation = async () => {
+    if (!newLocation.trim()) return
+    try {
+      await createLoc.mutateAsync({ name: newLocation.trim() })
+      toast.success('Location added')
+      setNewLocation('')
+    } catch { toast.error('Failed to add location') }
+  }
+
+  return (
+    <div className="space-y-5 max-w-2xl">
+      <div>
+        <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-af-muted">Config</p>
+        <h1 className="text-2xl font-semibold tracking-[-0.015em] mt-0.5">Settings</h1>
+      </div>
+
+      {/* Categories */}
+      <Card>
+        <CardHeader title="Asset categories" subtitle="Group assets by type" />
+        <div className="space-y-2 mb-4">
+          {(categories ?? []).map(c => (
+            <div key={c.id} className="flex items-center justify-between py-1.5 border-b border-af-border last:border-0">
+              <span className="text-[13px]">{c.name}</span>
+              <button
+                onClick={() => deleteCat.mutateAsync(c.id).then(() => toast.success('Deleted')).catch(() => toast.error('Failed'))}
+                className="text-af-muted hover:text-af-crit-600 transition-colors duration-[120ms]"
+              >
+                <Trash size={14} />
+              </button>
+            </div>
+          ))}
+          {(categories ?? []).length === 0 && (
+            <p className="text-[13px] text-af-muted py-2">No categories yet</p>
+          )}
+        </div>
+        <div className="flex gap-2">
+          <Input
+            value={newCategory}
+            onChange={e => setNewCategory(e.target.value)}
+            placeholder="New category name…"
+            onKeyDown={e => e.key === 'Enter' && handleAddCategory()}
+          />
+          <Button variant="secondary" size="sm" onClick={handleAddCategory} disabled={createCat.isPending}>
+            Add
+          </Button>
+        </div>
+      </Card>
+
+      {/* Locations */}
+      <Card>
+        <CardHeader title="Locations" subtitle="Physical areas where assets are kept" />
+        <div className="space-y-2 mb-4">
+          {(locations ?? []).map(l => (
+            <div key={l.id} className="flex items-center justify-between py-1.5 border-b border-af-border last:border-0">
+              <span className="text-[13px]">{l.name}</span>
+              <button
+                onClick={() => deleteLoc.mutateAsync(l.id).then(() => toast.success('Deleted')).catch(() => toast.error('Failed'))}
+                className="text-af-muted hover:text-af-crit-600 transition-colors duration-[120ms]"
+              >
+                <Trash size={14} />
+              </button>
+            </div>
+          ))}
+          {(locations ?? []).length === 0 && (
+            <p className="text-[13px] text-af-muted py-2">No locations yet</p>
+          )}
+        </div>
+        <div className="flex gap-2">
+          <Input
+            value={newLocation}
+            onChange={e => setNewLocation(e.target.value)}
+            placeholder="New location name…"
+            onKeyDown={e => e.key === 'Enter' && handleAddLocation()}
+          />
+          <Button variant="secondary" size="sm" onClick={handleAddLocation} disabled={createLoc.isPending}>
+            Add
+          </Button>
+        </div>
+      </Card>
+    </div>
+  )
+}

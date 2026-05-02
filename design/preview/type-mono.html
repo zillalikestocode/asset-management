@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Typography — Mono & Eyebrow</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  .card { padding: 24px; background: var(--af-surface); border: 1px solid var(--af-border); border-radius: 8px; }
+  .row { display: grid; grid-template-columns: 80px 1fr auto; gap: 18px; align-items: baseline; padding: 10px 0; border-bottom: 1px dashed var(--af-border); }
+  .row:last-child { border-bottom: 0; }
+  .lbl { font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .meta { font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-subtle); }
+</style>
+</head>
+<body style="padding: 20px;">
+  <div class="card">
+    <div class="af-eyebrow" style="margin-bottom: 14px;">Type · JetBrains Mono</div>
+    <div class="row"><span class="lbl">Eyebrow</span><span class="af-eyebrow">SECTION · ASSET REGISTRY</span><span class="meta">10 / 500</span></div>
+    <div class="row"><span class="lbl">Mono</span><span class="af-mono">AF-0042-PUMP-V2</span><span class="meta">12 / 500</span></div>
+    <div class="row"><span class="lbl">Mono XS</span><span class="af-mono-xs">SN· 8847-QX-0913</span><span class="meta">11 / 500</span></div>
+    <div class="row"><span class="lbl">Code</span><span><code class="af-code">asset.status = "overdue"</code></span><span class="meta">12 / 500</span></div>
+    <div class="row"><span class="lbl">Tabular</span><span style="font-family: var(--af-font-mono); font-variant-numeric: tabular-nums;">1,284 assets · $42,580.00 · 14d 03h</span><span class="meta">13 tab</span></div>
+  </div>
+</body>
+</html>

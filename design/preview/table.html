@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Data Table</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  .card { background: var(--af-surface); border: 1px solid var(--af-border); border-radius: 8px; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: var(--af-ink-050); font-family: var(--af-font-mono); font-weight: 500; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--af-fg-muted); text-align: left; padding: 8px 14px; border-bottom: 1px solid var(--af-border); }
+  td { padding: 10px 14px; font-size: 12px; border-bottom: 1px solid var(--af-ink-150); font-family: var(--af-font-sans); vertical-align: middle; }
+  tr:last-child td { border-bottom: 0; }
+  tr:hover td { background: var(--af-ink-050); }
+  .mono { font-family: var(--af-font-mono); font-size: 11px; }
+  .pill { font-family: var(--af-font-sans); font-weight: 500; font-size: 10px; padding: 2px 7px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; }
+  .dot { width: 5px; height: 5px; border-radius: 99px; }
+  .hdr { padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--af-border); }
+  .hdr-title { font-family: var(--af-font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--af-fg-muted);}
+  .count { font-family: var(--af-font-mono); font-size: 11px; color: var(--af-fg-muted);}
+</style>
+</head>
+<body style="padding: 20px;">
+  <div class="card">
+    <div class="hdr"><span class="hdr-title">Assets · Machinery</span><span class="count">4 of 1,284</span></div>
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Location</th><th>Status</th><th>Next PM</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">AF-0042</td><td>Hydraulic Press #4</td><td class="mono">B3·Z2</td><td><span class="pill" style="background:#E8F5D4; color:#3A6912;"><span class="dot" style="background:#4D8B1A"></span>Healthy</span></td><td class="mono">in 12d</td></tr>
+        <tr><td class="mono">AF-0088</td><td>CNC Lathe Mori-NL</td><td class="mono">B1·Z4</td><td><span class="pill" style="background:#FEF0CE; color:#7A3B06;"><span class="dot" style="background:#B45309"></span>Due 3d</span></td><td class="mono">Apr 27</td></tr>
+        <tr><td class="mono">AF-0131</td><td>Conveyor Belt A</td><td class="mono">B3·Z1</td><td><span class="pill" style="background:#FDE0E0; color:#8B1C1F;"><span class="dot" style="background:#C52629"></span>Overdue 2d</span></td><td class="mono">Apr 22</td></tr>
+        <tr><td class="mono">AF-0204</td><td>Pump Station 4</td><td class="mono">B2·Z3</td><td><span class="pill" style="background:var(--af-ink-100); color:var(--af-fg-muted);"><span class="dot" style="background:var(--af-ink-400)"></span>Archived</span></td><td class="mono">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

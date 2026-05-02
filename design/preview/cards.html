@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Cards — Asset & KPI</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { padding: 20px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .kpi { background: var(--af-surface); border: 1px solid var(--af-border); border-radius: 8px; padding: 14px 16px; }
+  .kpi-label { font-family: var(--af-font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--af-fg-muted); display:flex; justify-content: space-between; }
+  .kpi-val { font-family: var(--af-font-sans); font-weight: 600; font-size: 28px; letter-spacing: -0.02em; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .kpi-delta { font-family: var(--af-font-mono); font-size: 11px; color: var(--af-ok-600); margin-top: 2px; }
+  .kpi-delta.bad { color: var(--af-crit-600); }
+  .spark { margin-top: 8px; height: 20px; }
+  .asset { background: var(--af-surface); border: 1px solid var(--af-border); border-radius: 8px; padding: 14px; grid-column: span 3; display: grid; grid-template-columns: 56px 1fr auto; gap: 14px; align-items: center; margin-top: 12px; }
+  .qr { width: 56px; height: 56px; background:
+    repeating-linear-gradient(90deg, #0E1116 0 3px, transparent 3px 6px),
+    repeating-linear-gradient(0deg, #0E1116 0 3px, transparent 3px 6px);
+    background-blend-mode: multiply;
+    border-radius: 4px;
+    border: 1px solid var(--af-border);
+  }
+  .a-id { font-family: var(--af-font-mono); font-size: 11px; color: var(--af-fg-muted); letter-spacing: 0.02em;}
+  .a-name { font-family: var(--af-font-sans); font-weight: 600; font-size: 15px; margin-top: 2px; }
+  .a-meta { font-family: var(--af-font-sans); font-size: 12px; color: var(--af-fg-muted); margin-top: 4px; display: flex; gap: 10px; }
+  .pill { font-family: var(--af-font-sans); font-weight: 500; font-size: 11px; padding: 3px 9px; border-radius: 999px; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="kpi">
+      <div class="kpi-label">Assets tracked <span>↗</span></div>
+      <div class="kpi-val">1,284</div>
+      <div class="kpi-delta">+42 this week</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Overdue PM <span>⚠</span></div>
+      <div class="kpi-val" style="color:var(--af-crit-600)">7</div>
+      <div class="kpi-delta bad">+3 since Monday</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">On-time rate</div>
+      <div class="kpi-val">92<span style="font-size:16px;color:var(--af-fg-muted)">%</span></div>
+      <div class="kpi-delta">+4 pp MoM</div>
+    </div>
+  </div>
+  <div class="asset">
+    <div class="qr"></div>
+    <div>
+      <div class="a-id">AF-0042-PRESS-H4</div>
+      <div class="a-name">Hydraulic Press #4</div>
+      <div class="a-meta"><span>Building 3 · Zone 2</span><span>Last service · 18 Apr</span></div>
+    </div>
+    <span class="pill" style="background:#FEF0CE; color:#7A3B06;">Due in 3 days</span>
+  </div>
+</body>
+</html>

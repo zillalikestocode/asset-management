@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+/* ── AssetFlow Design Tokens ─────────────────────────────── */
+:root {
+  --af-ink-900: #0E1116;
+  --af-ink-800: #1A1F26;
+  --af-ink-700: #2A2F38;
+  --af-ink-600: #4A5260;
+  --af-ink-500: #6B7280;
+  --af-ink-400: #9AA3AE;
+  --af-ink-300: #C7CCD3;
+  --af-ink-200: #E2E5EA;
+  --af-ink-150: #EDEFF2;
+  --af-ink-100: #F4F5F7;
+  --af-ink-050: #FAFAF9;
+  --af-paper:   #FFFFFF;
+
+  --af-orange-600: #E55A22;
+  --af-orange-500: #FF6B35;
+  --af-orange-100: #FFE8DD;
+  --af-orange-050: #FFF4EE;
+
+  --af-blue-700:   #1E5FD4;
+  --af-blue-600:   #2B6FE8;
+  --af-blue-500:   #3B82F6;
+  --af-blue-100:   #DBEAFE;
+  --af-blue-050:   #EEF5FF;
+
+  --af-ok-600:     #4D8B1A;
+  --af-ok-500:     #84CC16;
+  --af-ok-100:     #E8F5D4;
+  --af-warn-600:   #B45309;
+  --af-warn-500:   #F59E0B;
+  --af-warn-100:   #FEF0CE;
+  --af-crit-700:   #A01F22;
+  --af-crit-600:   #C52629;
+  --af-crit-500:   #EF4444;
+  --af-crit-200:   #FBBFBF;
+  --af-crit-100:   #FDE0E0;
+  --af-crit-050:   #FFF5F5;
+  --af-info-600:   #2B6FE8;
+  --af-info-500:   #3B82F6;
+  --af-info-100:   #DBEAFE;
+
+  --af-amber-500:  #F59E0B;
+  --af-amber-100:  #FEF0CE;
+
+  --af-bg:         #FAFAF9;
+  --af-surface:    #FFFFFF;
+  --af-surface-2:  #F4F5F7;
+  --af-border:     #E2E5EA;
+  --af-border-strong: #C7CCD3;
+  --af-fg:         #0E1116;
+  --af-fg-muted:   #6B7280;
+  --af-fg-subtle:  #9AA3AE;
+  --af-accent:     #FF6B35;
+  --af-focus:      #3B82F6;
+
+  --af-font-sans: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif;
+  --af-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --af-ease: cubic-bezier(.2, .7, .2, 1);
+  --af-dur-1: 120ms;
+  --af-dur-2: 180ms;
+  --af-dur-3: 260ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--af-font-sans);
+  font-size: 13px;
+  color: var(--af-fg);
+  background: var(--af-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Safe-area utilities for mobile PWA */
+.h-safe-top  { height: env(safe-area-inset-top, 0px); }
+.pb-safe     { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+/* Blueprint grid utility */
+.af-grid-bg {
+  background-color: var(--af-bg);
+  background-image:
+    linear-gradient(to right,  rgba(14,17,22,.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(14,17,22,.035) 1px, transparent 1px),
+    linear-gradient(to right,  rgba(14,17,22,.06)  1px, transparent 1px),
+    linear-gradient(to bottom, rgba(14,17,22,.06)  1px, transparent 1px);
+  background-size: 8px 8px, 8px 8px, 64px 64px, 64px 64px;
+}

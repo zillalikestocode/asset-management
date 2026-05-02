@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Typography — Sans Scale</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  .card { padding: 24px; background: var(--af-surface); border: 1px solid var(--af-border); border-radius: 8px; }
+  .row { display: grid; grid-template-columns: 64px 1fr auto; gap: 18px; align-items: baseline; padding: 8px 0; border-bottom: 1px dashed var(--af-border); }
+  .row:last-child { border-bottom: 0; }
+  .lbl { font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .meta { font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-subtle); }
+</style>
+</head>
+<body style="padding: 20px;">
+  <div class="card">
+    <div class="af-eyebrow" style="margin-bottom: 14px;">Type · Inter Tight</div>
+    <div class="row"><span class="lbl">H1</span><span class="af-h1">Uptime, on record</span><span class="meta">44 / 600</span></div>
+    <div class="row"><span class="lbl">H2</span><span class="af-h2">Every asset accounted for</span><span class="meta">24 / 600</span></div>
+    <div class="row"><span class="lbl">H3</span><span class="af-h3">Work orders open today</span><span class="meta">20 / 600</span></div>
+    <div class="row"><span class="lbl">H4</span><span class="af-h4">Asset profile</span><span class="meta">16 / 600</span></div>
+    <div class="row"><span class="lbl">Body</span><span class="af-body">Pump station 4 is due for preventive maintenance in 3 days.</span><span class="meta">13 / 400</span></div>
+    <div class="row"><span class="lbl">Caption</span><span class="af-caption">Last synced 4 minutes ago</span><span class="meta">11 / 500</span></div>
+  </div>
+</body>
+</html>

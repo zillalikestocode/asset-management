@@ -1,0 +1,804 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>AssetFlow · Onboarding</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"/>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css"/>
+<style>
+  html, body { height: 100%; margin: 0; overflow: hidden; }
+  body { font-family: var(--af-font-sans); font-size: 13px; color: var(--af-fg); background: var(--af-ink-050); }
+
+  /* ============ SHELL ============ */
+  .wiz { display: grid; grid-template-columns: 320px 1fr; height: 100vh; }
+
+  /* Left rail */
+  .rail { background: var(--af-ink-900); color: #C7CCD3; padding: 28px 24px; display:flex; flex-direction: column; position: relative; overflow: hidden;}
+  .rail::before { content:''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+  .rail > * { position: relative; }
+  .brand { display:flex; align-items:center; gap: 10px; margin-bottom: 40px;}
+  .brand-mark { width: 28px; height: 28px; border-radius: 6px; background: var(--af-ink-800); display:grid; place-items: center;}
+  .brand-mark::after { content:''; width: 6px; height: 6px; border-radius: 99px; background: var(--af-orange-500);}
+  .brand-name { color: #fff; font-weight: 600; font-size: 16px; letter-spacing: -0.015em;}
+  .brand-env { margin-left: auto; font-family: var(--af-font-mono); font-size: 9.5px; letter-spacing: 0.14em; color: var(--af-ink-500); background: rgba(255,255,255,.05); padding: 2px 6px; border-radius: 3px;}
+
+  .rail-eyebrow { font-family: var(--af-font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--af-ink-500); margin-bottom: 14px;}
+
+  .steps { display: flex; flex-direction: column; gap: 2px; margin-bottom: auto;}
+  .step { display: grid; grid-template-columns: 28px 1fr; gap: 12px; padding: 10px 6px; position: relative; cursor: pointer;}
+  .step::before { content:''; position:absolute; left: 13px; top: 38px; bottom: -2px; width: 2px; background: rgba(255,255,255,.06);}
+  .step:last-child::before { display: none;}
+  .step.done::before { background: var(--af-orange-500); opacity: 0.4;}
+  .step-num { width: 28px; height: 28px; border-radius: 99px; border: 2px solid rgba(255,255,255,.12); color: var(--af-ink-400); font-family: var(--af-font-mono); font-size: 11px; font-weight: 600; display:grid; place-items:center; transition: all 180ms var(--af-ease);}
+  .step.active .step-num { background: var(--af-orange-500); border-color: var(--af-orange-500); color: #fff; box-shadow: 0 0 0 4px rgba(255,107,53,.2);}
+  .step.done .step-num { background: var(--af-orange-500); border-color: var(--af-orange-500); color: #fff;}
+  .step-body b { display:block; font-size: 13px; color: rgba(255,255,255,.5); font-weight: 500; letter-spacing: -0.005em; line-height: 1.4;}
+  .step-body span { display:block; font-family: var(--af-font-mono); font-size: 10px; color: var(--af-ink-500); margin-top: 2px; letter-spacing: 0.06em; text-transform: uppercase;}
+  .step.active .step-body b { color: #fff;}
+  .step.done .step-body b { color: rgba(255,255,255,.75);}
+
+  .rail-foot { border-top: 1px solid rgba(255,255,255,.06); padding-top: 16px; font-size: 11px; color: var(--af-ink-500);}
+  .rail-foot .mono { font-family: var(--af-font-mono); color: var(--af-ink-400);}
+
+  /* Right stage */
+  .stage { background: var(--af-ink-050); position: relative; overflow: auto; display:flex; flex-direction: column;}
+  .topbar { height: 56px; display:flex; align-items:center; padding: 0 32px; border-bottom: 1px solid var(--af-border); background: #fff; flex-shrink: 0;}
+  .topbar .progress-count { font-family: var(--af-font-mono); font-size: 11px; color: var(--af-fg-muted); letter-spacing: 0.06em; text-transform: uppercase;}
+  .topbar .spacer { flex: 1;}
+  .topbar .exit { font-size: 12px; color: var(--af-fg-muted); text-decoration: none; cursor: pointer;}
+
+  .panel { flex: 1; display:flex; justify-content: center; padding: 40px 32px;}
+  .panel-inner { width: 100%; max-width: 680px;}
+  .panel-inner.wide { max-width: 960px;}
+
+  .eyebrow { font-family: var(--af-font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--af-orange-600);}
+  h1.big { margin: 6px 0 6px; font-size: 32px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1;}
+  .lede { font-size: 15px; color: var(--af-fg-muted); line-height: 1.5; margin: 0 0 32px; max-width: 560px;}
+
+  /* Form */
+  .field { margin-bottom: 16px;}
+  .field label { display:block; font-size: 12px; font-weight: 500; margin-bottom: 6px; letter-spacing: -0.005em;}
+  .field label .opt { font-family: var(--af-font-mono); font-size: 9px; color: var(--af-fg-subtle); letter-spacing: 0.1em; margin-left: 6px;}
+  .input { width: 100%; height: 40px; padding: 0 12px; border: 1px solid var(--af-border); border-radius: 6px; background: #fff; font-family: var(--af-font-sans); font-size: 13px; color: var(--af-fg); outline: none; transition: border-color 120ms, box-shadow 120ms;}
+  .input:focus { border-color: var(--af-blue-500); box-shadow: var(--af-shadow-focus);}
+  .input-mono { font-family: var(--af-font-mono); letter-spacing: -0.01em;}
+  select.input { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M3 4.5L6 7.5L9 4.5' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 32px;}
+  .field-help { font-size: 11px; color: var(--af-fg-muted); margin-top: 4px;}
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px;}
+
+  /* Tiles / choice cards */
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;}
+  .tile { border: 1px solid var(--af-border); background: #fff; border-radius: 8px; padding: 16px 14px; cursor: pointer; transition: all 120ms var(--af-ease); position: relative;}
+  .tile:hover { border-color: var(--af-border-strong);}
+  .tile.on { border-color: var(--af-orange-500); background: var(--af-orange-050); box-shadow: 0 0 0 3px rgba(255,107,53,.1);}
+  .tile.on::after { content:''; position: absolute; top: 10px; right: 10px; width: 14px; height: 14px; border-radius: 99px; background: var(--af-orange-500); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 5L4 7L8 3' stroke='white' stroke-width='1.75' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>"); background-repeat: no-repeat; background-position: center;}
+  .tile i { font-size: 20px; color: var(--af-fg); display:block; margin-bottom: 10px;}
+  .tile.on i { color: var(--af-orange-600);}
+  .tile b { display:block; font-size: 13px; font-weight: 600; letter-spacing: -0.005em;}
+  .tile span { display:block; font-size: 11px; color: var(--af-fg-muted); margin-top: 2px;}
+
+  .tiles-2 { grid-template-columns: repeat(2, 1fr);}
+
+  /* Buttons */
+  .btn { display:inline-flex; align-items:center; gap:6px; height:40px; padding: 0 16px; border-radius: 6px; border: 1px solid var(--af-border); background: #fff; font-family: var(--af-font-sans); font-size: 13px; font-weight: 500; cursor: pointer; color: var(--af-fg); transition: all 120ms var(--af-ease);}
+  .btn:hover { background: var(--af-ink-100);}
+  .btn.primary { background: var(--af-ink-900); color: #fff; border-color: var(--af-ink-900);}
+  .btn.primary:hover { background: var(--af-ink-800);}
+  .btn.accent { background: var(--af-orange-500); color: #fff; border-color: var(--af-orange-600);}
+  .btn.accent:hover { background: var(--af-orange-600);}
+  .btn.ghost { background: transparent; border-color: transparent; color: var(--af-fg-muted);}
+  .btn.ghost:hover { color: var(--af-fg); background: transparent;}
+  .btn i { font-size: 14px;}
+  .btn.lg { height: 44px; padding: 0 20px; font-size: 14px;}
+
+  /* Panel foot */
+  .panel-foot { display:flex; align-items:center; gap: 12px; margin-top: 32px; padding-top: 20px; border-top: 1px dashed var(--af-ink-200);}
+  .panel-foot .skip { font-size: 12px; color: var(--af-fg-muted); cursor: pointer; text-decoration: none;}
+  .panel-foot .grow { flex: 1;}
+
+  /* Choice row cards (import vs manual) */
+  .choice-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;}
+  .choice { border: 1px solid var(--af-border); background: #fff; border-radius: 10px; padding: 20px; cursor: pointer; transition: all 120ms var(--af-ease); text-align: left;}
+  .choice:hover { border-color: var(--af-border-strong);}
+  .choice.on { border-color: var(--af-orange-500); box-shadow: 0 0 0 3px rgba(255,107,53,.1);}
+  .choice-ic { width: 36px; height: 36px; border-radius: 8px; background: var(--af-ink-100); display:grid; place-items: center; margin-bottom: 12px;}
+  .choice.on .choice-ic { background: var(--af-orange-100);}
+  .choice-ic i { font-size: 18px; color: var(--af-fg); }
+  .choice.on .choice-ic i { color: var(--af-orange-600);}
+  .choice b { display:block; font-size: 14px; font-weight: 600; letter-spacing: -0.005em; margin-bottom: 2px;}
+  .choice span { display:block; font-size: 12px; color: var(--af-fg-muted); line-height: 1.4;}
+  .choice .tag { display:inline-block; margin-top: 10px; font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-muted); letter-spacing: 0.08em; text-transform: uppercase;}
+
+  /* QR preview sheet */
+  .qr-preview-wrap { background: #fff; border: 1px solid var(--af-border); border-radius: 10px; padding: 24px; display: grid; grid-template-columns: 1fr 280px; gap: 28px; margin-bottom: 20px;}
+  .qr-sheet { background: var(--af-ink-050); border: 1px dashed var(--af-border-strong); padding: 18px; border-radius: 6px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;}
+  .qr-label { background: #fff; border: 1px solid var(--af-border); border-radius: 4px; padding: 10px 8px; text-align: center;}
+  .qr-label svg { width: 60px; height: 60px; margin: 0 auto; display: block;}
+  .qr-label .qr-id { font-family: var(--af-font-mono); font-size: 9px; font-weight: 600; letter-spacing: 0.06em; margin-top: 6px; color: var(--af-ink-900);}
+  .qr-label .qr-nm { font-size: 8.5px; color: var(--af-fg-muted); margin-top: 1px;}
+
+  .qr-options b { display:block; font-size: 13px; font-weight: 600; margin-bottom: 12px;}
+  .qr-options label { display:flex; align-items:center; gap: 8px; padding: 8px 0; border-bottom: 1px dashed var(--af-ink-200); font-size: 12px; cursor: pointer;}
+  .qr-options label:last-child { border-bottom: 0;}
+  .qr-options input[type=radio] { accent-color: var(--af-orange-500);}
+  .qr-options .mono { font-family: var(--af-font-mono); color: var(--af-fg-muted); margin-left: auto; font-size: 10.5px;}
+
+  /* Dashboard (empty + aha) */
+  .dash-frame { background: #fff; border: 1px solid var(--af-border); border-radius: 12px; overflow: hidden; box-shadow: var(--af-shadow-2);}
+  .dash-tb { height: 44px; display:flex; align-items:center; padding: 0 16px; background: #fff; border-bottom: 1px solid var(--af-border); gap: 10px;}
+  .dash-tb .dots { display:flex; gap: 5px;}
+  .dash-tb .dots span { width: 9px; height: 9px; border-radius: 99px; background: var(--af-ink-200);}
+  .dash-tb .url { font-family: var(--af-font-mono); font-size: 11px; color: var(--af-fg-muted); margin: 0 auto;}
+
+  .dash-body { display: grid; grid-template-columns: 180px 1fr; min-height: 380px;}
+  .dash-sb { background: var(--af-ink-900); padding: 16px 10px;}
+  .dash-sb-item { display:flex; align-items:center; gap: 8px; padding: 5px 8px; border-radius: 4px; color: #C7CCD3; font-size: 12px; margin-bottom: 1px;}
+  .dash-sb-item i { font-size: 14px; color: var(--af-ink-400);}
+  .dash-sb-item.active { background: rgba(255,107,53,.12); color: #fff;}
+  .dash-sb-item.active i { color: var(--af-orange-500);}
+
+  .dash-main { padding: 20px;}
+  .dash-head { display:flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px;}
+  .dash-head h3 { margin:0; font-size: 18px; font-weight: 600; letter-spacing: -0.015em;}
+
+  /* Empty state */
+  .empty-card { position: relative; background:
+    linear-gradient(var(--af-ink-050), var(--af-ink-050));
+    background-image:
+      linear-gradient(to right, rgba(14,17,22,.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(14,17,22,.04) 1px, transparent 1px);
+    background-size: 16px 16px;
+    border: 1px dashed var(--af-border-strong); border-radius: 10px; padding: 36px 24px; text-align: center;}
+  .empty-card .empty-ic { width: 48px; height: 48px; border-radius: 10px; background: #fff; border: 1px solid var(--af-border); display: grid; place-items: center; margin: 0 auto 12px;}
+  .empty-card .empty-ic i { font-size: 22px; color: var(--af-orange-500);}
+  .empty-card h4 { margin: 0 0 4px; font-size: 15px; font-weight: 600;}
+  .empty-card p { margin: 0 auto 14px; font-size: 12.5px; color: var(--af-fg-muted); max-width: 340px;}
+
+  .checklist-side { background: #fff; border: 1px solid var(--af-border); border-radius: 10px; overflow: hidden; margin-top: 16px;}
+  .cl-head { padding: 12px 14px; border-bottom: 1px solid var(--af-border); display:flex; align-items: center; justify-content: space-between;}
+  .cl-head b { font-size: 13px; font-weight: 600;}
+  .cl-head span { font-family: var(--af-font-mono); font-size: 11px; color: var(--af-orange-600); font-weight: 500;}
+  .cl-item { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; padding: 10px 14px; align-items: center; font-size: 12.5px; border-bottom: 1px dashed var(--af-ink-200); cursor: pointer;}
+  .cl-item:last-child { border-bottom: 0;}
+  .cl-check { width: 18px; height: 18px; border-radius: 99px; border: 1.5px solid var(--af-border-strong); display:grid; place-items: center;}
+  .cl-item.done .cl-check { background: var(--af-ok-500); border-color: var(--af-ok-500);}
+  .cl-item.done .cl-check i { font-size: 10px; color: #fff;}
+  .cl-item.done { color: var(--af-fg-muted); text-decoration: line-through;}
+  .cl-item small { font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-subtle);}
+
+  /* Aha / confetti */
+  .aha { text-align:center; padding: 20px 0;}
+  .aha-badge { width: 72px; height: 72px; border-radius: 18px; background: var(--af-orange-500); color: #fff; display: grid; place-items: center; margin: 0 auto 20px; position: relative; box-shadow: 0 20px 40px -10px rgba(255,107,53,.5);}
+  .aha-badge i { font-size: 36px;}
+  .aha-badge::before, .aha-badge::after { content:''; position:absolute; inset: -8px; border-radius: 22px; border: 1.5px solid var(--af-orange-500); opacity: .25;}
+  .aha-badge::after { inset: -16px; opacity: 0.12;}
+  .aha h1 { font-size: 34px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px;}
+  .aha .sub { font-size: 15px; color: var(--af-fg-muted); margin-bottom: 28px;}
+
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 540px; margin: 0 auto 28px;}
+  .stat { background: #fff; border: 1px solid var(--af-border); border-radius: 10px; padding: 14px 16px; text-align: left;}
+  .stat .eyebrow { color: var(--af-fg-muted);}
+  .stat b { display:block; font-size: 22px; font-weight: 600; letter-spacing: -0.02em; margin-top: 4px; font-variant-numeric: tabular-nums;}
+  .stat .mono-id { font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-subtle); margin-top: 2px; letter-spacing: 0.04em;}
+
+  /* Review list */
+  .review { background: var(--af-ink-050); border: 1px solid var(--af-border); border-radius: 8px; padding: 14px 16px; font-family: var(--af-font-mono); font-size: 11.5px; line-height: 1.9; letter-spacing: -0.005em;}
+  .review .k { color: var(--af-fg-muted); display:inline-block; width: 110px;}
+  .review .v { color: var(--af-fg); font-weight: 500;}
+  .review .hl { color: var(--af-orange-600);}
+
+  /* Schedule builder */
+  .sched-builder { display: grid; grid-template-columns: 1fr 280px; gap: 20px;}
+  .sched-pill { display:inline-flex; gap:0; border: 1px solid var(--af-border); border-radius: 6px; overflow: hidden; background: #fff;}
+  .sched-pill button { background: transparent; border: 0; padding: 8px 14px; font-family: var(--af-font-sans); font-size: 12px; cursor: pointer; color: var(--af-fg-muted);}
+  .sched-pill button.on { background: var(--af-ink-900); color: #fff;}
+  .freq-inline { display:flex; align-items:center; gap: 8px;}
+  .freq-inline .input { width: 80px;}
+
+  .sched-preview { background: var(--af-ink-050); border: 1px dashed var(--af-border-strong); border-radius: 8px; padding: 14px;}
+  .sched-preview .eyebrow { color: var(--af-fg-muted); margin-bottom: 10px;}
+  .sched-preview-item { display: grid; grid-template-columns: 48px 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--af-ink-200); align-items: center;}
+  .sched-preview-item:last-child { border-bottom: 0;}
+  .sched-preview-item b { font-family: var(--af-font-mono); font-size: 13px; font-weight: 600; text-align: center; display:block;}
+  .sched-preview-item span { font-family: var(--af-font-mono); font-size: 9.5px; text-align: center; display:block; color: var(--af-fg-muted); letter-spacing: 0.08em;}
+  .sched-preview-item .det { font-size: 11.5px;}
+  .sched-preview-item .det .mono { font-family: var(--af-font-mono); color: var(--af-fg-muted); font-size: 10.5px;}
+
+  /* Fade anim */
+  .fade-enter { animation: fade 280ms var(--af-ease);}
+  @keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: none;} }
+
+  /* Blueprint corner marks */
+  .corner { position: absolute; font-family: var(--af-font-mono); font-size: 9px; color: var(--af-ink-500); letter-spacing: 0.14em;}
+  .corner.tl { top: 28px; right: 24px; text-align: right;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel">
+const { useState, useMemo } = React;
+
+// ============ STEP DEFINITIONS ============
+const STEPS = [
+  { key: 'signup',    title: 'Create account',  sub: '01 · IDENTITY' },
+  { key: 'workspace', title: 'Set up workspace', sub: '02 · COMPANY' },
+  { key: 'asset',     title: 'Add first asset',  sub: '03 · INVENTORY' },
+  { key: 'schedule',  title: 'Maintenance schedule', sub: '04 · AUTOMATION' },
+  { key: 'qr',        title: 'Print QR labels',  sub: '05 · LABEL' },
+  { key: 'empty',     title: 'You\u2019re ready', sub: '06 · DASHBOARD' },
+  { key: 'aha',       title: 'All set!',         sub: '07 · DONE' },
+];
+
+// ============ TINY QR PLACEHOLDER ============
+const QrSvg = ({ seed = 'A' }) => {
+  // deterministic dot grid
+  const size = 8;
+  const dots = [];
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const h = (seed.charCodeAt(0) * 7 + x * 13 + y * 31) % 10;
+      if (h < 5) dots.push(<rect key={`${x}-${y}`} x={x*6+4} y={y*6+4} width={5} height={5} fill="#0E1116" />);
+    }
+  }
+  return (
+    <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <rect width="56" height="56" fill="white" />
+      {/* finders */}
+      <rect x="2" y="2" width="14" height="14" fill="none" stroke="#0E1116" strokeWidth="2"/>
+      <rect x="6" y="6" width="6" height="6" fill="#0E1116"/>
+      <rect x="40" y="2" width="14" height="14" fill="none" stroke="#0E1116" strokeWidth="2"/>
+      <rect x="44" y="6" width="6" height="6" fill="#0E1116"/>
+      <rect x="2" y="40" width="14" height="14" fill="none" stroke="#0E1116" strokeWidth="2"/>
+      <rect x="6" y="44" width="6" height="6" fill="#0E1116"/>
+      {dots}
+    </svg>
+  );
+};
+
+// ============ RAIL ============
+function Rail({ step }) {
+  return (
+    <aside className="rail">
+      <div className="brand">
+        <div className="brand-mark"></div>
+        <div className="brand-name">AssetFlow</div>
+        <div className="brand-env">SETUP</div>
+      </div>
+      <div className="rail-eyebrow">Get set up · 7 steps</div>
+      <div className="steps">
+        {STEPS.map((s, i) => (
+          <div key={s.key} className={`step ${i === step ? 'active' : ''} ${i < step ? 'done' : ''}`}>
+            <div className="step-num">{i < step ? <i className="ph-bold ph-check"></i> : i + 1}</div>
+            <div className="step-body"><b>{s.title}</b><span>{s.sub}</span></div>
+          </div>
+        ))}
+      </div>
+      <div className="rail-foot">
+        <div>Need help? <span style={{color: '#FF6B35', cursor: 'pointer'}}>Book a 15-min call</span></div>
+        <div style={{marginTop: 6}} className="mono">v.0.4 · APR 2026</div>
+      </div>
+    </aside>
+  );
+}
+
+// ============ STEPS ============
+function StepSignup({ data, set, onNext }) {
+  const valid = data.email && data.password && data.fullname;
+  return (
+    <div className="fade-enter">
+      <div className="eyebrow">Step 1 of 7 · Identity</div>
+      <h1 className="big">Create your admin account.</h1>
+      <p className="lede">You'll be the first admin for your workspace. Invite your team later — one decision at a time.</p>
+
+      <div className="field">
+        <label>Full name</label>
+        <input className="input" placeholder="Sarah Reyes" value={data.fullname} onChange={e => set('fullname', e.target.value)} />
+      </div>
+      <div className="form-row">
+        <div className="field">
+          <label>Work email</label>
+          <input className="input" type="email" placeholder="sarah@metalworks.co" value={data.email} onChange={e => set('email', e.target.value)} />
+        </div>
+        <div className="field">
+          <label>Password</label>
+          <input className="input" type="password" placeholder="Minimum 12 characters" value={data.password} onChange={e => set('password', e.target.value)} />
+        </div>
+      </div>
+      <div className="field">
+        <label>Your role <span className="opt">· OPTIONAL</span></label>
+        <select className="input" value={data.role} onChange={e => set('role', e.target.value)}>
+          <option>Operations Manager</option>
+          <option>Plant Manager</option>
+          <option>Maintenance Lead</option>
+          <option>Owner / Founder</option>
+          <option>IT Administrator</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div className="panel-foot">
+        <span className="skip">Already have an account? <b style={{color: 'var(--af-fg)'}}>Sign in</b></span>
+        <div className="grow"></div>
+        <button className="btn primary lg" onClick={onNext} disabled={!valid}>Continue<i className="ph-bold ph-arrow-right"></i></button>
+      </div>
+    </div>
+  );
+}
+
+function StepWorkspace({ data, set, onNext, onBack }) {
+  const industries = [
+    { k: 'metals', n: 'Metalworks', i: 'ph-factory' },
+    { k: 'auto', n: 'Automotive', i: 'ph-car' },
+    { k: 'food', n: 'Food & Beverage', i: 'ph-coffee' },
+    { k: 'chem', n: 'Chemicals', i: 'ph-flask' },
+    { k: 'pack', n: 'Packaging', i: 'ph-package' },
+    { k: 'other', n: 'Other', i: 'ph-dots-three' },
+  ];
+  const sizes = ['1–10', '11–50', '51–200', '201–500'];
+  const valid = data.company && data.industry && data.size;
+  return (
+    <div className="fade-enter">
+      <div className="eyebrow">Step 2 of 7 · Company</div>
+      <h1 className="big">Tell us about your operation.</h1>
+      <p className="lede">We'll tailor defaults — asset categories, unit systems, report templates — to your industry.</p>
+
+      <div className="field">
+        <label>Company name</label>
+        <input className="input" placeholder="Metalworks Co." value={data.company} onChange={e => set('company', e.target.value)} />
+      </div>
+
+      <div className="field">
+        <label>Industry</label>
+        <div className="tiles">
+          {industries.map(ind => (
+            <div key={ind.k} className={`tile ${data.industry === ind.k ? 'on' : ''}`} onClick={() => set('industry', ind.k)}>
+              <i className={`ph ${ind.i}`}></i>
+              <b>{ind.n}</b>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="field">
+        <label>Team size</label>
+        <div className="tiles tiles-2" style={{gridTemplateColumns: 'repeat(4, 1fr)'}}>
+          {sizes.map(sz => (
+            <div key={sz} className={`tile ${data.size === sz ? 'on' : ''}`} onClick={() => set('size', sz)} style={{textAlign: 'center'}}>
+              <b style={{fontFamily: 'var(--af-font-mono)', fontSize: 14}}>{sz}</b>
+              <span>employees</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="field">
+        <label>Primary location <span className="opt">· OPTIONAL</span></label>
+        <input className="input" placeholder="Plant 1 · 2400 Industrial Way, Cleveland OH" value={data.location} onChange={e => set('location', e.target.value)} />
+        <div className="field-help">You can add more locations and zones after setup.</div>
+      </div>
+
+      <div className="panel-foot">
+        <button className="btn ghost" onClick={onBack}><i className="ph-bold ph-arrow-left"></i>Back</button>
+        <div className="grow"></div>
+        <button className="btn primary lg" onClick={onNext} disabled={!valid}>Create workspace<i className="ph-bold ph-arrow-right"></i></button>
+      </div>
+    </div>
+  );
+}
+
+function StepAsset({ data, set, onNext, onBack }) {
+  const [mode, setMode] = useState(data.assetMode || 'manual');
+  const categories = [
+    { k: 'machinery', n: 'Machinery' },
+    { k: 'vehicles', n: 'Vehicles' },
+    { k: 'tools',    n: 'Tools' },
+    { k: 'it',       n: 'IT Equipment' },
+  ];
+  const valid = mode === 'csv' ? data.csvFile : (data.assetName && data.assetCat);
+  return (
+    <div className="fade-enter">
+      <div className="eyebrow">Step 3 of 7 · Inventory</div>
+      <h1 className="big">Add your first asset.</h1>
+      <p className="lede">Start with one machine you want to track. You'll import the rest from a spreadsheet in two minutes later.</p>
+
+      <div className="choice-pair">
+        <div className={`choice ${mode === 'manual' ? 'on' : ''}`} onClick={() => { setMode('manual'); set('assetMode', 'manual'); }}>
+          <div className="choice-ic"><i className="ph ph-plus-square"></i></div>
+          <b>Add manually</b>
+          <span>Register one asset now. Takes about 30 seconds.</span>
+          <span className="tag">RECOMMENDED · FIRST TIME</span>
+        </div>
+        <div className={`choice ${mode === 'csv' ? 'on' : ''}`} onClick={() => { setMode('csv'); set('assetMode', 'csv'); }}>
+          <div className="choice-ic"><i className="ph ph-upload-simple"></i></div>
+          <b>Import from CSV</b>
+          <span>Upload a spreadsheet with up to 5,000 assets at once.</span>
+          <span className="tag">BULK · ADMIN</span>
+        </div>
+      </div>
+
+      {mode === 'manual' ? (
+        <>
+          <div className="form-row">
+            <div className="field">
+              <label>Asset name</label>
+              <input className="input" placeholder="Hydraulic Press #4" value={data.assetName || ''} onChange={e => set('assetName', e.target.value)} />
+            </div>
+            <div className="field">
+              <label>Asset ID <span className="opt">· AUTO</span></label>
+              <input className="input input-mono" value={data.assetId || 'AF-0001'} onChange={e => set('assetId', e.target.value)} />
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="field">
+              <label>Category</label>
+              <select className="input" value={data.assetCat || ''} onChange={e => set('assetCat', e.target.value)}>
+                <option value="">Select a category</option>
+                {categories.map(c => <option key={c.k} value={c.k}>{c.n}</option>)}
+              </select>
+            </div>
+            <div className="field">
+              <label>Location <span className="opt">· OPTIONAL</span></label>
+              <input className="input input-mono" placeholder="B3·Z2" value={data.assetLoc || ''} onChange={e => set('assetLoc', e.target.value)} />
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="field">
+              <label>Manufacturer <span className="opt">· OPTIONAL</span></label>
+              <input className="input" placeholder="Bosch Rexroth" value={data.assetMfr || ''} onChange={e => set('assetMfr', e.target.value)} />
+            </div>
+            <div className="field">
+              <label>Purchase date <span className="opt">· OPTIONAL</span></label>
+              <input className="input input-mono" placeholder="2023-05-12" value={data.assetPurchaseDate || ''} onChange={e => set('assetPurchaseDate', e.target.value)} />
+            </div>
+          </div>
+        </>
+      ) : (
+        <div style={{background: '#fff', border: '1px dashed var(--af-border-strong)', borderRadius: 10, padding: 32, textAlign: 'center'}}>
+          <div style={{width: 48, height: 48, borderRadius: 10, background: 'var(--af-ink-100)', display: 'grid', placeItems: 'center', margin: '0 auto 12px'}}>
+            <i className="ph ph-file-csv" style={{fontSize: 24, color: 'var(--af-fg-muted)'}}></i>
+          </div>
+          <div style={{fontSize: 14, fontWeight: 600}}>Drop your CSV here</div>
+          <div style={{fontSize: 12, color: 'var(--af-fg-muted)', marginTop: 4}}>or <span style={{color: 'var(--af-orange-600)', fontWeight: 500, cursor: 'pointer'}} onClick={() => set('csvFile', 'assets-metalworks-apr2026.csv')}>browse your files</span></div>
+          <div style={{marginTop: 14, display: 'inline-flex', gap: 6, alignItems: 'center', fontFamily: 'var(--af-font-mono)', fontSize: 10.5, color: 'var(--af-fg-muted)', letterSpacing: '0.06em'}}>
+            <i className="ph ph-download-simple" style={{fontSize: 12}}></i>DOWNLOAD TEMPLATE · 3KB
+          </div>
+          {data.csvFile && (
+            <div style={{marginTop: 16, padding: 10, background: 'var(--af-ok-100)', borderRadius: 6, fontSize: 12, color: 'var(--af-ok-600)', fontWeight: 500}}>
+              <i className="ph-bold ph-check" style={{marginRight: 6}}></i>{data.csvFile} · 124 rows detected
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="panel-foot">
+        <button className="btn ghost" onClick={onBack}><i className="ph-bold ph-arrow-left"></i>Back</button>
+        <div className="grow"></div>
+        <button className="btn primary lg" onClick={onNext} disabled={!valid}>Save asset<i className="ph-bold ph-arrow-right"></i></button>
+      </div>
+    </div>
+  );
+}
+
+function StepSchedule({ data, set, onNext, onBack }) {
+  const valid = data.schedType && data.schedTask;
+  const preview = useMemo(() => {
+    if (!data.schedEvery) return [];
+    const base = new Date(2026, 3, 25);
+    const step = parseInt(data.schedEvery || 30, 10);
+    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    return [0, 1, 2].map(i => {
+      const d = new Date(base.getTime() + step * (i + 1) * 86400000);
+      return { day: d.getDate(), m: months[d.getMonth()] };
+    });
+  }, [data.schedEvery]);
+
+  return (
+    <div className="fade-enter">
+      <div className="eyebrow">Step 4 of 7 · Automation</div>
+      <h1 className="big">Schedule its first maintenance.</h1>
+      <p className="lede">AssetFlow auto-generates work orders from the rules you set. You can skip and do this later.</p>
+
+      <div className="field">
+        <label>Maintenance type</label>
+        <div className="sched-pill">
+          {['Time-based', 'Usage-based', 'Condition-based'].map(t => (
+            <button key={t} className={data.schedType === t ? 'on' : ''} onClick={() => set('schedType', t)}>{t}</button>
+          ))}
+        </div>
+      </div>
+
+      <div className="field">
+        <label>Task name</label>
+        <input className="input" placeholder="Quarterly pressure test" value={data.schedTask || ''} onChange={e => set('schedTask', e.target.value)} />
+      </div>
+
+      <div className="sched-builder">
+        <div>
+          <div className="field">
+            <label>Repeat every</label>
+            <div className="freq-inline">
+              <input className="input input-mono" type="number" value={data.schedEvery || 30} onChange={e => set('schedEvery', e.target.value)} />
+              <select className="input" style={{width: 120}} value={data.schedUnit || 'days'} onChange={e => set('schedUnit', e.target.value)}>
+                <option>days</option><option>weeks</option><option>months</option><option>operating hours</option>
+              </select>
+              <span style={{color: 'var(--af-fg-muted)', fontSize: 12}}>starting</span>
+              <input className="input input-mono" style={{width: 130}} value={data.schedStart || 'Apr 25, 2026'} onChange={e => set('schedStart', e.target.value)} />
+            </div>
+          </div>
+
+          <div className="field">
+            <label>Assign to <span className="opt">· OPTIONAL</span></label>
+            <select className="input" value={data.schedAssign || ''} onChange={e => set('schedAssign', e.target.value)}>
+              <option value="">Any technician</option>
+              <option>Marcus Chen</option>
+              <option>Amara Okafor</option>
+              <option>Jay Patel</option>
+            </select>
+          </div>
+
+          <div className="field">
+            <label>Alert before due</label>
+            <div className="freq-inline">
+              <input className="input input-mono" type="number" defaultValue={3} />
+              <select className="input" style={{width: 120}}>
+                <option>days</option><option>hours</option>
+              </select>
+              <span style={{color: 'var(--af-fg-muted)', fontSize: 12}}>via email + in-app</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="sched-preview">
+          <div className="eyebrow">Preview · next 3 work orders</div>
+          {preview.length > 0 ? preview.map((p, i) => (
+            <div key={i} className="sched-preview-item">
+              <div><b>{p.day}</b><span>{p.m}</span></div>
+              <div className="det"><b style={{fontFamily: 'var(--af-font-sans)', fontWeight: 600}}>{data.schedTask || 'Maintenance task'}</b><div className="mono">{data.assetId || 'AF-0001'} · every {data.schedEvery || 30} {data.schedUnit || 'days'}</div></div>
+            </div>
+          )) : (
+            <div style={{fontSize: 12, color: 'var(--af-fg-muted)', padding: '20px 0', textAlign: 'center'}}>Fill in frequency to preview</div>
+          )}
+        </div>
+      </div>
+
+      <div className="panel-foot">
+        <button className="btn ghost" onClick={onBack}><i className="ph-bold ph-arrow-left"></i>Back</button>
+        <span className="skip" style={{marginLeft: 12}} onClick={onNext}>Skip for now</span>
+        <div className="grow"></div>
+        <button className="btn primary lg" onClick={onNext} disabled={!valid}>Save schedule<i className="ph-bold ph-arrow-right"></i></button>
+      </div>
+    </div>
+  );
+}
+
+function StepQr({ data, set, onNext, onBack }) {
+  return (
+    <div className="fade-enter">
+      <div className="eyebrow">Step 5 of 7 · Label</div>
+      <h1 className="big">Print your first QR label.</h1>
+      <p className="lede">Stick it on the machine. Your technicians can scan it to log work on the spot — no searching, no typing.</p>
+
+      <div className="qr-preview-wrap">
+        <div>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10}}>
+            <div className="eyebrow">Avery 5160 · 30 per sheet · preview</div>
+            <div style={{fontFamily: 'var(--af-font-mono)', fontSize: 10.5, color: 'var(--af-fg-muted)'}}>1 / 1 sheets</div>
+          </div>
+          <div className="qr-sheet">
+            {[0,1,2,3,4,5].map(i => (
+              <div key={i} className="qr-label">
+                <QrSvg seed={i === 0 ? 'P' : 'A' + i} />
+                <div className="qr-id">{data.assetId || 'AF-0001'}</div>
+                <div className="qr-nm" style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{data.assetName || 'Hydraulic Press #4'}</div>
+              </div>
+            ))}
+            {[6,7,8].map(i => (
+              <div key={i} className="qr-label" style={{opacity: .3}}>
+                <div style={{height: 60, width: 60, background: 'repeating-linear-gradient(135deg, transparent 0 4px, rgba(0,0,0,.05) 4px 5px)', margin: '0 auto'}}></div>
+                <div className="qr-id" style={{color: 'var(--af-fg-subtle)'}}>—</div>
+                <div className="qr-nm">Empty</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="qr-options">
+          <b>Label settings</b>
+          <label><input type="radio" name="sz" defaultChecked /> Avery 5160 <span className="mono">1"×2⅝"</span></label>
+          <label><input type="radio" name="sz" /> Avery 5163 <span className="mono">2"×4"</span></label>
+          <label><input type="radio" name="sz" /> Zebra 4"×6" <span className="mono">industrial</span></label>
+          <div style={{marginTop: 14}}><b>Include on label</b></div>
+          <label><input type="checkbox" defaultChecked /> Asset ID <span className="mono">mono</span></label>
+          <label><input type="checkbox" defaultChecked /> Asset name</label>
+          <label><input type="checkbox" /> Location code</label>
+          <label><input type="checkbox" /> Company logo</label>
+        </div>
+      </div>
+
+      <div className="panel-foot">
+        <button className="btn ghost" onClick={onBack}><i className="ph-bold ph-arrow-left"></i>Back</button>
+        <button className="btn"><i className="ph ph-download-simple"></i>Download PDF</button>
+        <span className="skip" style={{marginLeft: 12}} onClick={onNext}>Print later</span>
+        <div className="grow"></div>
+        <button className="btn primary lg" onClick={onNext}><i className="ph-bold ph-printer"></i>Print now</button>
+      </div>
+    </div>
+  );
+}
+
+function StepEmpty({ data, onNext, onBack }) {
+  const [checked, setChecked] = useState({ asset: true, schedule: true, qr: true });
+  const completeCount = Object.values(checked).filter(Boolean).length;
+  return (
+    <div className="fade-enter">
+      <div className="eyebrow">Step 6 of 7 · Dashboard preview</div>
+      <h1 className="big">This is where you'll live.</h1>
+      <p className="lede">Here's your dashboard — still quiet, because you have just one asset. Add more to see it come alive.</p>
+
+      <div className="dash-frame">
+        <div className="dash-tb">
+          <div className="dots"><span></span><span></span><span></span></div>
+          <div className="url">app.assetflow.com / {(data.company || 'metalworks').toLowerCase().replace(/\W+/g,'-')}</div>
+          <div style={{width: 28, height: 28, borderRadius: 99, background: 'linear-gradient(135deg, var(--af-orange-500), var(--af-orange-600))', color: '#fff', display: 'grid', placeItems: 'center', fontSize: 10, fontWeight: 600}}>{(data.fullname || 'S R').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase()}</div>
+        </div>
+        <div className="dash-body">
+          <div className="dash-sb">
+            <div className="dash-sb-item active"><i className="ph ph-gauge"></i>Dashboard</div>
+            <div className="dash-sb-item"><i className="ph ph-clipboard-text"></i>Work Orders</div>
+            <div className="dash-sb-item"><i className="ph ph-calendar-dots"></i>Maintenance</div>
+            <div className="dash-sb-item"><i className="ph ph-package"></i>Assets</div>
+            <div className="dash-sb-item"><i className="ph ph-map-pin"></i>Locations</div>
+            <div className="dash-sb-item"><i className="ph ph-qr-code"></i>QR Labels</div>
+            <div className="dash-sb-item"><i className="ph ph-chart-line-up"></i>Reports</div>
+          </div>
+          <div className="dash-main">
+            <div className="dash-head">
+              <div>
+                <div className="eyebrow" style={{color: 'var(--af-fg-muted)'}}>Welcome, {(data.fullname || 'Sarah').split(' ')[0]}</div>
+                <h3 style={{marginTop: 2}}>Your workspace · {data.company || 'Metalworks Co.'}</h3>
+              </div>
+              <div style={{display: 'flex', gap: 6}}>
+                <button className="btn"><i className="ph ph-plus"></i>New asset</button>
+              </div>
+            </div>
+
+            <div style={{display: 'grid', gridTemplateColumns: '1fr 260px', gap: 14}}>
+              <div className="empty-card">
+                <div className="empty-ic"><i className="ph ph-package"></i></div>
+                <h4>1 asset tracked · 6 more to go</h4>
+                <p>Finish setup by adding a few more assets. Most plants track 20–500 items — we'll grow with you.</p>
+                <div style={{display: 'flex', gap: 6, justifyContent: 'center'}}>
+                  <button className="btn primary"><i className="ph-bold ph-plus"></i>Add another asset</button>
+                  <button className="btn"><i className="ph ph-upload-simple"></i>Import CSV</button>
+                </div>
+              </div>
+              <div className="checklist-side">
+                <div className="cl-head"><b>Setup checklist</b><span>{completeCount}/6</span></div>
+                <div className={`cl-item ${checked.asset ? 'done' : ''}`}><div className="cl-check">{checked.asset && <i className="ph-bold ph-check"></i>}</div><span>Add first asset</span><small>+20 XP</small></div>
+                <div className={`cl-item ${checked.schedule ? 'done' : ''}`}><div className="cl-check">{checked.schedule && <i className="ph-bold ph-check"></i>}</div><span>Set maintenance rule</span><small>+30 XP</small></div>
+                <div className={`cl-item ${checked.qr ? 'done' : ''}`}><div className="cl-check">{checked.qr && <i className="ph-bold ph-check"></i>}</div><span>Print QR label</span><small>+10 XP</small></div>
+                <div className="cl-item"><div className="cl-check"></div><span>Invite a technician</span><small>+20 XP</small></div>
+                <div className="cl-item"><div className="cl-check"></div><span>Scan from phone</span><small>+10 XP</small></div>
+                <div className="cl-item"><div className="cl-check"></div><span>Complete first work order</span><small>+40 XP</small></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="panel-foot">
+        <button className="btn ghost" onClick={onBack}><i className="ph-bold ph-arrow-left"></i>Back</button>
+        <div className="grow"></div>
+        <button className="btn primary lg" onClick={onNext}>Looks good<i className="ph-bold ph-arrow-right"></i></button>
+      </div>
+    </div>
+  );
+}
+
+function StepAha({ data, onBack, onRestart }) {
+  return (
+    <div className="fade-enter">
+      <div className="aha">
+        <div className="aha-badge"><i className="ph-fill ph-confetti"></i></div>
+        <h1>You're live, {(data.fullname || 'Sarah').split(' ')[0]}.</h1>
+        <p className="sub">{data.company || 'Your workspace'} is set up and tracking in real time.</p>
+      </div>
+
+      <div className="stats-row">
+        <div className="stat">
+          <div className="eyebrow">Asset registered</div>
+          <b>{data.assetName || 'Hydraulic Press #4'}</b>
+          <div className="mono-id">{data.assetId || 'AF-0001'} · {data.assetLoc || 'B3·Z2'}</div>
+        </div>
+        <div className="stat">
+          <div className="eyebrow">Next PM</div>
+          <b style={{color: 'var(--af-ok-600)'}}>in {data.schedEvery || 30}d</b>
+          <div className="mono-id">{data.schedTask || 'Quarterly pressure test'}</div>
+        </div>
+        <div className="stat">
+          <div className="eyebrow">Labels ready</div>
+          <b>1 printed</b>
+          <div className="mono-id">AVERY 5160 · 1/30 USED</div>
+        </div>
+      </div>
+
+      <div className="review" style={{maxWidth: 540, margin: '0 auto 28px'}}>
+        <div><span className="k">Workspace</span><span className="v">{data.company || 'Metalworks Co.'}</span></div>
+        <div><span className="k">Admin</span><span className="v">{data.fullname || 'Sarah Reyes'}</span> · <span className="hl">{data.email || 'sarah@metalworks.co'}</span></div>
+        <div><span className="k">Industry</span><span className="v">{data.industry || 'metals'}</span> · {data.size || '11–50'} employees</div>
+        <div><span className="k">Plan</span><span className="v">Free tier</span> · 1 / 50 assets</div>
+      </div>
+
+      <div style={{display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap'}}>
+        <button className="btn primary lg"><i className="ph-bold ph-gauge"></i>Go to dashboard</button>
+        <button className="btn lg"><i className="ph ph-users-three"></i>Invite your team</button>
+        <button className="btn lg"><i className="ph ph-qr-code"></i>Scan from mobile</button>
+      </div>
+
+      <div style={{textAlign: 'center', marginTop: 28, paddingTop: 20, borderTop: '1px dashed var(--af-ink-200)', fontSize: 12, color: 'var(--af-fg-muted)'}}>
+        Demo wizard — <span style={{color: 'var(--af-orange-600)', cursor: 'pointer', fontWeight: 500}} onClick={onRestart}>restart from step 1</span>
+      </div>
+    </div>
+  );
+}
+
+// ============ ROOT ============
+function App() {
+  const [step, setStep] = useState(0);
+  const [data, setData] = useState({
+    fullname: '', email: '', password: '', role: 'Operations Manager',
+    company: '', industry: '', size: '', location: '',
+    assetMode: 'manual', assetName: '', assetId: 'AF-0001', assetCat: '', assetLoc: '', assetMfr: '', assetPurchaseDate: '',
+    schedType: 'Time-based', schedTask: '', schedEvery: 30, schedUnit: 'days', schedStart: 'Apr 25, 2026', schedAssign: '',
+  });
+  const set = (k, v) => setData(d => ({ ...d, [k]: v }));
+  const onNext = () => setStep(s => Math.min(s + 1, STEPS.length - 1));
+  const onBack = () => setStep(s => Math.max(s - 1, 0));
+  const onRestart = () => setStep(0);
+
+  const panels = [
+    <StepSignup    key="s0" data={data} set={set} onNext={onNext} />,
+    <StepWorkspace key="s1" data={data} set={set} onNext={onNext} onBack={onBack} />,
+    <StepAsset     key="s2" data={data} set={set} onNext={onNext} onBack={onBack} />,
+    <StepSchedule  key="s3" data={data} set={set} onNext={onNext} onBack={onBack} />,
+    <StepQr        key="s4" data={data} set={set} onNext={onNext} onBack={onBack} />,
+    <StepEmpty     key="s5" data={data} onNext={onNext} onBack={onBack} />,
+    <StepAha       key="s6" data={data} onBack={onBack} onRestart={onRestart} />,
+  ];
+
+  return (
+    <div className="wiz">
+      <Rail step={step} />
+      <div className="stage">
+        <div className="topbar">
+          <span className="progress-count">Step {String(step + 1).padStart(2, '0')} / {String(STEPS.length).padStart(2, '0')} · {STEPS[step].title}</span>
+          <div className="spacer"></div>
+          <span className="exit">Save & exit</span>
+        </div>
+        <div className="panel">
+          <div className={`panel-inner ${step === 5 ? 'wide' : ''}`}>
+            {panels[step]}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

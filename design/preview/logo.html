@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Logo & Mark</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { padding: 20px; }
+  .grid { display: grid; grid-template-columns: 140px 1fr 180px; gap: 14px; }
+  .tile { background: var(--af-surface); border: 1px solid var(--af-border); border-radius: 8px; display: flex; align-items: center; justify-content: center; height: 120px; padding: 18px; }
+  .tile.dark { background: var(--af-ink-900); border-color: var(--af-ink-900); }
+  .tile img { max-width: 100%; height: auto; }
+  .lbl { font-family: var(--af-font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--af-fg-muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div>
+      <div class="tile"><img src="../assets/logo-mark.svg" style="width:64px;height:64px"/></div>
+      <div class="lbl">Mark · Light</div>
+    </div>
+    <div>
+      <div class="tile"><img src="../assets/logo-wordmark.svg" style="height:28px"/></div>
+      <div class="lbl">Wordmark · Default</div>
+    </div>
+    <div>
+      <div class="tile dark"><img src="../assets/logo-mark.svg" style="width:56px;height:56px; filter: invert(1) hue-rotate(180deg) saturate(0);"/></div>
+      <div class="lbl">Mark · Dark</div>
+    </div>
+  </div>
+</body>
+</html>

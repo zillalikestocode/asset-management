@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Colors — Status</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  .card { padding: 20px; background: var(--af-surface); border: 1px solid var(--af-border); border-radius: 8px; }
+  .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .status { display: flex; flex-direction: column; gap: 8px; }
+  .chip-row { display: flex; gap: 4px; }
+  .chip { height: 44px; flex: 1; border-radius: 4px; }
+  .meta { display: flex; justify-content: space-between; align-items: center; }
+  .dot { width: 10px; height: 10px; border-radius: 99px; display: inline-block; }
+  .label { font-family: var(--af-font-sans); font-weight: 600; font-size: 12px; display: flex; gap: 6px; align-items: center;}
+  .use { font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-muted); }
+</style>
+</head>
+<body style="padding: 20px;">
+  <div class="card">
+    <div class="af-eyebrow" style="margin-bottom: 12px;">Status · Operational</div>
+    <div class="row">
+      <div class="status">
+        <div class="meta"><span class="label"><span class="dot" style="background:#84CC16"></span>Healthy</span><span class="use">OK</span></div>
+        <div class="chip-row"><div class="chip" style="background:#E8F5D4"></div><div class="chip" style="background:#84CC16"></div><div class="chip" style="background:#4D8B1A"></div></div>
+      </div>
+      <div class="status">
+        <div class="meta"><span class="label"><span class="dot" style="background:#F59E0B"></span>Due Soon</span><span class="use">WARN</span></div>
+        <div class="chip-row"><div class="chip" style="background:#FEF0CE"></div><div class="chip" style="background:#F59E0B"></div><div class="chip" style="background:#B45309"></div></div>
+      </div>
+      <div class="status">
+        <div class="meta"><span class="label"><span class="dot" style="background:#EF4444"></span>Overdue</span><span class="use">CRIT</span></div>
+        <div class="chip-row"><div class="chip" style="background:#FDE0E0"></div><div class="chip" style="background:#EF4444"></div><div class="chip" style="background:#C52629"></div></div>
+      </div>
+      <div class="status">
+        <div class="meta"><span class="label"><span class="dot" style="background:#3B82F6"></span>Scheduled</span><span class="use">INFO</span></div>
+        <div class="chip-row"><div class="chip" style="background:#DBEAFE"></div><div class="chip" style="background:#3B82F6"></div><div class="chip" style="background:#1E5FD4"></div></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

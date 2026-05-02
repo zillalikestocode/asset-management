@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Colors — Primary</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  .card { padding: 20px; background: var(--af-surface); border: 1px solid var(--af-border); border-radius: 8px; }
+  .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .sw { display: flex; flex-direction: column; gap: 8px; }
+  .chip { height: 56px; border-radius: 5px; border: 1px solid rgba(14,17,22,.06); }
+  .name { display: flex; justify-content: space-between; align-items: baseline; gap: 4px; }
+  .name b { font-family: var(--af-font-sans); font-weight: 600; font-size: 12px; }
+  .name span { font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-muted); letter-spacing: 0; }
+</style>
+</head>
+<body style="padding: 20px;">
+  <div class="card">
+    <div class="af-eyebrow" style="margin-bottom: 14px;">Accent · Orange</div>
+    <div class="row">
+      <div class="sw"><div class="chip" style="background:#FFF4EE"></div><div class="name"><b>050</b><span>#FFF4EE</span></div></div>
+      <div class="sw"><div class="chip" style="background:#FFE8DD"></div><div class="name"><b>100</b><span>#FFE8DD</span></div></div>
+      <div class="sw"><div class="chip" style="background:#FF6B35"></div><div class="name"><b>500</b><span>#FF6B35</span></div></div>
+      <div class="sw"><div class="chip" style="background:#E55A22"></div><div class="name"><b>600</b><span>#E55A22</span></div></div>
+      <div class="sw"><div class="chip" style="background:#0E1116"></div><div class="name"><b>Ink 900</b><span>#0E1116</span></div></div>
+    </div>
+  </div>
+</body>
+</html>

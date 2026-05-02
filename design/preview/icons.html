@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Iconography — Phosphor</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<style>
+  body { padding: 20px; }
+  .card { background: var(--af-surface); border: 1px solid var(--af-border); border-radius: 8px; padding: 18px; }
+  .grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; }
+  .cell { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border: 1px dashed var(--af-ink-150); border-radius: 5px; }
+  .cell i { font-size: 22px; color: var(--af-fg); }
+  .cell span { font-family: var(--af-font-mono); font-size: 9px; color: var(--af-fg-muted); }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="af-eyebrow" style="margin-bottom: 12px;">Icons · Phosphor · Regular 22 / Bold 24</div>
+    <div class="grid">
+      <div class="cell"><i class="ph ph-qr-code"></i><span>qr-code</span></div>
+      <div class="cell"><i class="ph ph-wrench"></i><span>wrench</span></div>
+      <div class="cell"><i class="ph ph-gauge"></i><span>gauge</span></div>
+      <div class="cell"><i class="ph ph-map-pin"></i><span>map-pin</span></div>
+      <div class="cell"><i class="ph ph-factory"></i><span>factory</span></div>
+      <div class="cell"><i class="ph ph-clipboard-text"></i><span>clipboard</span></div>
+      <div class="cell"><i class="ph ph-bell"></i><span>bell</span></div>
+      <div class="cell"><i class="ph ph-calendar-dots"></i><span>calendar</span></div>
+      <div class="cell"><i class="ph ph-package"></i><span>package</span></div>
+      <div class="cell"><i class="ph ph-warning"></i><span>warning</span></div>
+      <div class="cell"><i class="ph ph-check-circle"></i><span>check</span></div>
+      <div class="cell"><i class="ph ph-x-circle"></i><span>x</span></div>
+      <div class="cell"><i class="ph ph-camera"></i><span>camera</span></div>
+      <div class="cell"><i class="ph ph-user"></i><span>user</span></div>
+      <div class="cell"><i class="ph ph-gear"></i><span>gear</span></div>
+      <div class="cell"><i class="ph ph-magnifying-glass"></i><span>search</span></div>
+    </div>
+  </div>
+</body>
+</html>

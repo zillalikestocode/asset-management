@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Blueprint Grid</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { padding: 20px; }
+  .tile { height: 180px; border: 1px solid var(--af-border); border-radius: 8px; overflow: hidden; position: relative; padding: 16px; }
+  .tile.grid { background-color: #FAFAF9;
+    background-image:
+      linear-gradient(to right, rgba(14,17,22,.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(14,17,22,.035) 1px, transparent 1px),
+      linear-gradient(to right, rgba(14,17,22,.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(14,17,22,.06) 1px, transparent 1px);
+    background-size: 8px 8px, 8px 8px, 64px 64px, 64px 64px;
+  }
+  .caption { position: absolute; bottom: 12px; left: 16px; font-family: var(--af-font-mono); font-size: 10px; color: var(--af-fg-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .callout { position: absolute; top: 24px; left: 24px; font-family: var(--af-font-mono); font-size: 10px; color: var(--af-ink-700); padding: 4px 8px; background: rgba(255,255,255,.85); border: 1px solid var(--af-border); border-radius: 3px; }
+  .mark { position: absolute; top: 40px; right: 40px; width: 64px; height: 64px; border: 1.5px dashed var(--af-orange-500); border-radius: 50%; }
+  .mark::after { content:''; position: absolute; inset: -14px; border: 1px dashed var(--af-orange-500); border-radius: 50%; opacity: 0.4;}
+</style>
+</head>
+<body>
+  <div class="tile grid">
+    <div class="callout">BLUEPRINT · 8PX MINOR · 64PX MAJOR</div>
+    <div class="mark"></div>
+    <div class="caption">Used as a background motif behind empty states, marketing hero, printable assets.</div>
+  </div>
+</body>
+</html>
