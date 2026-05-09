@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, CheckCircle, ChatCircle, Clock } from '@phosphor-icons/react'
+import { ArrowLeft, CheckCircle, ChatCircle, Clock, Play, Hourglass } from '@phosphor-icons/react'
 import { toast } from 'sonner'
-import { useWorkOrder, useCompleteWorkOrder, useAddComment } from '@/hooks/useWorkOrders'
+import { useWorkOrder, useUpdateWorkOrder, useCompleteWorkOrder, useAddComment } from '@/hooks/useWorkOrders'
 import { StatusPill, PriorityPill } from '@/components/ui/Badge'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { formatDate, formatRelative, initials, cn } from '@/lib/utils'
@@ -10,26 +10,37 @@ import { formatDate, formatRelative, initials, cn } from '@/lib/utils'
 export function TechLogPage() {
   const { id }   = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const [comment, setComment]       = useState('')
-  const [actualHours, setActualHours] = useState('')
-  const [notes, setNotes]           = useState('')
+  const [comment, setComment]           = useState('')
+  const [actualHours, setActualHours]   = useState('')
+  const [notes, setNotes]               = useState('')
   const [showComplete, setShowComplete] = useState(false)
 
   const { data: wo, isLoading } = useWorkOrder(id ?? '')
   const addComment   = useAddComment(id ?? '')
+  const updateWO     = useUpdateWorkOrder(id ?? '')
   const completeWO   = useCompleteWorkOrder()
 
   if (isLoading || !wo) return <PageSpinner />
 
-  const isDone = wo.status === 'completed' || wo.status === 'cancelled'
+  const isDone       = wo.status === 'completed' || wo.status === 'cancelled'
+  const isInProgress = wo.status === 'in_progress'
+  const isOpen       = wo.status === 'open'
+  const isOverdue    = !isDone && !!wo.dueDate && new Date(wo.dueDate) < new Date()
 
   const handleComment = async () => {
     if (!comment.trim()) return
     try {
       await addComment.mutateAsync(comment.trim())
       setComment('')
-      toast.success('Comment added')
+      toast.success('Entry added')
     } catch { toast.error('Failed') }
+  }
+
+  const handleStart = async () => {
+    try {
+      await updateWO.mutateAsync({ status: 'in_progress' })
+      toast.success('Work order started')
+    } catch { toast.error('Failed to start') }
   }
 
   const handleComplete = async () => {
@@ -67,12 +78,18 @@ export function TechLogPage() {
       {/* Due date */}
       <div className={cn(
         'flex items-center gap-2 p-3 rounded-xl border font-mono text-[12px]',
-        !!wo.dueDate && new Date(wo.dueDate) < new Date() && !isDone
+        isOverdue
           ? 'border-af-crit-200 bg-af-crit-050 text-af-crit-600'
           : 'border-af-border bg-white text-af-muted',
       )}>
         <Clock size={14} />
-        Due {wo.dueDate ? formatDate(wo.dueDate) : '—'}
+        {isOverdue ? 'Overdue · ' : ''}Due {wo.dueDate ? formatDate(wo.dueDate) : '—'}
+        {wo.completedAt && (
+          <span className="ml-auto text-af-ok-600 flex items-center gap-1">
+            <CheckCircle size={12} weight="fill" />
+            Completed {formatDate(wo.completedAt)}
+          </span>
+        )}
       </div>
 
       {/* Description */}
@@ -83,10 +100,26 @@ export function TechLogPage() {
         </div>
       )}
 
-      {/* Comments */}
+      {/* Completion summary (if done) */}
+      {isDone && (wo.actualHours || wo.completionNotes) && (
+        <div className="rounded-xl border border-af-ok-100 bg-af-ok-100/40 p-4 space-y-2">
+          <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-af-ok-600 mb-1">Completion summary</p>
+          {wo.actualHours && (
+            <div className="flex items-center gap-2 text-[13px]">
+              <Hourglass size={13} className="text-af-ok-600" />
+              <span>{wo.actualHours}h logged</span>
+            </div>
+          )}
+          {wo.completionNotes && (
+            <p className="text-[13px] leading-relaxed">{wo.completionNotes}</p>
+          )}
+        </div>
+      )}
+
+      {/* Log / Comments */}
       <div className="rounded-xl border border-af-border bg-white overflow-hidden">
         <div className="px-4 py-3 border-b border-af-border">
-          <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-af-muted">Log / Comments</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-af-muted">Work log</p>
         </div>
         <div className="divide-y divide-af-border">
           {(wo.comments ?? []).length === 0
@@ -107,71 +140,82 @@ export function TechLogPage() {
             ))
           }
         </div>
-        <div className="px-4 py-3 border-t border-af-border bg-af-ink-050">
-          <textarea
-            value={comment}
-            onChange={e => setComment(e.target.value)}
-            placeholder="Add a log entry…"
-            rows={2}
-            className="w-full px-3 py-2 rounded-lg border border-af-border bg-white text-[14px] outline-none focus:border-af-focus resize-none"
-          />
-          <button
-            onClick={handleComment}
-            disabled={!comment.trim() || addComment.isPending}
-            className="mt-2 flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.08em] px-3 py-1.5 rounded-lg border border-af-border bg-white hover:bg-af-ink-050 text-af-muted disabled:opacity-50 transition-colors duration-[120ms]"
-          >
-            <ChatCircle size={12} />Post
-          </button>
-        </div>
+        {!isDone && (
+          <div className="px-4 py-3 border-t border-af-border bg-af-ink-050">
+            <textarea
+              value={comment}
+              onChange={e => setComment(e.target.value)}
+              placeholder="Add a log entry…"
+              rows={2}
+              className="w-full px-3 py-2 rounded-lg border border-af-border bg-white text-[14px] outline-none focus:border-af-focus resize-none"
+            />
+            <button
+              onClick={handleComment}
+              disabled={!comment.trim() || addComment.isPending}
+              className="mt-2 flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.08em] px-3 py-1.5 rounded-lg border border-af-border bg-white hover:bg-af-ink-050 text-af-muted disabled:opacity-50 transition-colors duration-[120ms]"
+            >
+              <ChatCircle size={12} />Post
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Complete */}
-      {!isDone && (
-        <div>
-          {!showComplete ? (
+      {/* Actions */}
+      {isOpen && (
+        <button
+          onClick={handleStart}
+          disabled={updateWO.isPending}
+          className="w-full h-12 rounded-xl bg-af-blue-500 text-white text-[15px] font-semibold flex items-center justify-center gap-2 hover:bg-af-blue-600 disabled:opacity-50 transition-colors duration-[120ms]"
+        >
+          <Play size={16} weight="fill" />
+          {updateWO.isPending ? 'Starting…' : 'Start working'}
+        </button>
+      )}
+
+      {isInProgress && !showComplete && (
+        <button
+          onClick={() => setShowComplete(true)}
+          className="w-full h-12 rounded-xl bg-af-orange-500 text-white text-[15px] font-semibold flex items-center justify-center gap-2 hover:bg-af-orange-600 transition-colors duration-[120ms]"
+        >
+          <CheckCircle size={18} />Mark as complete
+        </button>
+      )}
+
+      {isInProgress && showComplete && (
+        <div className="rounded-xl border border-af-border bg-white p-4 space-y-3">
+          <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-af-muted">Complete work order</p>
+          <textarea
+            value={notes}
+            onChange={e => setNotes(e.target.value)}
+            placeholder="Completion notes…"
+            rows={3}
+            className="w-full px-3 py-2 rounded-lg border border-af-border text-[14px] outline-none focus:border-af-focus resize-none"
+          />
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              value={actualHours}
+              onChange={e => setActualHours(e.target.value)}
+              placeholder="Hours spent"
+              className="w-32 h-10 px-3 rounded-lg border border-af-border text-[14px] outline-none focus:border-af-focus"
+            />
+            <span className="text-[13px] text-af-muted">hours</span>
+          </div>
+          <div className="flex gap-2">
             <button
-              onClick={() => setShowComplete(true)}
-              className="w-full h-12 rounded-xl bg-af-orange-500 text-white text-[15px] font-semibold flex items-center justify-center gap-2 hover:bg-af-orange-600 transition-colors duration-[120ms]"
+              onClick={() => setShowComplete(false)}
+              className="flex-1 h-11 rounded-xl border border-af-border text-[14px] font-medium hover:bg-af-ink-050 transition-colors duration-[120ms]"
             >
-              <CheckCircle size={18} />Mark as complete
+              Cancel
             </button>
-          ) : (
-            <div className="rounded-xl border border-af-border bg-white p-4 space-y-3">
-              <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-af-muted">Complete work order</p>
-              <textarea
-                value={notes}
-                onChange={e => setNotes(e.target.value)}
-                placeholder="Completion notes…"
-                rows={3}
-                className="w-full px-3 py-2 rounded-lg border border-af-border text-[14px] outline-none focus:border-af-focus resize-none"
-              />
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  value={actualHours}
-                  onChange={e => setActualHours(e.target.value)}
-                  placeholder="Hours spent"
-                  className="w-32 h-10 px-3 rounded-lg border border-af-border text-[14px] outline-none focus:border-af-focus"
-                />
-                <span className="text-[13px] text-af-muted">hours</span>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setShowComplete(false)}
-                  className="flex-1 h-11 rounded-xl border border-af-border text-[14px] font-medium hover:bg-af-ink-050 transition-colors duration-[120ms]"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleComplete}
-                  disabled={completeWO.isPending}
-                  className="flex-1 h-11 rounded-xl bg-af-orange-500 text-white text-[14px] font-semibold hover:bg-af-orange-600 disabled:opacity-50 transition-colors duration-[120ms]"
-                >
-                  {completeWO.isPending ? 'Saving…' : 'Confirm'}
-                </button>
-              </div>
-            </div>
-          )}
+            <button
+              onClick={handleComplete}
+              disabled={completeWO.isPending}
+              className="flex-1 h-11 rounded-xl bg-af-orange-500 text-white text-[14px] font-semibold hover:bg-af-orange-600 disabled:opacity-50 transition-colors duration-[120ms]"
+            >
+              {completeWO.isPending ? 'Saving…' : 'Confirm complete'}
+            </button>
+          </div>
         </div>
       )}
     </div>

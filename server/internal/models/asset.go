@@ -1,10 +1,23 @@
 package models
 
 import (
+	"math/rand"
+	"time"
+
 	"github.com/google/uuid"
 	"gorm.io/datatypes"
-	"time"
+	"gorm.io/gorm"
 )
+
+const assetCodeChars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+
+func generateAssetCode() string {
+	b := make([]byte, 7)
+	for i := range b {
+		b[i] = assetCodeChars[rand.Intn(len(assetCodeChars))]
+	}
+	return string(b)
+}
 
 type Asset struct {
 	Base
@@ -34,4 +47,11 @@ type Asset struct {
 
 	LocationID *uuid.UUID `gorm:"type:uuid;index"`
 	Location   *Location  `gorm:"foreignKey:LocationID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;not null"`
+}
+
+func (a *Asset) BeforeCreate(_ *gorm.DB) error {
+	if a.AssetCode == "" {
+		a.AssetCode = generateAssetCode()
+	}
+	return nil
 }

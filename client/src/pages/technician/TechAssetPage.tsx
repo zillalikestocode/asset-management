@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Wrench, Warning, ClipboardText } from '@phosphor-icons/react'
+import { ArrowLeft, Warning, ClipboardText } from '@phosphor-icons/react'
 import { useAsset } from '@/hooks/useAssets'
 import { useWorkOrders } from '@/hooks/useWorkOrders'
 import { StatusPill, PriorityPill, IdTag } from '@/components/ui/Badge'
@@ -91,11 +91,11 @@ export function TechAssetPage() {
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <IdTag>{wo.workOrderCode}</IdTag>
+                    <IdTag>{wo.id.slice(0, 8).toUpperCase()}</IdTag>
                     <PriorityPill priority={wo.priority} />
                   </div>
                   <p className="text-[14px] font-medium truncate">{wo.title}</p>
-                  <p className="text-[11px] text-af-muted">Due {formatDate(wo.dueDate)}</p>
+                  <p className="text-[11px] text-af-muted">Due {wo.dueDate ? formatDate(wo.dueDate) : '—'}</p>
                 </div>
               </div>
             ))}

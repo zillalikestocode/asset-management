@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -17,14 +18,16 @@ type MaintenanceService interface {
 	Create(orgID string, req dto.CreateMaintenanceScheduleRequest) (*dto.MaintenanceScheduleResponse, error)
 	Update(id, orgID string, req dto.UpdateMaintenanceScheduleRequest) (*dto.MaintenanceScheduleResponse, error)
 	Delete(id, orgID string) error
+	Trigger(id, orgID, triggeredByID string) (*dto.MaintenanceScheduleResponse, error)
 }
 
 type maintenanceService struct {
-	repo repository.MaintenanceScheduleRepository
+	repo          repository.MaintenanceScheduleRepository
+	workOrderRepo repository.WorkOrderRepository
 }
 
-func NewMaintenanceService(repo repository.MaintenanceScheduleRepository) MaintenanceService {
-	return &maintenanceService{repo: repo}
+func NewMaintenanceService(repo repository.MaintenanceScheduleRepository, workOrderRepo repository.WorkOrderRepository) MaintenanceService {
+	return &maintenanceService{repo: repo, workOrderRepo: workOrderRepo}
 }
 
 func (s *maintenanceService) List(orgID string, assetID string) ([]dto.MaintenanceScheduleResponse, error) {
@@ -215,6 +218,69 @@ func (s *maintenanceService) Delete(id, orgID string) error {
 	return s.repo.Delete(uid)
 }
 
+func (s *maintenanceService) Trigger(id, orgID, triggeredByID string) (*dto.MaintenanceScheduleResponse, error) {
+	uid, err := uuid.Parse(id)
+	if err != nil {
+		return nil, errors.New("invalid schedule ID")
+	}
+	sched, err := s.repo.FindByID(uid)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("schedule not found")
+		}
+		return nil, err
+	}
+	if sched.OrgID.String() != orgID {
+		return nil, errors.New("schedule not found")
+	}
+
+	triggeredByUserID, err := uuid.Parse(triggeredByID)
+	if err != nil {
+		return nil, errors.New("invalid user ID")
+	}
+
+	if sched.AssetID == nil {
+		return nil, errors.New("schedule has no asset")
+	}
+
+	schedID := sched.ID
+	wo := &models.WorkOrder{
+		OrgRef:                models.OrgRef{OrgID: sched.OrgID},
+		Title:                 fmt.Sprintf("[PM] %s", sched.Name),
+		Description:           sched.Description,
+		Priority:              sched.Priority,
+		Status:                "open",
+		Type:                  "scheduled",
+		AssetID:               *sched.AssetID,
+		MaintenanceScheduleID: &schedID,
+		CreatedByID:           triggeredByUserID,
+		AssignedToID:          sched.DefaultAssigneeID,
+		DueDate:               sched.NextDueAt,
+		EstimatedHours:        sched.EstimatedHours,
+	}
+
+	if err := s.workOrderRepo.Create(wo); err != nil {
+		return nil, err
+	}
+
+	now := time.Now()
+	sched.LastTriggeredAt = &now
+	if sched.ScheduleType == "time_based" && sched.IntervalDays != nil {
+		base := now
+		if sched.NextDueAt != nil {
+			base = *sched.NextDueAt
+		}
+		next := base.AddDate(0, 0, *sched.IntervalDays)
+		sched.NextDueAt = &next
+	}
+	if err := s.repo.Update(sched); err != nil {
+		return nil, err
+	}
+
+	r := toMaintenanceResponse(sched)
+	return &r, nil
+}
+
 func toMaintenanceResponse(s *models.MaintenanceSchedule) dto.MaintenanceScheduleResponse {
 	r := dto.MaintenanceScheduleResponse{
 		ID:              s.ID.String(),
@@ -239,7 +305,7 @@ func toMaintenanceResponse(s *models.MaintenanceSchedule) dto.MaintenanceSchedul
 		r.AssetID = &v
 		if s.Asset != nil && s.Asset.ID != uuid.Nil {
 			ar := toAssetResponse(s.Asset)
-			_ = ar // asset details available if needed
+			r.Asset = &ar
 		}
 	}
 	if s.CategoryID != nil {

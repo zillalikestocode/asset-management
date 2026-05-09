@@ -18,6 +18,7 @@ func registerMaintenanceRoutes(rg *gin.RouterGroup, h *handler.MaintenanceHandle
 	adminManager.Use(middleware.RequireRole("admin", "manager"))
 	adminManager.POST("", h.CreateSchedule)
 	adminManager.PUT("/:id", h.UpdateSchedule)
+	adminManager.POST("/:id/trigger", h.TriggerSchedule)
 
 	adminOnly := schedules.Group("")
 	adminOnly.Use(middleware.RequireRole("admin"))

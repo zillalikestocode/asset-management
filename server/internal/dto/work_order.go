@@ -8,8 +8,8 @@ type CreateWorkOrderRequest struct {
 	Priority       string     `json:"priority" binding:"omitempty,oneof=low medium high critical"`
 	AssetID        string     `json:"assetId" binding:"required"`
 	AssignedToID   *string    `json:"assignedToId"`
-	DueDate        *time.Time `json:"dueDate"`
-	EstimatedHours *float64   `json:"estimatedHours"`
+	DueDate        *string  `json:"dueDate"`
+	EstimatedHours *float64 `json:"estimatedHours"`
 }
 
 type UpdateWorkOrderRequest struct {
@@ -18,8 +18,8 @@ type UpdateWorkOrderRequest struct {
 	Priority        *string    `json:"priority" binding:"omitempty,oneof=low medium high critical"`
 	Status          *string    `json:"status" binding:"omitempty,oneof=open in_progress completed cancelled"`
 	AssignedToID    *string    `json:"assignedToId"`
-	DueDate         *time.Time `json:"dueDate"`
-	EstimatedHours  *float64   `json:"estimatedHours"`
+	DueDate         *string  `json:"dueDate"`
+	EstimatedHours  *float64 `json:"estimatedHours"`
 	ActualHours     *float64   `json:"actualHours"`
 	CompletionNotes *string    `json:"completionNotes"`
 }

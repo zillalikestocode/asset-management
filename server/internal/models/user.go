@@ -12,4 +12,7 @@ type User struct {
 
 	OrgID uuid.UUID `gorm:"type:uuid;not null"`
 	Org   Org       `gorm:"foreignKey:OrgID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE; not null"`
+
+	// Managers can be scoped to specific locations (many-to-many via user_locations join table).
+	Locations []Location `gorm:"many2many:user_locations;"`
 }

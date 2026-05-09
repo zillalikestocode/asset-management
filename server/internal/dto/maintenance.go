@@ -45,9 +45,10 @@ type MaintenanceScheduleResponse struct {
 	IntervalHours     *int       `json:"intervalHours,omitempty"`
 	LeadTimeDays      int        `json:"leadTimeDays"`
 	EstimatedHours    *float64   `json:"estimatedHours,omitempty"`
-	AssetID           *string    `json:"assetId,omitempty"`
-	CategoryID        *string    `json:"categoryId,omitempty"`
-	DefaultAssigneeID *string    `json:"defaultAssigneeId,omitempty"`
+	AssetID           *string        `json:"assetId,omitempty"`
+	Asset             *AssetResponse `json:"asset,omitempty"`
+	CategoryID        *string        `json:"categoryId,omitempty"`
+	DefaultAssigneeID *string        `json:"defaultAssigneeId,omitempty"`
 	Active            bool       `json:"active"`
 	LastTriggeredAt   *time.Time `json:"lastTriggeredAt,omitempty"`
 	NextDueAt         *time.Time `json:"nextDueAt,omitempty"`

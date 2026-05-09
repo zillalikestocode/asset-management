@@ -4,30 +4,49 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/zillalikestocode/assetflow-core/internal/service"
 )
 
-type ReportHandler struct{}
+type ReportHandler struct {
+	service service.ReportService
+}
 
-func NewReportHandler() *ReportHandler {
-	return &ReportHandler{}
+func NewReportHandler(s service.ReportService) *ReportHandler {
+	return &ReportHandler{service: s}
 }
 
 func (h *ReportHandler) MaintenanceCompletion(c *gin.Context) {
-	// TODO: inject and call ReportService.MaintenanceCompletion (filter by ?from=&to=)
-	c.JSON(http.StatusNotImplemented, gin.H{"error": "not implemented"})
+	report, err := h.service.MaintenanceCompletion(c.GetString("orgID"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, report)
 }
 
 func (h *ReportHandler) AssetDowntime(c *gin.Context) {
-	// TODO: inject and call ReportService.AssetDowntime
-	c.JSON(http.StatusNotImplemented, gin.H{"error": "not implemented"})
+	report, err := h.service.AssetDowntime(c.GetString("orgID"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, report)
 }
 
 func (h *ReportHandler) WorkOrderHistory(c *gin.Context) {
-	// TODO: inject and call ReportService.WorkOrderHistory
-	c.JSON(http.StatusNotImplemented, gin.H{"error": "not implemented"})
+	report, err := h.service.WorkOrderHistory(c.GetString("orgID"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, report)
 }
 
 func (h *ReportHandler) AssetInventory(c *gin.Context) {
-	// TODO: inject and call ReportService.AssetInventory; supports ?format=csv
-	c.JSON(http.StatusNotImplemented, gin.H{"error": "not implemented"})
+	report, err := h.service.AssetInventory(c.GetString("orgID"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, report)
 }

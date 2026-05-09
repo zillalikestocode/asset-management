@@ -1,10 +1,24 @@
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { toast } from 'sonner'
+import { Trash } from '@phosphor-icons/react'
 import { Card, CardHeader } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { Input, Select, Field } from '@/components/ui/Input'
+import { Input, Field } from '@/components/ui/Input'
 import { useCategories, useLocations, useCreateCategory, useCreateLocation, useDeleteCategory, useDeleteLocation } from '@/hooks/useCategories'
-import { Trash } from '@phosphor-icons/react'
+import { useChangePassword } from '@/hooks/useUsers'
+
+const passwordSchema = z.object({
+  currentPassword: z.string().min(1, 'Required'),
+  newPassword:     z.string().min(8, 'Must be at least 8 characters'),
+  confirmPassword: z.string().min(1, 'Required'),
+}).refine(d => d.newPassword === d.confirmPassword, {
+  message: 'Passwords do not match',
+  path: ['confirmPassword'],
+})
+type PasswordValues = z.infer<typeof passwordSchema>
 
 export function SettingsPage() {
   const [newCategory, setNewCategory] = useState('')
@@ -16,6 +30,11 @@ export function SettingsPage() {
   const createLoc  = useCreateLocation()
   const deleteCat  = useDeleteCategory()
   const deleteLoc  = useDeleteLocation()
+  const changePassword = useChangePassword()
+
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<PasswordValues>({
+    resolver: zodResolver(passwordSchema),
+  })
 
   const handleAddCategory = async () => {
     if (!newCategory.trim()) return
@@ -35,12 +54,47 @@ export function SettingsPage() {
     } catch { toast.error('Failed to add location') }
   }
 
+  const onChangePassword = async (values: PasswordValues) => {
+    try {
+      await changePassword.mutateAsync({
+        currentPassword: values.currentPassword,
+        newPassword: values.newPassword,
+      })
+      toast.success('Password updated')
+      reset()
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to update password'
+      toast.error(msg)
+    }
+  }
+
   return (
     <div className="space-y-5 max-w-2xl">
       <div>
         <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-af-muted">Config</p>
         <h1 className="text-2xl font-semibold tracking-[-0.015em] mt-0.5">Settings</h1>
       </div>
+
+      {/* Security */}
+      <Card>
+        <CardHeader title="Security" subtitle="Change your account password" />
+        <form onSubmit={handleSubmit(onChangePassword)} className="space-y-4">
+          <Field label="Current password" required error={errors.currentPassword?.message}>
+            <Input type="password" {...register('currentPassword')} placeholder="Enter current password" />
+          </Field>
+          <Field label="New password" required error={errors.newPassword?.message}>
+            <Input type="password" {...register('newPassword')} placeholder="At least 8 characters" />
+          </Field>
+          <Field label="Confirm new password" required error={errors.confirmPassword?.message}>
+            <Input type="password" {...register('confirmPassword')} placeholder="Repeat new password" />
+          </Field>
+          <div className="pt-1">
+            <Button type="submit" variant="accent" size="sm" disabled={isSubmitting}>
+              {isSubmitting ? 'Saving…' : 'Update password'}
+            </Button>
+          </div>
+        </form>
+      </Card>
 
       {/* Categories */}
       <Card>

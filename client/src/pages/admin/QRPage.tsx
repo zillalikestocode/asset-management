@@ -1,4 +1,5 @@
 import { useState } from "react";
+import QRCode from "qrcode";
 import { QrCode, DownloadSimple, Printer } from "@phosphor-icons/react";
 import { useAssets } from "@/hooks/useAssets";
 import {
@@ -14,8 +15,22 @@ import { IdTag, StatusPill } from "@/components/ui/Badge";
 import { PageSpinner } from "@/components/ui/Spinner";
 import { EmptyState } from "@/components/ui/EmptyState";
 
+async function downloadQR(assetCode: string, assetId: string) {
+  const value = `${window.location.origin}/assets/${assetId}`;
+  const dataUrl = await QRCode.toDataURL(value, {
+    width: 512,
+    margin: 2,
+    color: { dark: "#0E1116", light: "#FFFFFF" },
+  });
+  const a = document.createElement("a");
+  a.href = dataUrl;
+  a.download = `qr-${assetCode}.png`;
+  a.click();
+}
+
 export function QRPage() {
   const [search, setSearch] = useState("");
+  const [downloading, setDownloading] = useState<string | null>(null);
   const { data, isLoading } = useAssets({ perPage: 999 });
   const assets = (data?.data ?? []).filter(
     (a) =>
@@ -23,6 +38,15 @@ export function QRPage() {
       a.name.toLowerCase().includes(search.toLowerCase()) ||
       a.assetCode.toLowerCase().includes(search.toLowerCase()),
   );
+
+  const handleDownload = async (assetCode: string, assetId: string) => {
+    setDownloading(assetId);
+    try {
+      await downloadQR(assetCode, assetId);
+    } finally {
+      setDownloading(null);
+    }
+  };
 
   if (isLoading) return <PageSpinner />;
 
@@ -92,15 +116,14 @@ export function QRPage() {
                     <StatusPill status={asset.status} />
                   </Td>
                   <Td>
-                    <a
-                      href={`/api/assets/${asset.id}/qr`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.06em] px-2 py-1 rounded border border-af-border hover:bg-af-ink-050 text-af-muted transition-colors duration-[120ms]"
+                    <button
+                      onClick={() => handleDownload(asset.assetCode, asset.id)}
+                      disabled={downloading === asset.id}
+                      className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.06em] px-2 py-1 rounded border border-af-border hover:bg-af-ink-050 text-af-muted transition-colors duration-[120ms] disabled:opacity-50"
                     >
                       <DownloadSimple size={11} />
-                      Download
-                    </a>
+                      {downloading === asset.id ? "…" : "Download"}
+                    </button>
                   </Td>
                 </Tr>
               ))

@@ -21,6 +21,9 @@ export default {
 
           'orange-600': 'var(--af-orange-600)',
           'orange-500': 'var(--af-orange-500)',
+          'orange-400': 'var(--af-orange-400)',
+          'orange-300': 'var(--af-orange-300)',
+          'orange-200': 'var(--af-orange-200)',
           'orange-100': 'var(--af-orange-100)',
           'orange-050': 'var(--af-orange-050)',
 

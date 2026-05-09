@@ -46,3 +46,14 @@ export function useDeleteSchedule() {
     onSuccess: () => qc.invalidateQueries({ queryKey: QK.schedules() }),
   })
 }
+
+export function useTriggerSchedule() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => post<MaintenanceSchedule>(`/maintenance/schedules/${id}/trigger`, {}),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK.schedules() })
+      qc.invalidateQueries({ queryKey: QK.workOrders() })
+    },
+  })
+}

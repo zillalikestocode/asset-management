@@ -4,7 +4,7 @@ import "time"
 
 type CreateAssetRequest struct {
 	Name           string                 `json:"name" binding:"required"`
-	AssetCode      string                 `json:"assetCode" binding:"required"`
+	AssetCode      string                 `json:"assetCode"`
 	Description    string                 `json:"description"`
 	Model          string                 `json:"model" binding:"required"`
 	Manufacturer   string                 `json:"manufacturer"`
@@ -15,7 +15,7 @@ type CreateAssetRequest struct {
 	LocationID     *string                `json:"locationId"`
 	AssignedUserID *string                `json:"assignedUserId"`
 	PurchaseCost   *float64               `json:"purchaseCost"`
-	PurchaseDate   *time.Time             `json:"purchaseDate"`
+	PurchaseDate   *string                `json:"purchaseDate"`
 }
 
 type UpdateAssetRequest struct {
@@ -30,7 +30,7 @@ type UpdateAssetRequest struct {
 	LocationID     *string                `json:"locationId"`
 	AssignedUserID *string                `json:"assignedUserId"`
 	PurchaseCost   *float64               `json:"purchaseCost"`
-	PurchaseDate   *time.Time             `json:"purchaseDate"`
+	PurchaseDate   *string                `json:"purchaseDate"`
 	LastLat        *float64               `json:"lastLat"`
 	LastLong       *float64               `json:"lastLong"`
 }

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { ClipboardText, QrCode, Warning, Clock } from '@phosphor-icons/react'
+import { ClipboardText, QrCode, Clock } from '@phosphor-icons/react'
 import { useWorkOrders } from '@/hooks/useWorkOrders'
 import { useAuth } from '@/contexts/AuthContext'
 import { StatusPill, PriorityPill } from '@/components/ui/Badge'
@@ -9,8 +9,8 @@ import { formatDate } from '@/lib/utils'
 export function TechHomePage() {
   const { user }   = useAuth()
   const navigate   = useNavigate()
-  const { data, isLoading } = useWorkOrders({ assigneeId: user?.id, status: 'open', perPage: 10 })
-  const { data: inProgressData } = useWorkOrders({ assigneeId: user?.id, status: 'in_progress', perPage: 10 })
+  const { data, isLoading } = useWorkOrders({ assignedToId: user?.id, status: 'open', perPage: 10 })
+  const { data: inProgressData } = useWorkOrders({ assignedToId: user?.id, status: 'in_progress', perPage: 10 })
 
   if (isLoading) return <PageSpinner />
 
@@ -18,13 +18,13 @@ export function TechHomePage() {
   const inProgress = inProgressData?.data ?? []
   const allActive  = [...inProgress, ...openOrders]
 
-  const overdue = allActive.filter(w => new Date(w.dueDate) < new Date())
+  const overdue = allActive.filter(w => w.dueDate && new Date(w.dueDate) < new Date())
 
   return (
     <div className="p-5 space-y-5">
       {/* Header */}
       <div>
-        <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-af-muted">AssetFlow</p>
+        <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-af-muted">{user?.orgName ?? 'AssetFlow'}</p>
         <h1 className="text-[22px] font-semibold tracking-[-0.015em] mt-0.5">
           Good morning, {user?.name.split(' ')[0]} 👋
         </h1>
@@ -98,7 +98,7 @@ export function TechHomePage() {
                   <p className="text-[11px] text-af-muted">{wo.asset?.name ?? '—'}</p>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <p className="font-mono text-[10px] text-af-muted">{formatDate(wo.dueDate)}</p>
+                  <p className="font-mono text-[10px] text-af-muted">{wo.dueDate ? formatDate(wo.dueDate) : '—'}</p>
                 </div>
               </div>
             ))}

@@ -18,6 +18,8 @@ type WOFilters struct {
 	Priority     string
 	AssignedToID string
 	AssetID      string
+	ScheduleID   string
+	WOType       string
 }
 
 type WorkOrderService interface {
@@ -33,11 +35,12 @@ type WorkOrderService interface {
 }
 
 type workOrderService struct {
-	repo repository.WorkOrderRepository
+	repo     repository.WorkOrderRepository
+	userRepo repository.UserRepository
 }
 
-func NewWorkOrderService(repo repository.WorkOrderRepository) WorkOrderService {
-	return &workOrderService{repo: repo}
+func NewWorkOrderService(repo repository.WorkOrderRepository, userRepo repository.UserRepository) WorkOrderService {
+	return &workOrderService{repo: repo, userRepo: userRepo}
 }
 
 func (s *workOrderService) List(orgID string, f WOFilters) (*dto.Paginated[dto.WorkOrderResponse], error) {
@@ -47,7 +50,16 @@ func (s *workOrderService) List(orgID string, f WOFilters) (*dto.Paginated[dto.W
 	}
 
 	var wos []models.WorkOrder
-	if f.AssetID != "" {
+	if f.ScheduleID != "" {
+		sid, err := uuid.Parse(f.ScheduleID)
+		if err != nil {
+			return nil, errors.New("invalid schedule ID")
+		}
+		wos, err = s.repo.FindBySchedule(sid)
+		if err != nil {
+			return nil, err
+		}
+	} else if f.AssetID != "" {
 		aid, err := uuid.Parse(f.AssetID)
 		if err != nil {
 			return nil, errors.New("invalid asset ID")
@@ -79,6 +91,9 @@ func (s *workOrderService) List(orgID string, f WOFilters) (*dto.Paginated[dto.W
 			continue
 		}
 		if f.Priority != "" && w.Priority != f.Priority {
+			continue
+		}
+		if f.WOType != "" && w.Type != f.WOType {
 			continue
 		}
 		filtered = append(filtered, w)
@@ -141,6 +156,11 @@ func (s *workOrderService) Create(orgID, createdByID string, req dto.CreateWorkO
 		priority = "medium"
 	}
 
+	dueDate, err := dto.ParseDate(req.DueDate)
+	if err != nil {
+		return nil, err
+	}
+
 	wo := &models.WorkOrder{
 		OrgRef:         models.OrgRef{OrgID: oid},
 		Title:          req.Title,
@@ -150,7 +170,7 @@ func (s *workOrderService) Create(orgID, createdByID string, req dto.CreateWorkO
 		Type:           "manual",
 		AssetID:        assetID,
 		CreatedByID:    cid,
-		DueDate:        req.DueDate,
+		DueDate:        dueDate,
 		EstimatedHours: req.EstimatedHours,
 	}
 	if req.AssignedToID != nil {
@@ -202,7 +222,11 @@ func (s *workOrderService) Update(id, orgID string, req dto.UpdateWorkOrderReque
 		}
 	}
 	if req.DueDate != nil {
-		wo.DueDate = req.DueDate
+		dd, err := dto.ParseDate(req.DueDate)
+		if err != nil {
+			return nil, err
+		}
+		wo.DueDate = dd
 	}
 	if req.EstimatedHours != nil {
 		wo.EstimatedHours = req.EstimatedHours
@@ -344,10 +368,14 @@ func (s *workOrderService) AddComment(id, orgID, authorID string, req dto.AddWor
 	if err := s.repo.AddComment(comment); err != nil {
 		return nil, err
 	}
+	authorName := authorID
+	if u, err := s.userRepo.FindByID(auid); err == nil {
+		authorName = u.Name
+	}
 	r := &dto.WorkOrderCommentResponse{
 		ID:        comment.ID.String(),
 		AuthorID:  comment.AuthorID.String(),
-		Author:    authorID, // will be resolved from user name in a future pass
+		Author:    authorName,
 		Body:      comment.Body,
 		CreatedAt: comment.CreatedAt,
 	}

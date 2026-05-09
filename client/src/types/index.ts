@@ -10,6 +10,7 @@ export interface User {
   active: boolean
   avatarUrl?: string
   createdAt?: string
+  locations?: Location[]
 }
 
 // Backend /auth/me returns orgId but not orgName

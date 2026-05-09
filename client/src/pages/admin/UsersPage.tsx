@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { Users, Plus } from '@phosphor-icons/react'
+import { Users, Plus, EnvelopeSimple } from '@phosphor-icons/react'
 import { useUsers, useInviteUser, useDeactivateUser } from '@/hooks/useUsers'
+import { useLocations } from '@/hooks/useCategories'
 import { Table, Thead, Th, Tbody, Tr, Td, TdEmpty } from '@/components/ui/Table'
 import { Button } from '@/components/ui/Button'
 import { Input, Select, Field } from '@/components/ui/Input'
@@ -15,9 +16,10 @@ import { formatDate, initials, cn } from '@/lib/utils'
 import type { User } from '@/types'
 
 const inviteSchema = z.object({
-  name:  z.string().min(2, 'Name is required'),
-  email: z.string().email('Valid email required'),
-  role:  z.enum(['admin', 'manager', 'technician']),
+  name:        z.string().min(2, 'Name is required'),
+  email:       z.string().email('Valid email required'),
+  role:        z.enum(['admin', 'manager', 'technician']),
+  locationIds: z.array(z.string()).optional(),
 })
 type InviteValues = z.infer<typeof inviteSchema>
 
@@ -26,19 +28,25 @@ export function UsersPage() {
   const [deactivateTarget, setDeactivateTarget] = useState<User | null>(null)
 
   const { data: usersData, isLoading } = useUsers()
+  const { data: locations = [] } = useLocations()
   const inviteUser    = useInviteUser()
   const deactivateUser = useDeactivateUser()
 
   const users = usersData ?? []
 
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<InviteValues>({
+  const { register, handleSubmit, reset, control, formState: { errors, isSubmitting } } = useForm<InviteValues>({
     resolver: zodResolver(inviteSchema),
-    defaultValues: { role: 'technician' },
+    defaultValues: { role: 'technician', locationIds: [] },
   })
+
+  const watchedRole = useWatch({ control, name: 'role' })
 
   const onInvite = async (values: InviteValues) => {
     try {
-      await inviteUser.mutateAsync(values)
+      await inviteUser.mutateAsync({
+        ...values,
+        locationIds: values.role === 'manager' ? (values.locationIds ?? []) : undefined,
+      })
       toast.success(`Invite sent to ${values.email}`)
       reset()
       setShowInvite(false)
@@ -86,6 +94,7 @@ export function UsersPage() {
               <Th>User</Th>
               <Th>Email</Th>
               <Th>Role</Th>
+              <Th>Locations</Th>
               <Th>Status</Th>
               <Th>Joined</Th>
               <Th />
@@ -93,7 +102,7 @@ export function UsersPage() {
           </Thead>
           <Tbody>
             {users.length === 0
-              ? <TdEmpty cols={6} message="No users" />
+              ? <TdEmpty cols={7} message="No users" />
               : users.map(u => (
                 <Tr key={u.id}>
                   <Td>
@@ -111,6 +120,12 @@ export function UsersPage() {
                     </span>
                   </Td>
                   <Td>
+                    {u.role === 'manager' && u.locations && u.locations.length > 0
+                      ? <span className="text-[12px] text-af-muted">{u.locations.map(l => l.name).join(', ')}</span>
+                      : <span className="text-[12px] text-af-muted">—</span>
+                    }
+                  </Td>
+                  <Td>
                     <span className={cn(
                       'font-mono text-[10px] uppercase tracking-[0.06em] px-1.5 py-0.5 rounded-full',
                       u.active ? 'bg-af-ok-100 text-af-ok-600' : 'bg-af-ink-100 text-af-muted',
@@ -118,7 +133,7 @@ export function UsersPage() {
                       {u.active ? 'Active' : 'Inactive'}
                     </span>
                   </Td>
-                  <Td muted>{formatDate(u.createdAt)}</Td>
+                  <Td muted>{u.createdAt ? formatDate(u.createdAt) : '—'}</Td>
                   <Td>
                     {u.active && (
                       <button
@@ -141,12 +156,13 @@ export function UsersPage() {
         open={showInvite}
         onClose={() => setShowInvite(false)}
         title="Invite user"
-        description="An email will be sent with a link to set up their account."
+        description="A temporary password will be generated and emailed to them automatically."
         size="sm"
         footer={
           <>
             <Button variant="secondary" size="sm" onClick={() => setShowInvite(false)}>Cancel</Button>
             <Button variant="accent" size="sm" onClick={handleSubmit(onInvite)} disabled={isSubmitting}>
+              <EnvelopeSimple size={13} className="mr-1" />
               {isSubmitting ? 'Sending…' : 'Send invite'}
             </Button>
           </>
@@ -166,6 +182,27 @@ export function UsersPage() {
               <option value="admin">Admin</option>
             </Select>
           </Field>
+          {watchedRole === 'manager' && locations.length > 0 && (
+            <Field label="Assigned locations" error={errors.locationIds?.message}>
+              <div className="rounded-lg border border-af-border divide-y divide-af-border max-h-40 overflow-y-auto">
+                {locations.map(loc => (
+                  <label
+                    key={loc.id}
+                    className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-af-ink-050 transition-colors duration-[120ms]"
+                  >
+                    <input
+                      type="checkbox"
+                      value={loc.id}
+                      {...register('locationIds')}
+                      className="accent-af-orange-500 w-3.5 h-3.5"
+                    />
+                    <span className="text-[13px]">{loc.name}</span>
+                  </label>
+                ))}
+              </div>
+              <p className="text-[11px] text-af-muted mt-1">Managers will only see assets in these locations.</p>
+            </Field>
+          )}
         </div>
       </Modal>
 

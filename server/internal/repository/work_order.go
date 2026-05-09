@@ -12,6 +12,7 @@ type WorkOrderRepository interface {
 	FindByAsset(assetID uuid.UUID) ([]models.WorkOrder, error)
 	FindByAssignee(userID uuid.UUID) ([]models.WorkOrder, error)
 	FindByStatus(orgID uuid.UUID, status string) ([]models.WorkOrder, error)
+	FindBySchedule(scheduleID uuid.UUID) ([]models.WorkOrder, error)
 	Create(workOrder *models.WorkOrder) error
 	Update(workOrder *models.WorkOrder) error
 	Delete(id uuid.UUID) error
@@ -79,6 +80,17 @@ func (r *workOrderRepository) FindByStatus(orgID uuid.UUID, status string) ([]mo
 		Preload("AssignedTo").
 		Where("org_id = ? AND status = ?", orgID, status).
 		Order("due_date ASC").
+		Find(&workOrders).Error
+	return workOrders, err
+}
+
+func (r *workOrderRepository) FindBySchedule(scheduleID uuid.UUID) ([]models.WorkOrder, error) {
+	var workOrders []models.WorkOrder
+	err := r.db.
+		Preload("Asset").
+		Preload("AssignedTo").
+		Where("maintenance_schedule_id = ?", scheduleID).
+		Order("created_at DESC").
 		Find(&workOrders).Error
 	return workOrders, err
 }

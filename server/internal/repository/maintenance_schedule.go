@@ -40,13 +40,21 @@ func (r *maintenanceScheduleRepository) FindByID(id uuid.UUID) (*models.Maintena
 
 func (r *maintenanceScheduleRepository) FindByOrg(orgID uuid.UUID) ([]models.MaintenanceSchedule, error) {
 	var schedules []models.MaintenanceSchedule
-	err := r.db.Where("org_id = ?", orgID).Find(&schedules).Error
+	err := r.db.
+		Preload("Asset").
+		Preload("DefaultAssignee").
+		Where("org_id = ?", orgID).
+		Find(&schedules).Error
 	return schedules, err
 }
 
 func (r *maintenanceScheduleRepository) FindByAsset(assetID uuid.UUID) ([]models.MaintenanceSchedule, error) {
 	var schedules []models.MaintenanceSchedule
-	err := r.db.Where("asset_id = ?", assetID).Find(&schedules).Error
+	err := r.db.
+		Preload("Asset").
+		Preload("DefaultAssignee").
+		Where("asset_id = ?", assetID).
+		Find(&schedules).Error
 	return schedules, err
 }
 

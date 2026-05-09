@@ -13,9 +13,16 @@ export function useUsers() {
 export function useInviteUser() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (data: { name: string; email: string; role: string }) =>
+    mutationFn: (data: { name: string; email: string; role: string; locationIds?: string[] }) =>
       post('/users/invite', data),
     onSuccess: () => qc.invalidateQueries({ queryKey: QK.users() }),
+  })
+}
+
+export function useChangePassword() {
+  return useMutation({
+    mutationFn: (data: { currentPassword: string; newPassword: string }) =>
+      post('/auth/change-password', data),
   })
 }
 

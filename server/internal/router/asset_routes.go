@@ -9,11 +9,12 @@ import (
 func registerAssetRoutes(rg *gin.RouterGroup, h *handler.AssetHandler) {
 	assets := rg.Group("/assets")
 
-	// All authenticated users can read assets and scan QR codes.
+	// All authenticated users can read assets, scan QR codes, and record GPS.
 	assets.GET("", h.List)
 	assets.GET("/:id", h.Get)
 	assets.GET("/:id/history", h.GetHistory)
 	assets.GET("/:id/qr", h.GetQR)
+	assets.POST("/:id/location", h.RecordLocation)
 
 	// Only admins can create, modify, delete, or bulk-import assets.
 	adminOnly := assets.Group("")

@@ -13,12 +13,13 @@ import (
 )
 
 type AssetFilters struct {
-	Page       int
-	PerPage    int
-	Search     string
-	CategoryID string
-	LocationID string
-	Status     string
+	Page        int
+	PerPage     int
+	Search      string
+	CategoryID  string
+	LocationID  string   // single filter from query param
+	LocationIDs []string // scope filter injected by LocationScope middleware
+	Status      string
 }
 
 type AssetService interface {
@@ -50,6 +51,15 @@ func (s *assetService) List(orgID string, f AssetFilters) (*dto.Paginated[dto.As
 		return nil, err
 	}
 
+	// Build a set from the location scope (manager-scoped locations), if present.
+	var scopeSet map[string]struct{}
+	if len(f.LocationIDs) > 0 {
+		scopeSet = make(map[string]struct{}, len(f.LocationIDs))
+		for _, id := range f.LocationIDs {
+			scopeSet[id] = struct{}{}
+		}
+	}
+
 	// Apply in-memory filters (suitable for MVP scale)
 	filtered := assets[:0]
 	for _, a := range assets {
@@ -63,6 +73,16 @@ func (s *assetService) List(orgID string, f AssetFilters) (*dto.Paginated[dto.As
 		}
 		if f.LocationID != "" {
 			if a.LocationID == nil || a.LocationID.String() != f.LocationID {
+				continue
+			}
+		}
+		// Location scope: managers only see assets in their assigned locations.
+		if scopeSet != nil {
+			locID := ""
+			if a.LocationID != nil {
+				locID = a.LocationID.String()
+			}
+			if _, ok := scopeSet[locID]; !ok {
 				continue
 			}
 		}
@@ -119,6 +139,10 @@ func (s *assetService) Create(orgID, _ string, req dto.CreateAssetRequest) (*dto
 	if err != nil {
 		return nil, errors.New("invalid org ID")
 	}
+	purchaseDate, err := dto.ParseDate(req.PurchaseDate)
+	if err != nil {
+		return nil, err
+	}
 	asset := &models.Asset{
 		OrgRef:       models.OrgRef{OrgID: oid},
 		Name:         req.Name,
@@ -129,7 +153,7 @@ func (s *assetService) Create(orgID, _ string, req dto.CreateAssetRequest) (*dto
 		SerialNumber: req.SerialNumber,
 		Status:       req.Status,
 		PurchaseCost: req.PurchaseCost,
-		PurchaseDate: req.PurchaseDate,
+		PurchaseDate: purchaseDate,
 	}
 	if req.Status == "" {
 		asset.Status = "active"
@@ -203,7 +227,11 @@ func (s *assetService) Update(id, orgID, updatedByID string, req dto.UpdateAsset
 		asset.PurchaseCost = req.PurchaseCost
 	}
 	if req.PurchaseDate != nil {
-		asset.PurchaseDate = req.PurchaseDate
+		pd, err := dto.ParseDate(req.PurchaseDate)
+		if err != nil {
+			return nil, err
+		}
+		asset.PurchaseDate = pd
 	}
 	if req.LastLat != nil {
 		asset.LastLat = req.LastLat

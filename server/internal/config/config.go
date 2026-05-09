@@ -11,6 +11,12 @@ type Config struct {
 	ServerAddress string
 	JWTSecret     string
 	Env           string
+
+	SMTPHost     string
+	SMTPPort     string
+	SMTPUsername string
+	SMTPPassword string
+	SMTPFrom     string
 }
 
 func Load() *Config {
@@ -21,6 +27,12 @@ func Load() *Config {
 		ServerAddress: getEnv("SERVER_ADDRESS", ":8080"),
 		JWTSecret:     getEnv("JWT_SECRET", "supersecretkey"),
 		Env:           getEnv("ENV", "development"),
+
+		SMTPHost:     getEnv("SMTP_HOST", "smtp.gmail.com"),
+		SMTPPort:     getEnv("SMTP_PORT", "587"),
+		SMTPUsername: getEnv("SMTP_USERNAME", "emmanuelngoka778@gmail.com"),
+		SMTPPassword: getEnv("SMTP_PASSWORD", "xfqarbnqflamxvuv"),
+		SMTPFrom:     getEnv("SMTP_FROM", "emmanuelngoka778@gmail.com"),
 	}
 }
 
