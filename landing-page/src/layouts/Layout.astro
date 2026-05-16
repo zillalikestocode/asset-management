@@ -1,0 +1,36 @@
+---
+import '../styles/global.css'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const {
+  title = 'AssetFlow — Asset management for manufacturing teams',
+  description = 'Track assets, schedule maintenance, and close work orders. Built for manufacturing teams of 10 to 500.',
+} = Astro.props
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/logo-mark.svg" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+
+    <meta name="theme-color" content="#0E1116" />
+  </head>
+  <body class="bg-af-bg text-af-fg antialiased">
+    <slot />
+  </body>
+</html>

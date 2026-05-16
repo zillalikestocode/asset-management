@@ -1,0 +1,30 @@
+---
+const stats = [
+  { value: '200+',  label: 'Manufacturing teams' },
+  { value: '50k+',  label: 'Assets tracked' },
+  { value: '99.9%', label: 'Uptime SLA' },
+  { value: '< 1d',  label: 'Time to onboard' },
+]
+---
+
+<section class="border-b border-af-border bg-af-surface">
+  <div class="mx-auto max-w-7xl px-6 py-10">
+    <div class="grid grid-cols-2 gap-6 sm:grid-cols-4">
+      {stats.map(({ value, label }, i) => (
+        <div
+          class:list={[
+            'flex flex-col items-start gap-1 sm:px-2',
+            i > 0 && 'sm:border-l sm:border-af-border',
+          ]}
+        >
+          <span class="text-[26px] font-semibold leading-none tracking-[-0.02em] text-af-fg sm:text-[30px]">
+            {value}
+          </span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-af-muted">
+            {label}
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

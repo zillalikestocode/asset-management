@@ -1,0 +1,72 @@
+---
+const steps = [
+  {
+    n: '01',
+    title: 'Register your assets',
+    body: 'Import a CSV or add assets one by one. Attach photos, set custom fields, and print QR labels in under an hour.',
+    tag: 'Setup',
+  },
+  {
+    n: '02',
+    title: 'Define your schedules',
+    body: 'Set time-based or usage-based PM intervals per asset or category. Assign defaults, lead times, and let AssetFlow take it from there.',
+    tag: 'Configure',
+  },
+  {
+    n: '03',
+    title: 'Put your team to work',
+    body: 'Technicians scan, receive work orders, and log completions from their phone. You see progress in real time.',
+    tag: 'Operate',
+  },
+]
+---
+
+<section id="how-it-works" class="relative border-y border-af-border bg-af-ink-050 py-20 lg:py-28">
+  {/* Subtle blueprint behind */}
+  <div class="af-grid-bg pointer-events-none absolute inset-0 opacity-60"></div>
+
+  <div class="relative mx-auto max-w-7xl px-6">
+    <div class="max-w-xl">
+      <p class="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-af-orange-500">
+        — How it works
+      </p>
+      <h2 class="text-[30px] font-semibold leading-tight tracking-[-0.02em] text-af-fg sm:text-[36px]">
+        Up and running in a day.
+      </h2>
+      <p class="mt-4 text-[14px] leading-relaxed text-af-muted">
+        No six-month implementation. No consultants. Import your assets, configure
+        your schedules, and send your team into the field.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-6 sm:grid-cols-3">
+      {steps.map(({ n, title, body, tag }, i) => (
+        <div class="relative">
+          {/* Dashed connector to next card */}
+          {i < steps.length - 1 && (
+            <div
+              class="pointer-events-none absolute top-8 z-0 hidden h-px sm:block"
+              style="left: calc(100% - 8px); width: calc(100% - 32px); background-image: linear-gradient(to right, #C7CCD3 50%, transparent 50%); background-size: 6px 1px; background-repeat: repeat-x;"
+            ></div>
+          )}
+
+          <div class="relative z-10 flex h-full flex-col rounded-[10px] border border-af-border bg-af-surface p-6 transition-all duration-[180ms] hover:border-af-ink-300 hover:shadow-[0_8px_24px_rgba(14,17,22,0.05)]">
+            {/* Step number + tag */}
+            <div class="mb-5 flex items-center gap-3">
+              <span class="font-mono text-[11px] font-medium tracking-[0.14em] text-af-orange-500">
+                {n}
+              </span>
+              <span class="h-px flex-1 bg-af-border"></span>
+              <span class="rounded-[3px] border border-af-border bg-af-ink-100 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-af-muted">
+                {tag}
+              </span>
+            </div>
+
+            <h3 class="mb-2 text-[16px] font-semibold tracking-[-0.005em] text-af-fg">{title}</h3>
+            <p class="text-[13px] leading-relaxed text-af-muted">{body}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

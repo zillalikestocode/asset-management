@@ -1,0 +1,47 @@
+---
+const APP_URL = 'http://localhost:5173'
+// Replace with your Cal.com / Calendly link.
+const BOOK_CALL_URL = 'https://cal.com/your-handle'
+---
+
+<section class="relative overflow-hidden bg-af-ink-900 py-20 lg:py-28">
+  {/* Blueprint */}
+  <div class="af-grid-bg-dark pointer-events-none absolute inset-0"></div>
+
+  {/* Diagonal orange accent line */}
+  <div
+    class="pointer-events-none absolute -top-12 -right-12 h-[300px] w-[300px] rotate-12"
+    style="background: radial-gradient(circle, rgba(255,107,53,0.08) 0%, transparent 70%);"
+  ></div>
+
+  <div class="relative mx-auto max-w-3xl px-6 text-center">
+    <p class="mb-4 font-mono text-[10px] uppercase tracking-[0.2em] text-af-orange-500">
+      — Talk to us
+    </p>
+    <h2 class="text-[32px] font-semibold leading-tight tracking-[-0.02em] text-white sm:text-[42px]">
+      Ready to get off the spreadsheet?
+    </h2>
+    <p class="mx-auto mt-5 max-w-lg text-[14.5px] leading-relaxed text-af-ink-400">
+      Tell us about your operation in a 30-minute call. We'll show you exactly
+      how AssetFlow fits your floor.
+    </p>
+
+    <div class="mt-9 flex flex-wrap justify-center gap-3">
+      <a
+        href={BOOK_CALL_URL}
+        target="_blank"
+        rel="noopener"
+        class="flex h-11 items-center gap-2 rounded-[6px] bg-af-orange-500 px-6 text-[14px] font-medium text-white shadow-[0_4px_14px_rgba(255,107,53,0.35)] transition-all duration-[120ms] hover:bg-af-orange-600"
+      >
+        Book a call
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+      <a
+        href={`${APP_URL}/login`}
+        class="flex h-11 items-center rounded-[6px] border border-white/15 bg-white/[0.06] px-6 text-[14px] font-medium text-white transition-colors duration-[120ms] hover:bg-white/10"
+      >
+        Sign in
+      </a>
+    </div>
+  </div>
+</section>

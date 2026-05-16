@@ -1,0 +1,82 @@
+---
+// Inline Phosphor-style icons as SVG strings for zero-runtime overhead.
+const features = [
+  {
+    title: 'Asset Registry',
+    body:  'Every machine, vehicle, and tool in one searchable list. Full profile, edit history, custom fields, printable QR labels.',
+    icon: `<rect x="3" y="3" width="18" height="18" rx="2" stroke-width="1.8"/><path d="M3 9h18M9 3v18" stroke-width="1.8"/>`,
+  },
+  {
+    title: 'Maintenance Scheduling',
+    body:  'Define PM schedules by time or usage. Work orders generate automatically — never let a service interval slip again.',
+    icon: `<circle cx="12" cy="12" r="9" stroke-width="1.8"/><path d="M12 7v5l3 2" stroke-width="1.8" stroke-linecap="round"/>`,
+  },
+  {
+    title: 'Work Orders',
+    body:  'Open, assign, log, and close jobs from desktop or phone. Photo attachments, completion notes, actual hours on every record.',
+    icon: `<path d="M5 4h11l3 3v13H5z" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12h7M9 16h5M9 8h4" stroke-width="1.8" stroke-linecap="round"/>`,
+  },
+  {
+    title: 'QR Scan & Field Log',
+    body:  'Technicians scan any asset\'s QR code, see its full history, and log work — no laptop required.',
+    icon: `<rect x="3" y="3" width="7" height="7" rx="1" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke-width="1.8"/><path d="M14 14h3v3M21 14v3M17 17v4h4v-3M14 20h0" stroke-width="1.8"/>`,
+  },
+]
+
+const secondary = [
+  { label: 'GPS last-location tracking', icon: `<path d="M12 22s-7-7-7-12a7 7 0 1 1 14 0c0 5-7 12-7 12z" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" stroke-width="1.8"/>` },
+  { label: 'Live dashboards & PDF reports', icon: `<path d="M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6" stroke-width="1.8" stroke-linecap="round"/>` },
+  { label: 'Asset health at a glance', icon: `<path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0z" stroke-width="1.8"/><path d="M12 8v4l3 1.5" stroke-width="1.8" stroke-linecap="round"/>` },
+]
+---
+
+<section id="features" class="relative bg-af-surface py-20 lg:py-28">
+  <div class="mx-auto max-w-7xl px-6">
+    {/* Section header */}
+    <div class="max-w-xl">
+      <p class="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-af-orange-500">
+        — Features
+      </p>
+      <h2 class="text-[30px] font-semibold leading-tight tracking-[-0.02em] text-af-fg sm:text-[36px]">
+        Everything your floor needs.<br />
+        <span class="text-af-muted">Nothing it doesn't.</span>
+      </h2>
+      <p class="mt-4 text-[14px] leading-relaxed text-af-muted">
+        Built for the operations teams that keep manufacturing plants running — not
+        general-purpose project trackers.
+      </p>
+    </div>
+
+    {/* Feature grid */}
+    <div class="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {features.map(({ title, body, icon }, i) => (
+        <article class="group relative overflow-hidden rounded-[10px] border border-af-border bg-af-bg p-5 transition-all duration-[180ms] hover:border-af-ink-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(14,17,22,0.06)]">
+          {/* Top-right corner mark */}
+          <span class="absolute top-3 right-3 font-mono text-[9px] uppercase tracking-[0.16em] text-af-subtle opacity-0 transition-opacity duration-[180ms] group-hover:opacity-100">
+            0{i + 1}
+          </span>
+
+          {/* Icon tile */}
+          <div class="mb-5 flex h-10 w-10 items-center justify-center rounded-[6px] bg-af-ink-900">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-linecap="round" set:html={icon} aria-hidden="true"></svg>
+          </div>
+
+          <h3 class="mb-1.5 text-[14px] font-semibold text-af-fg">{title}</h3>
+          <p class="text-[12.5px] leading-relaxed text-af-muted">{body}</p>
+        </article>
+      ))}
+    </div>
+
+    {/* Secondary callouts */}
+    <div class="mt-4 grid gap-3 sm:grid-cols-3">
+      {secondary.map(({ label, icon }) => (
+        <div class="flex items-center gap-3 rounded-[10px] border border-af-border bg-af-bg px-4 py-3.5">
+          <div class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-[5px] bg-af-ink-100">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A5260" stroke-linecap="round" set:html={icon} aria-hidden="true"></svg>
+          </div>
+          <span class="text-[12.5px] font-medium text-af-fg">{label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

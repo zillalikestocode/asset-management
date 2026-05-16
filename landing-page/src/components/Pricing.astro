@@ -1,0 +1,170 @@
+---
+const APP_URL = 'http://localhost:5173'
+
+const plans = [
+  {
+    name: 'Starter',
+    price: '$49',
+    per: '/mo',
+    tagline: 'For small teams getting off spreadsheets.',
+    features: [
+      '5 seats',
+      '500 assets',
+      'Asset registry & QR labels',
+      'Work orders & maintenance',
+      'Email alerts',
+    ],
+    cta: 'Start free trial',
+    highlight: false,
+  },
+  {
+    name: 'Pro',
+    price: '$149',
+    per: '/mo',
+    tagline: 'For growing operations that need more.',
+    features: [
+      '25 seats',
+      'Unlimited assets',
+      'Everything in Starter',
+      'GPS last-location tracking',
+      'Advanced reports & CSV export',
+      'Priority support',
+    ],
+    cta: 'Start free trial',
+    highlight: true,
+  },
+  {
+    name: 'Enterprise',
+    price: 'Custom',
+    per: '',
+    tagline: 'For large plants with complex requirements.',
+    features: [
+      'Unlimited seats',
+      'Unlimited assets',
+      'Everything in Pro',
+      'SSO / SAML',
+      'Dedicated CSM',
+      'SLA & on-prem option',
+    ],
+    cta: 'Talk to sales',
+    highlight: false,
+  },
+]
+---
+
+<section id="pricing" class="bg-af-surface py-20 lg:py-28">
+  <div class="mx-auto max-w-7xl px-6">
+    <div class="max-w-xl">
+      <p class="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-af-orange-500">
+        — Pricing
+      </p>
+      <h2 class="text-[30px] font-semibold leading-tight tracking-[-0.02em] text-af-fg sm:text-[36px]">
+        Simple, seat-based pricing.
+      </h2>
+      <p class="mt-4 text-[14px] leading-relaxed text-af-muted">
+        All plans include a 14-day free trial. No credit card required.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-5 sm:grid-cols-3">
+      {plans.map(({ name, price, per, tagline, features, cta, highlight }) => (
+        <div
+          class:list={[
+            'relative flex flex-col rounded-[10px] border',
+            highlight
+              ? 'border-af-orange-500 bg-af-ink-900 shadow-[0_12px_40px_-12px_rgba(255,107,53,0.35)]'
+              : 'border-af-border bg-af-bg',
+          ]}
+        >
+          {highlight && (
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+              <span class="rounded-full bg-af-orange-500 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-white">
+                Most popular
+              </span>
+            </div>
+          )}
+
+          {/* Header */}
+          <div
+            class:list={[
+              'flex-shrink-0 border-b p-6',
+              highlight ? 'border-white/10' : 'border-af-border',
+            ]}
+          >
+            <div
+              class:list={[
+                'mb-2 font-mono text-[10px] font-semibold uppercase tracking-[0.16em]',
+                highlight ? 'text-af-orange-500' : 'text-af-muted',
+              ]}
+            >
+              {name}
+            </div>
+            <div class="mb-2 flex items-baseline gap-1">
+              <span
+                class:list={[
+                  'text-[36px] font-semibold leading-none tracking-tight',
+                  highlight ? 'text-white' : 'text-af-fg',
+                ]}
+              >
+                {price}
+              </span>
+              {per && (
+                <span class:list={['text-[13px]', highlight ? 'text-af-ink-400' : 'text-af-muted']}>
+                  {per}
+                </span>
+              )}
+            </div>
+            <p
+              class:list={[
+                'text-[12.5px] leading-relaxed',
+                highlight ? 'text-af-ink-400' : 'text-af-muted',
+              ]}
+            >
+              {tagline}
+            </p>
+          </div>
+
+          {/* Features list */}
+          <ul class="flex-1 space-y-2.5 p-6">
+            {features.map(f => (
+              <li class="flex items-start gap-2.5">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke={highlight ? '#FF6B35' : '#4D8B1A'} stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 flex-shrink-0" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>
+                <span
+                  class:list={[
+                    'text-[12.5px] leading-relaxed',
+                    highlight ? 'text-af-ink-300' : 'text-af-muted',
+                  ]}
+                >
+                  {f}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          {/* CTA */}
+          <div class="px-6 pb-6">
+            <a
+              href={name === 'Enterprise' ? 'mailto:sales@assetflow.app' : `${APP_URL}/onboarding`}
+              class:list={[
+                'flex h-10 items-center justify-center gap-2 rounded-[6px] text-[13px] font-medium transition-colors duration-[120ms]',
+                highlight
+                  ? 'bg-af-orange-500 text-white hover:bg-af-orange-600'
+                  : 'bg-af-ink-900 text-white hover:bg-af-ink-800',
+              ]}
+            >
+              {cta}
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <p class="mt-8 text-center text-[12.5px] text-af-muted">
+      Need a custom seat count or an annual quote?
+      <a href="mailto:sales@assetflow.app" class="text-af-fg underline-offset-4 hover:underline">
+        Talk to us
+      </a>.
+    </p>
+  </div>
+</section>

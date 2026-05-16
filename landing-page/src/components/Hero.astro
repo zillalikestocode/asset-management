@@ -1,0 +1,188 @@
+---
+const APP_URL = 'http://localhost:5173'
+// Replace with your Cal.com / Calendly link.
+const BOOK_CALL_URL = 'https://cal.com/your-handle'
+
+// ────────────────────────────────────────────────────────────
+// HOW TO ADD YOUR DEMO VIDEO
+// ────────────────────────────────────────────────────────────
+// 1. Loom: copy the iframe embed code from Loom → "Share" → "Embed"
+//    and paste it inside the <div data-video-slot> below.
+// 2. YouTube/Vimeo: replace the same div with an <iframe>.
+// 3. Self-hosted MP4: replace with <video src="/demo.mp4" controls />.
+//
+// The placeholder below will be replaced by whatever you put there.
+// ────────────────────────────────────────────────────────────
+---
+
+<section class="relative overflow-hidden bg-af-ink-900">
+  {/* Blueprint grid */}
+  <div class="af-grid-bg-dark pointer-events-none absolute inset-0"></div>
+
+  {/* Orange ambient glow — top-right */}
+  <div
+    class="pointer-events-none absolute -top-40 -right-40 h-[560px] w-[560px] rounded-full af-video-glow"
+    style="background: radial-gradient(circle, rgba(255,107,53,0.10) 0%, transparent 70%);"
+  ></div>
+  {/* Blue ambient glow — bottom-left */}
+  <div
+    class="pointer-events-none absolute -bottom-32 -left-32 h-[420px] w-[420px] rounded-full"
+    style="background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);"
+  ></div>
+
+  <div class="relative mx-auto max-w-7xl px-6 pt-20 pb-16 lg:pt-28 lg:pb-24">
+    {/* ── Text — centered ─────────────────────────── */}
+    <div class="mx-auto max-w-3xl text-center">
+      {/* Eyebrow chip */}
+      <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1">
+        <span class="h-1.5 w-1.5 rounded-full bg-af-orange-500"></span>
+        <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-af-ink-300">
+          Asset management for manufacturing
+        </span>
+      </div>
+
+      <h1 class="text-[42px] font-semibold leading-[1.04] tracking-[-0.025em] text-white sm:text-[56px] lg:text-[64px]">
+        Keep every asset<br />
+        <span class="relative inline-block">
+          accounted for.
+          {/* Underline accent */}
+          <svg
+            class="absolute -bottom-1 left-0 w-full"
+            viewBox="0 0 320 8"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M2 5 Q 80 1, 160 4 T 318 3"
+              stroke="#FF6B35"
+              stroke-width="2.5"
+              fill="none"
+              stroke-linecap="round"
+            />
+          </svg>
+        </span>
+      </h1>
+
+      <p class="mx-auto mt-7 max-w-[560px] text-[15px] leading-relaxed text-af-ink-400 sm:text-[16px]">
+        Track assets, schedule maintenance, and close work orders — for manufacturing
+        teams of 10 to 500. No more spreadsheets. No more missed PMs.
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
+        <a
+          href={BOOK_CALL_URL}
+          target="_blank"
+          rel="noopener"
+          class="flex h-11 items-center gap-2 rounded-[6px] bg-af-orange-500 px-6 text-[14px] font-medium text-white shadow-[0_4px_14px_rgba(255,107,53,0.35)] transition-all duration-[120ms] hover:bg-af-orange-600 hover:shadow-[0_6px_20px_rgba(255,107,53,0.45)]"
+        >
+          Book a call
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+        <a
+          href="#demo"
+          class="flex h-11 items-center gap-2 rounded-[6px] border border-white/15 bg-white/[0.06] px-6 text-[14px] font-medium text-white backdrop-blur-sm transition-colors duration-[120ms] hover:bg-white/10"
+        >
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M4 3.5v9a.5.5 0 0 0 .76.43l7.5-4.5a.5.5 0 0 0 0-.86l-7.5-4.5A.5.5 0 0 0 4 3.5Z"/>
+          </svg>
+          Watch demo
+        </a>
+      </div>
+
+      {/* Trust strip */}
+      <div class="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-af-ink-500">
+        {[
+          '30-minute walkthrough',
+          'No commitment',
+          'Tailored to your operation',
+        ].map(t => (
+          <div class="flex items-center gap-2">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#4D8B1A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>
+            <span class="text-[12px]">{t}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* ── Video frame ─────────────────────────────── */}
+    <div id="demo" class="relative mx-auto mt-16 max-w-[1040px] lg:mt-20">
+      {/* Frame "chrome" — looks like a window/browser around the video */}
+      <div class="relative overflow-hidden rounded-xl border border-white/10 bg-af-ink-800 shadow-[0_24px_80px_-12px_rgba(0,0,0,0.6),0_8px_24px_-8px_rgba(255,107,53,0.18)]">
+        {/* Browser top bar with traffic-light dots + tab */}
+        <div class="flex h-9 items-center gap-3 border-b border-white/10 bg-af-ink-900/80 px-4">
+          <div class="flex gap-1.5">
+            <span class="h-2.5 w-2.5 rounded-full bg-af-crit-500/60"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-af-warn-500/60"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-af-ok-500/60"></span>
+          </div>
+          <div class="flex flex-1 items-center justify-center">
+            <div class="flex h-5 items-center gap-2 rounded-[3px] bg-white/[0.06] px-3">
+              <svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" class="text-af-ink-400" aria-hidden="true">
+                <rect x="3" y="7" width="10" height="7" rx="1.5"/>
+                <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/>
+              </svg>
+              <span class="font-mono text-[10px] tracking-wide text-af-ink-400">assetflow.app — Live demo</span>
+            </div>
+          </div>
+          <span class="font-mono text-[9px] uppercase tracking-[0.16em] text-af-orange-500">REC</span>
+        </div>
+
+        {/* ── VIDEO SLOT ─────────────────────────────────────
+             Replace the entire <div data-video-slot> block with
+             your Loom <iframe>, YouTube embed, or <video> tag.
+             Keep aspect-video so the frame stays 16:9.
+        ─────────────────────────────────────────────────────── */}
+        <div data-video-slot class="relative aspect-video bg-af-ink-900">
+          {/* Placeholder blueprint pattern */}
+          <div class="af-grid-bg-dark absolute inset-0"></div>
+
+          {/* Subtle gradient sheen */}
+          <div
+            class="pointer-events-none absolute inset-0"
+            style="background: radial-gradient(ellipse at center, rgba(255,107,53,0.12) 0%, transparent 60%);"
+          ></div>
+
+          {/* Placeholder play button + caption */}
+          <div class="absolute inset-0 flex flex-col items-center justify-center gap-5">
+            <button
+              type="button"
+              class="group relative flex h-20 w-20 items-center justify-center rounded-full bg-af-orange-500 shadow-[0_8px_30px_rgba(255,107,53,0.45)] transition-transform duration-[180ms] hover:scale-105"
+              aria-label="Play demo video"
+            >
+              {/* Pulsing ring */}
+              <span class="absolute inset-0 rounded-full ring-2 ring-af-orange-500/40 animate-ping"></span>
+              <svg width="28" height="28" viewBox="0 0 16 16" fill="white" aria-hidden="true">
+                <path d="M5 3.5v9a.5.5 0 0 0 .76.43l7.5-4.5a.5.5 0 0 0 0-.86l-7.5-4.5A.5.5 0 0 0 5 3.5Z"/>
+              </svg>
+            </button>
+
+            <div class="text-center">
+              <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-af-orange-500">
+                Demo
+              </p>
+              <p class="mt-2 text-[14px] font-medium text-white">
+                Two minutes. End-to-end product walkthrough.
+              </p>
+              <p class="mt-1 text-[12px] text-af-ink-400">
+                Embed your Loom or recorded video here.
+              </p>
+            </div>
+          </div>
+
+          {/* Corner crop marks (industrial detail) */}
+          <svg class="pointer-events-none absolute top-3 left-3 text-af-ink-600" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M0 4V0h4M14 4V0h-4M0 10v4h4M14 10v4h-4"/></svg>
+        </div>
+      </div>
+
+      {/* Decorative caption bar below frame */}
+      <div class="mt-3 flex flex-wrap items-center justify-between gap-2 px-1">
+        <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-af-ink-500">
+          assetflow / demo.mp4
+        </p>
+        <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-af-ink-500">
+          02:14 · 1080p
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
