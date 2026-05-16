@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { MagnifyingGlass, FunnelSimple, ClipboardText, Plus } from '@phosphor-icons/react'
 import { useWorkOrders } from '@/hooks/useWorkOrders'
 import { useAssets } from '@/hooks/useAssets'
-import { Table, Thead, Th, Tbody, Tr, Td, TdEmpty } from '@/components/ui/Table'
+import { Table, Thead, Th, Tbody, Tr, Td } from '@/components/ui/Table'
 import { StatusPill, PriorityPill, IdTag } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Input'
@@ -130,14 +130,14 @@ export function WorkOrdersPage() {
                   <Td><PriorityPill priority={wo.priority} /></Td>
                   <Td><StatusPill status={wo.status} /></Td>
                   <Td muted>{wo.assignedTo?.name ?? 'Unassigned'}</Td>
-                  <Td muted>{formatDate(wo.dueDate)}</Td>
+                  <Td muted>{wo.dueDate ? formatDate(wo.dueDate) : '—'}</Td>
                 </Tr>
               ))}
             </Tbody>
           </Table>
 
           {total > 20 && (
-            <Pagination page={page} perPage={20} total={total} onPage={setPage} />
+            <Pagination page={page} perPage={20} total={total} onChange={setPage} />
           )}
         </>
       )}

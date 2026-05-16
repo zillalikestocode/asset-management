@@ -79,11 +79,6 @@ export function CategorySetupPrompt({ onDone, onCancel }: Props) {
     }
   }
 
-  const allNames = [
-    ...PRESETS.map(p => p.name),
-    ...customs,
-  ]
-
   return (
     <div className="space-y-5">
       {/* Header */}

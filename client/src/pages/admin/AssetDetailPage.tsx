@@ -214,7 +214,7 @@ export function AssetDetailPage() {
                         <dt className="font-mono text-[10px] text-af-muted">
                           {k}
                         </dt>
-                        <dd className="text-[13px]">{v}</dd>
+                        <dd className="text-[13px]">{String(v)}</dd>
                       </div>
                     ))}
                   </dl>
@@ -266,7 +266,7 @@ export function AssetDetailPage() {
                     <Td>
                       <StatusPill status={wo.status} />
                     </Td>
-                    <Td muted>{formatDate(wo.dueDate)}</Td>
+                    <Td muted>{wo.dueDate ? formatDate(wo.dueDate) : '—'}</Td>
                   </Tr>
                 ))
               )}

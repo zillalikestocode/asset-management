@@ -42,7 +42,7 @@ export function MaintenanceFormModal({ open, onClose, schedule, assets }: Props)
   const updateSchedule = useUpdateSchedule(schedule?.id ?? '')
 
   const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as any,
     defaultValues: { scheduleType: 'time_based', priority: 'medium', leadTimeDays: 7, active: true },
   })
 

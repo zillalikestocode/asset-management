@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { MagnifyingGlass, FunnelSimple, Package } from '@phosphor-icons/react'
 import { useAssets } from '@/hooks/useAssets'
 import { useCategories, useLocations } from '@/hooks/useCategories'
-import { Table, Thead, Th, Tbody, Tr, Td, TdEmpty } from '@/components/ui/Table'
+import { Table, Thead, Th, Tbody, Tr, Td } from '@/components/ui/Table'
 import { StatusPill, IdTag } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Input'
@@ -40,7 +40,6 @@ export function AssetsPage() {
   const total = data?.total ?? 0
 
   const openAdd = () => { setEditAsset(null); setShowForm(true) }
-  const openEdit = (a: Asset) => { setEditAsset(a); setShowForm(true) }
 
   if (isLoading) return <PageSpinner />
 
@@ -164,7 +163,7 @@ export function AssetsPage() {
               page={page}
               perPage={20}
               total={total}
-              onPage={setPage}
+              onChange={setPage}
             />
           )}
         </>

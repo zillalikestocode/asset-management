@@ -39,7 +39,7 @@ export function WorkOrderFormModal({ open, onClose, assets, workOrder }: Props) 
   const updateWO = useUpdateWorkOrder(workOrder?.id ?? '')
 
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as any,
     defaultValues: { priority: 'medium', status: 'open' },
   })
 

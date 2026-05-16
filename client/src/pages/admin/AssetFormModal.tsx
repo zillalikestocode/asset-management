@@ -55,7 +55,7 @@ export function AssetFormModal({ open, onClose, asset }: Props) {
   }, [open])
 
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as any,
     defaultValues: { status: 'active' },
   })
 

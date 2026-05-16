@@ -18,7 +18,7 @@ export function ReportsPage() {
   const totalWOs   = allWOs?.total ?? 0
 
   const completedWOs = workOrders.filter(w => w.status === 'completed')
-  const overdueWOs   = workOrders.filter(w => w.status !== 'completed' && w.status !== 'cancelled' && new Date(w.dueDate) < new Date())
+  const overdueWOs   = workOrders.filter(w => w.status !== 'completed' && w.status !== 'cancelled' && !!w.dueDate && new Date(w.dueDate) < new Date())
   const completionRate = totalWOs > 0 ? Math.round((completedWOs.length / totalWOs) * 100) : 0
 
   const statusCounts: Record<string, number> = {}
@@ -28,14 +28,14 @@ export function ReportsPage() {
 
   const categoryCounts: Record<string, { name: string; count: number }> = {}
   for (const a of assets) {
-    const key = a.categoryId
+    const key = a.categoryId ?? 'unknown'
     if (!categoryCounts[key]) categoryCounts[key] = { name: a.category?.name ?? 'Unknown', count: 0 }
     categoryCounts[key].count++
   }
   const topCategories = Object.values(categoryCounts).sort((a, b) => b.count - a.count).slice(0, 5)
 
   const activeSchedules = (schedules ?? []).filter(s => s.active)
-  const overdueSchedules = (schedules ?? []).filter(s => s.nextDueDate && new Date(s.nextDueDate) < new Date() && s.active)
+  const overdueSchedules = (schedules ?? []).filter(s => s.nextDueAt && new Date(s.nextDueAt) < new Date() && s.active)
 
   return (
     <div className="space-y-5">

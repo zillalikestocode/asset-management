@@ -1,9 +1,6 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { ProtectedRoute } from './ProtectedRoute'
 import { RoleRoute } from './RoleRoute'
-
-// Landing
-import { LandingPage } from '@/pages/LandingPage'
 
 // Auth
 import { LoginPage }      from '@/pages/auth/LoginPage'
@@ -33,7 +30,9 @@ import { TechReportIssuePage }  from '@/pages/technician/TechReportIssuePage'
 
 export const router = createBrowserRouter([
   // ── Public ──────────────────────────────────────────────
-  { path: '/',           element: <LandingPage /> },
+  // The marketing landing page lives in the separate `landing-page/` Astro project.
+  // Root path simply forwards into the auth flow.
+  { path: '/',           element: <Navigate to="/login" replace /> },
   { path: '/login',      element: <LoginPage /> },
   { path: '/onboarding', element: <OnboardingPage /> },
 
