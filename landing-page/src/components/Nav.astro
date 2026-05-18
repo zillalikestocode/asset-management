@@ -9,18 +9,18 @@ const APP_URL = 'https://assetflow-app.netlify.app'
 const BOOK_CALL_URL = 'https://cal.com/your-handle'
 ---
 
-<header class="sticky top-0 z-50 border-b border-af-border bg-af-surface/85 backdrop-blur-md">
+<header class="bg-af-ink-900">
   <div class="mx-auto flex h-14 max-w-7xl items-center gap-8 px-6">
     <a href="/" class="mr-auto flex items-center gap-2.5">
       <img src="/logo-mark.svg" alt="AssetFlow" class="h-7 w-7" />
-      <span class="text-[15px] font-semibold tracking-[-0.01em] text-af-fg">AssetFlow</span>
+      <span class="text-[15px] font-semibold tracking-[-0.01em] text-white">AssetFlow</span>
     </a>
 
     <nav class="hidden items-center gap-7 md:flex">
       {links.map(({ label, href }) => (
         <a
           href={href}
-          class="text-[13px] text-af-muted transition-colors duration-[120ms] hover:text-af-fg"
+          class="text-[13px] text-af-ink-400 transition-colors duration-[120ms] hover:text-white"
         >
           {label}
         </a>
@@ -30,7 +30,7 @@ const BOOK_CALL_URL = 'https://cal.com/your-handle'
     <div class="flex items-center gap-3">
       <a
         href={`${APP_URL}/login`}
-        class="hidden text-[13px] text-af-muted transition-colors duration-[120ms] hover:text-af-fg sm:block"
+        class="hidden text-[13px] text-af-ink-400 transition-colors duration-[120ms] hover:text-white sm:block"
       >
         Sign in
       </a>
