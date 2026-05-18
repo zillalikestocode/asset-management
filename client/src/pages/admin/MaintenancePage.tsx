@@ -9,7 +9,7 @@ import { PageSpinner } from '@/components/ui/Spinner'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Modal } from '@/components/ui/Modal'
 import { MaintenanceFormModal } from './MaintenanceFormModal'
-import { formatRelative, cn } from '@/lib/utils'
+import { formatRelative, cn, apiError } from '@/lib/utils'
 import { toast } from 'sonner'
 import type { MaintenanceSchedule } from '@/types'
 
@@ -29,8 +29,8 @@ export function MaintenancePage() {
     try {
       await deleteSchedule.mutateAsync(deleteTarget.id)
       toast.success('Schedule deleted')
-    } catch {
-      toast.error('Failed to delete schedule')
+    } catch (err) {
+      toast.error(apiError(err))
     }
     setDeleteTarget(null)
   }

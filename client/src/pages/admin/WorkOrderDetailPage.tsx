@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/Button'
 import { Input, Textarea } from '@/components/ui/Input'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { WorkOrderFormModal } from './WorkOrderFormModal'
-import { formatDate, formatRelative, cn, initials } from '@/lib/utils'
+import { formatDate, formatRelative, cn, initials, apiError } from '@/lib/utils'
 
 export function WorkOrderDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -45,8 +45,8 @@ export function WorkOrderDetailPage() {
       await addComment.mutateAsync(comment.trim())
       setComment('')
       toast.success('Comment added')
-    } catch {
-      toast.error('Failed to add comment')
+    } catch (err) {
+      toast.error(apiError(err))
     }
   }
 
@@ -59,8 +59,8 @@ export function WorkOrderDetailPage() {
       })
       setShowCompleteForm(false)
       toast.success('Work order completed')
-    } catch {
-      toast.error('Failed to complete work order')
+    } catch (err) {
+      toast.error(apiError(err))
     }
   }
 
@@ -72,8 +72,8 @@ export function WorkOrderDetailPage() {
       setPhotoFilename('')
       setShowPhotoForm(false)
       toast.success('Photo added')
-    } catch {
-      toast.error('Failed to add photo')
+    } catch (err) {
+      toast.error(apiError(err))
     }
   }
 

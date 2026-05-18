@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { ArrowLeft, Warning } from '@phosphor-icons/react'
 import { useAsset } from '@/hooks/useAssets'
 import { useCreateIssue } from '@/hooks/useIssues'
+import { apiError } from '@/lib/utils'
 import { PageSpinner } from '@/components/ui/Spinner'
 
 const schema = z.object({
@@ -31,8 +32,8 @@ export function TechReportIssuePage() {
       await createIssue.mutateAsync({ assetId: id!, ...values })
       toast.success('Issue reported')
       navigate(-1)
-    } catch {
-      toast.error('Failed to report issue')
+    } catch (err) {
+      toast.error(apiError(err))
     }
   }
 

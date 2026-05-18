@@ -10,6 +10,7 @@ import { useCreateAsset, useUpdateAsset } from '@/hooks/useAssets'
 import { useCategories, useLocations } from '@/hooks/useCategories'
 import { useUsers } from '@/hooks/useUsers'
 import { CategorySetupPrompt } from './CategorySetupPrompt'
+import { apiError } from '@/lib/utils'
 import type { Asset } from '@/types'
 
 const schema = z.object({
@@ -96,8 +97,8 @@ export function AssetFormModal({ open, onClose, asset }: Props) {
         toast.success('Asset created')
       }
       onClose()
-    } catch {
-      toast.error('Something went wrong')
+    } catch (err) {
+      toast.error(apiError(err))
     }
   }
 

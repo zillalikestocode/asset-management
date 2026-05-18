@@ -12,7 +12,7 @@ import { Input, Select, Field } from '@/components/ui/Input'
 import { Modal } from '@/components/ui/Modal'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { EmptyState } from '@/components/ui/EmptyState'
-import { formatDate, initials, cn } from '@/lib/utils'
+import { formatDate, initials, cn, apiError } from '@/lib/utils'
 import type { User } from '@/types'
 
 const inviteSchema = z.object({
@@ -50,8 +50,8 @@ export function UsersPage() {
       toast.success(`Invite sent to ${values.email}`)
       reset()
       setShowInvite(false)
-    } catch {
-      toast.error('Failed to send invite')
+    } catch (err) {
+      toast.error(apiError(err))
     }
   }
 
@@ -60,8 +60,8 @@ export function UsersPage() {
     try {
       await deactivateUser.mutateAsync(deactivateTarget.id)
       toast.success('User deactivated')
-    } catch {
-      toast.error('Failed to deactivate user')
+    } catch (err) {
+      toast.error(apiError(err))
     }
     setDeactivateTarget(null)
   }

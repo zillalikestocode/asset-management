@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { Plus, Check, Tag } from '@phosphor-icons/react'
 import { useCreateCategory } from '@/hooks/useCategories'
-import { cn } from '@/lib/utils'
+import { cn, apiError } from '@/lib/utils'
 
 interface Preset {
   name: string
@@ -72,8 +72,8 @@ export function CategorySetupPrompt({ onDone, onCancel }: Props) {
       )
       toast.success(`${selected.size} categor${selected.size === 1 ? 'y' : 'ies'} created`)
       onDone()
-    } catch {
-      toast.error('Failed to create categories')
+    } catch (err) {
+      toast.error(apiError(err))
     } finally {
       setSaving(false)
     }

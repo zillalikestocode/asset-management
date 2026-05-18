@@ -20,3 +20,10 @@ export function formatRelative(date: string | Date): string {
 export function initials(name: string): string {
   return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
 }
+
+export function apiError(err: unknown, fallback = 'Something went wrong'): string {
+  if (err && typeof err === 'object' && 'message' in err) {
+    return (err as { message: string }).message || fallback
+  }
+  return fallback
+}

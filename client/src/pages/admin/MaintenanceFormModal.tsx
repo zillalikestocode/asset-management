@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { Input, Select, Textarea, Field } from '@/components/ui/Input'
 import { useCreateSchedule, useUpdateSchedule } from '@/hooks/useMaintenance'
 import { useUsers } from '@/hooks/useUsers'
+import { apiError } from '@/lib/utils'
 import type { Asset, MaintenanceSchedule } from '@/types'
 
 const schema = z.object({
@@ -83,8 +84,8 @@ export function MaintenanceFormModal({ open, onClose, schedule, assets }: Props)
         toast.success('Schedule created')
       }
       onClose()
-    } catch {
-      toast.error('Something went wrong')
+    } catch (err) {
+      toast.error(apiError(err))
     }
   }
 

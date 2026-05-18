@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { Input, Select, Textarea, Field } from '@/components/ui/Input'
 import { useCreateWorkOrder, useUpdateWorkOrder } from '@/hooks/useWorkOrders'
 import { useUsers } from '@/hooks/useUsers'
+import { apiError } from '@/lib/utils'
 import type { Asset, WorkOrder } from '@/types'
 
 const schema = z.object({
@@ -74,8 +75,8 @@ export function WorkOrderFormModal({ open, onClose, assets, workOrder }: Props) 
         toast.success('Work order created')
       }
       onClose()
-    } catch {
-      toast.error('Something went wrong')
+    } catch (err) {
+      toast.error(apiError(err))
     }
   }
 

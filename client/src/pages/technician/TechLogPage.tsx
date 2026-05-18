@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 import { useWorkOrder, useUpdateWorkOrder, useCompleteWorkOrder, useAddComment } from '@/hooks/useWorkOrders'
 import { StatusPill, PriorityPill } from '@/components/ui/Badge'
 import { PageSpinner } from '@/components/ui/Spinner'
-import { formatDate, formatRelative, initials, cn } from '@/lib/utils'
+import { formatDate, formatRelative, initials, cn, apiError } from '@/lib/utils'
 
 export function TechLogPage() {
   const { id }   = useParams<{ id: string }>()
@@ -33,14 +33,14 @@ export function TechLogPage() {
       await addComment.mutateAsync(comment.trim())
       setComment('')
       toast.success('Entry added')
-    } catch { toast.error('Failed') }
+    } catch (err) { toast.error(apiError(err)) }
   }
 
   const handleStart = async () => {
     try {
       await updateWO.mutateAsync({ status: 'in_progress' })
       toast.success('Work order started')
-    } catch { toast.error('Failed to start') }
+    } catch (err) { toast.error(apiError(err)) }
   }
 
   const handleComplete = async () => {
@@ -52,7 +52,7 @@ export function TechLogPage() {
       })
       toast.success('Work order completed!')
       navigate('/tech/work-orders')
-    } catch { toast.error('Failed to complete') }
+    } catch (err) { toast.error(apiError(err)) }
   }
 
   return (

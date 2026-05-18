@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button'
 import { Input, Field } from '@/components/ui/Input'
 import { useCategories, useLocations, useCreateCategory, useCreateLocation, useDeleteCategory, useDeleteLocation } from '@/hooks/useCategories'
 import { useChangePassword } from '@/hooks/useUsers'
+import { apiError } from '@/lib/utils'
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(1, 'Required'),
@@ -42,7 +43,7 @@ export function SettingsPage() {
       await createCat.mutateAsync({ name: newCategory.trim() })
       toast.success('Category added')
       setNewCategory('')
-    } catch { toast.error('Failed to add category') }
+    } catch (err) { toast.error(apiError(err)) }
   }
 
   const handleAddLocation = async () => {
@@ -51,7 +52,7 @@ export function SettingsPage() {
       await createLoc.mutateAsync({ name: newLocation.trim() })
       toast.success('Location added')
       setNewLocation('')
-    } catch { toast.error('Failed to add location') }
+    } catch (err) { toast.error(apiError(err)) }
   }
 
   const onChangePassword = async (values: PasswordValues) => {
@@ -62,9 +63,8 @@ export function SettingsPage() {
       })
       toast.success('Password updated')
       reset()
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Failed to update password'
-      toast.error(msg)
+    } catch (err) {
+      toast.error(apiError(err, 'Failed to update password'))
     }
   }
 
@@ -104,7 +104,7 @@ export function SettingsPage() {
             <div key={c.id} className="flex items-center justify-between py-1.5 border-b border-af-border last:border-0">
               <span className="text-[13px]">{c.name}</span>
               <button
-                onClick={() => deleteCat.mutateAsync(c.id).then(() => toast.success('Deleted')).catch(() => toast.error('Failed'))}
+                onClick={() => deleteCat.mutateAsync(c.id).then(() => toast.success('Deleted')).catch(err => toast.error(apiError(err)))}
                 className="text-af-muted hover:text-af-crit-600 transition-colors duration-[120ms]"
               >
                 <Trash size={14} />
@@ -136,7 +136,7 @@ export function SettingsPage() {
             <div key={l.id} className="flex items-center justify-between py-1.5 border-b border-af-border last:border-0">
               <span className="text-[13px]">{l.name}</span>
               <button
-                onClick={() => deleteLoc.mutateAsync(l.id).then(() => toast.success('Deleted')).catch(() => toast.error('Failed'))}
+                onClick={() => deleteLoc.mutateAsync(l.id).then(() => toast.success('Deleted')).catch(err => toast.error(apiError(err)))}
                 className="text-af-muted hover:text-af-crit-600 transition-colors duration-[120ms]"
               >
                 <Trash size={14} />
