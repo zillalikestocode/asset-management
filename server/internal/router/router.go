@@ -2,7 +2,9 @@ package router
 
 import (
 	"net/http"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/zillalikestocode/assetflow-core/internal/config"
 	"github.com/zillalikestocode/assetflow-core/internal/handler"
@@ -24,49 +26,58 @@ func Setup(db *gorm.DB, cfg *config.Config) *gin.Engine {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"https://assetflow-app.netlify.app", "http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
 	// ── Repositories ──────────────────────────────────────────────────────────
-	userRepo         := repository.NewUserRepository(db)
-	orgRepo          := repository.NewOrgRepository(db)
-	assetRepo        := repository.NewAssetRepository(db)
+	userRepo := repository.NewUserRepository(db)
+	orgRepo := repository.NewOrgRepository(db)
+	assetRepo := repository.NewAssetRepository(db)
 	assetHistoryRepo := repository.NewAssetHistoryRepository(db)
-	categoryRepo     := repository.NewCategoryRepository(db)
-	locationRepo     := repository.NewLocationRepository(db)
-	scheduleRepo     := repository.NewMaintenanceScheduleRepository(db)
-	workOrderRepo    := repository.NewWorkOrderRepository(db)
-	issueRepo        := repository.NewIssueRepository(db)
-	notifRepo        := repository.NewNotificationRepository(db)
-	prefRepo         := repository.NewNotificationPreferenceRepository(db)
+	categoryRepo := repository.NewCategoryRepository(db)
+	locationRepo := repository.NewLocationRepository(db)
+	scheduleRepo := repository.NewMaintenanceScheduleRepository(db)
+	workOrderRepo := repository.NewWorkOrderRepository(db)
+	issueRepo := repository.NewIssueRepository(db)
+	notifRepo := repository.NewNotificationRepository(db)
+	prefRepo := repository.NewNotificationPreferenceRepository(db)
 
 	// ── Mailer ────────────────────────────────────────────────────────────────
 	mailer := mail.New(cfg.SMTPHost, cfg.SMTPPort, cfg.SMTPUsername, cfg.SMTPPassword, cfg.SMTPFrom)
 
 	// ── Services ──────────────────────────────────────────────────────────────
-	authService        := service.NewAuthService(userRepo, orgRepo, mailer, cfg.JWTSecret)
-	userService        := service.NewUserService(userRepo, orgRepo, mailer)
-	assetService       := service.NewAssetService(assetRepo, assetHistoryRepo)
-	categoryService    := service.NewCategoryService(categoryRepo)
-	locationService    := service.NewLocationService(locationRepo)
+	authService := service.NewAuthService(userRepo, orgRepo, mailer, cfg.JWTSecret)
+	userService := service.NewUserService(userRepo, orgRepo, mailer)
+	assetService := service.NewAssetService(assetRepo, assetHistoryRepo)
+	categoryService := service.NewCategoryService(categoryRepo)
+	locationService := service.NewLocationService(locationRepo)
 	maintenanceService := service.NewMaintenanceService(scheduleRepo, workOrderRepo)
-	workOrderService   := service.NewWorkOrderService(workOrderRepo, userRepo)
-	issueService       := service.NewIssueService(issueRepo)
-	notifService       := service.NewNotificationService(notifRepo, prefRepo)
-	reportService      := service.NewReportService(assetRepo, workOrderRepo, scheduleRepo, issueRepo)
+	workOrderService := service.NewWorkOrderService(workOrderRepo, userRepo)
+	issueService := service.NewIssueService(issueRepo)
+	notifService := service.NewNotificationService(notifRepo, prefRepo)
+	reportService := service.NewReportService(assetRepo, workOrderRepo, scheduleRepo, issueRepo)
 
 	// ── Handlers ──────────────────────────────────────────────────────────────
-	authHandler         := handler.NewAuthHandler(authService)
-	userHandler         := handler.NewUserHandler(userService)
-	assetHandler        := handler.NewAssetHandler(assetService)
-	categoryHandler     := handler.NewCategoryHandler(categoryService)
-	locationHandler     := handler.NewLocationHandler(locationService)
-	maintenanceHandler  := handler.NewMaintenanceHandler(maintenanceService)
-	workOrderHandler    := handler.NewWorkOrderHandler(workOrderService)
-	issueHandler        := handler.NewIssueHandler(issueService)
+	authHandler := handler.NewAuthHandler(authService)
+	userHandler := handler.NewUserHandler(userService)
+	assetHandler := handler.NewAssetHandler(assetService)
+	categoryHandler := handler.NewCategoryHandler(categoryService)
+	locationHandler := handler.NewLocationHandler(locationService)
+	maintenanceHandler := handler.NewMaintenanceHandler(maintenanceService)
+	workOrderHandler := handler.NewWorkOrderHandler(workOrderService)
+	issueHandler := handler.NewIssueHandler(issueService)
 	notificationHandler := handler.NewNotificationHandler(notifService)
-	reportHandler       := handler.NewReportHandler(reportService)
+	reportHandler := handler.NewReportHandler(reportService)
 
 	// ── Scheduler ─────────────────────────────────────────────────────────────
 	sched := scheduler.New(scheduleRepo, workOrderRepo, userRepo)
