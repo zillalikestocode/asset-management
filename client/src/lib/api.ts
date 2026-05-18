@@ -73,7 +73,10 @@ api.interceptors.response.use(
     }
 
     const apiError: ApiError = {
-      message: err.response?.data?.message ?? "Something went wrong",
+      message:
+        err.response?.data?.message ??
+        err.response?.error ??
+        "Something went wrong",
       code: err.response?.data?.code,
       fields: err.response?.data?.fields,
     };
